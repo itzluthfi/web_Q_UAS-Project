@@ -1,56 +1,157 @@
 <?php include 'app/views/templates/header.php'; ?>
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0f1116;
+        }
+        .glow-effect {
+            box-shadow: 0 0 15px rgba(101, 31, 255, 0.4);
+        }
+        .btn-glow:hover {
+            box-shadow: 0 0 20px rgba(101, 31, 255, 0.6);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(101, 31, 255, 0.5);
+        }
+        .input-dark {
+            background-color: rgba(30, 32, 44, 0.8);
+            border-color: #2e3346;
+            color: #e2e8f0;
+        }
+        .input-dark::placeholder {
+            color: #64748b;
+        }
+        .input-dark:focus {
+            border-color: #651fff;
+            box-shadow: 0 0 0 2px rgba(101, 31, 255, 0.2);
+        }
+        /* Custom scrollbar for webkit browsers */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4c1d95;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6d28d9;
+        }
+</style>
+<body>
 <div class="container mx-auto px-4 py-6">
-    <h1 class="text-3xl font-bold text-center text-indigo-600 mb-8">Top Anime</h1>
+    <!-- <h1 class="text-3xl font-bold text-center text-indigo-600 mb-8">Top Anime</h1> -->
 
     <!-- Alert Message -->
-    <?php if (!empty($_SESSION['error_message'])): ?>
-    <div class="text-red-600 text-center mb-4"><?= htmlspecialchars($_SESSION['error_message']) ?></div>
-    <?php unset($_SESSION['error_message']); ?>
-    <?php endif; ?>
+    <body class="min-h-screen bg-gradient-to-br from-gray-900 to-black text-gray-100">
+    <div class="container mx-auto px-4 py-6">
+        <h1 class="text-3xl font-bold text-center text-purple-400 mb-8">Top Anime</h1>
 
-    <?php if (!empty($_SESSION['success_message'])): ?>
-    <div class="text-green-600 text-center mb-4"><?= htmlspecialchars($_SESSION['success_message']) ?></div>
-    <?php unset($_SESSION['success_message']); ?>
-    <?php endif; ?>
+        <!-- Alert Message -->
+        <?php if (!empty($_SESSION['error_message'])): ?>
+        <div class="p-3 bg-red-900/50 border-l-4 border-red-500 text-red-200 flex items-center rounded-r mb-4 max-w-2xl mx-auto">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+            <span><?= htmlspecialchars($_SESSION['error_message']) ?></span>
+        </div>
+        <?php unset($_SESSION['error_message']); ?>
+        <?php endif; ?>
 
-    <!-- Login Button -->
-    <div class="flex justify-end mb-4">
-        <a href="./login" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Login</a>
-    </div>
+        <?php if (!empty($_SESSION['success_message'])): ?>
+        <div class="p-3 bg-green-900/50 border-l-4 border-green-500 text-green-200 flex items-center rounded-r mb-4 max-w-2xl mx-auto">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+            <span><?= htmlspecialchars($_SESSION['success_message']) ?></span>
+        </div>
+        <?php unset($_SESSION['success_message']); ?>
+        <?php endif; ?>
 
-    <!-- Search Form -->
-    <form method="GET" action="" class="mb-6 flex justify-center">
-        <input type="text" name="q" placeholder="Cari anime..."
-            class="border border-gray-300 rounded-l px-4 py-2 w-1/2">
-        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-r hover:bg-indigo-700">Cari</button>
-    </form>
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+            <!-- Search Form -->
+            <form method="GET" action="" class="mb-4 md:mb-0 flex w-full md:w-2/3 lg:w-1/2">
+                <input type="text" name="q" placeholder="Cari anime..."
+                    class="input-dark border border-gray-700 rounded-l px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-purple-500">
+                <button type="submit" class="bg-purple-700 text-white px-4 py-2 rounded-r hover:bg-purple-600 transition-colors btn-glow">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </form>
 
-    <!-- Anime Grid -->
-    <?php if (!empty($animeList)): ?>
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <?php foreach ($animeList as $anime): ?>
-        <div class="bg-white shadow-md rounded overflow-hidden">
-            <img src="<?= htmlspecialchars($anime['images']['jpg']['image_url']) ?>"
-                alt="<?= htmlspecialchars($anime['title']) ?>" class="w-full h-56 object-cover">
-            <div class="p-4">
-                <h3 class="text-xl font-semibold mb-2"><?= htmlspecialchars($anime['title']) ?></h3>
-                <p class="text-sm text-gray-700 mb-1"><strong>Score:</strong> <?= $anime['score'] ?></p>
-                <p class="text-sm text-gray-700 mb-1"><strong>Status:</strong> <?= $anime['status'] ?></p>
-                <p class="text-sm text-gray-700 mb-1"><strong>Episode:</strong> <?= $anime['episodes'] ?></p>
-                <p class="text-sm text-gray-700 mb-1"><strong>Tayang:</strong> <?= $anime['aired']['string'] ?></p>
-                <p class="text-sm text-gray-600 mt-2"><?= substr($anime['synopsis'], 0, 120) ?>...</p>
-                <a href="/anime-list-uas/anime/show/<?= $anime['mal_id'] ?>"
-                    class="inline-block mt-4 bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">
-                    Lihat Detail
+            <?php if(!isset($_SESSION['user'])): ?>
+            <!-- Login Button -->
+            <div class="flex">
+                <a href="./login" class="bg-purple-700 text-white px-6 py-2 rounded hover:bg-purple-600 transition-colors flex items-center btn-glow">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    Login
                 </a>
             </div>
+            <?php else: ?>
+            <!-- User is logged in, you can add profile or logout button here -->
+            <div class="flex">
+                <a href="./logout" class="bg-gray-700 text-white px-6 py-2 rounded hover:bg-gray-600 transition-colors flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
+                    </svg>
+                    Logout
+                </a>
+            </div>
+            <?php endif; ?>
         </div>
-        <?php endforeach; ?>
-    </div>
-    <?php else: ?>
-    <p class="text-center text-gray-600">Gagal mengambil data anime dari API.</p>
-    <?php endif; ?>
-</div>
 
+        <!-- Anime Grid -->
+        <?php if (!empty($animeList)): ?>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <?php foreach ($animeList as $anime): ?>
+            <div class="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-lg card-hover">
+                <div class="relative overflow-hidden">
+                    <img src="<?= htmlspecialchars($anime['images']['jpg']['image_url']) ?>"
+                        alt="<?= htmlspecialchars($anime['title']) ?>" class="w-full h-56 object-cover transition-transform duration-500 hover:scale-110">
+                    <div class="absolute top-0 right-0 bg-purple-700 text-white px-2 py-1 m-2 rounded text-xs font-bold">
+                        <?= $anime['score'] ?> ★
+                    </div>
+                </div>
+                <div class="p-4">
+                    <h3 class="text-xl font-semibold mb-2 text-white"><?= htmlspecialchars($anime['title']) ?></h3>
+                    <div class="flex flex-wrap gap-2 mb-3">
+                        <span class="bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded">
+                            <?= $anime['status'] ?>
+                        </span>
+                        <span class="bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded">
+                            <?= $anime['episodes'] ?> Episode
+                        </span>
+                    </div>
+                    <p class="text-sm text-gray-400 mb-3"><strong>Tayang:</strong> <?= $anime['aired']['string'] ?></p>
+                    <p class="text-sm text-gray-400 mt-2 h-16 overflow-hidden"><?= substr($anime['synopsis'], 0, 120) ?>...</p>
+                    <a href="/anime-list-uas/anime/show/<?= $anime['mal_id'] ?>"
+                        class="inline-block mt-4 bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-600 transition-colors btn-glow">
+                        Lihat Detail
+                    </a>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <?php else: ?>
+        <div class="bg-gray-800/50 border border-gray-700 rounded-lg p-8 text-center max-w-2xl mx-auto">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p class="text-gray-400">Gagal mengambil data anime dari API.</p>
+            <p class="text-gray-500 text-sm mt-2">Silakan coba lagi nanti atau periksa koneksi internet Anda.</p>
+        </div>
+        <?php endif; ?>
+    </div>
+    </body>
 <?php include 'app/views/templates/footer.php'; ?>

@@ -11,7 +11,7 @@ function getDB() {
         if ($dbConnection->connect_error) {
             throw new Exception("Koneksi gagal: " . $dbConnection->connect_error);
         } else {
-             echo "Koneksi berhasil";     
+            // echo "Koneksi berhasil";     
         }
     } catch (Exception $e) {
         echo "Error: " . $e->getMessage();
