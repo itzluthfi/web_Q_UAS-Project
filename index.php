@@ -3,7 +3,6 @@ session_start();
 require_once 'config/database.php';
 $routes = require __DIR__ . '/routes.php';
 
-
 spl_autoload_register(function ($class) {
     if (file_exists("app/controllers/$class.php")) {
         require_once "app/controllers/$class.php";
@@ -16,22 +15,53 @@ spl_autoload_register(function ($class) {
 $base = '/anime-list-uas';
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = str_replace($base, '', $uri);
-$uri = rtrim($uri, '/');
-$uri = $uri === '' ? '/' : $uri;
+$uri = rtrim($uri, '/') ?: '/';
+// echo "URI: $uri<br>";
+// print_r($routes);
 
 
-// Routing
-if (array_key_exists($uri, $routes)) {
-    $controllerName = $routes[$uri]['controller'];
-    $method = $routes[$uri]['method'];
+// Proses routing dengan dukungan parameter
+$found = false;
 
-    $controller = new $controllerName();
-    if (method_exists($controller, $method)) {
-        $controller->$method();
-    } else {
-        echo "Method $method tidak ditemukan di $controllerName.";
+foreach ($routes as $route => $info) {
+    // Tangani root '/' secara eksplisit
+    if ($route === $uri) {
+        $controllerName = $info['controller'];
+        $method = $info['method'];
+        $controller = new $controllerName();
+
+        if (method_exists($controller, $method)) {
+            $controller->$method();
+        } else {
+            echo "Method $method tidak ditemukan di $controllerName.";
+        }
+
+        $found = true;
+        break;
     }
-} else {
-    http_response_code(404);
-    echo "404 - Halaman tidak ditemukan";
+
+    // Tangani route dinamis seperti /anime/show/{id}
+    $pattern = preg_replace('#\{[\w]+\}#', '([\w-]+)', $route);
+    $pattern = '#^' . rtrim($pattern, '/') . '$#';
+
+    if (preg_match($pattern, $uri, $matches)) {
+        array_shift($matches);
+
+        $controllerName = $info['controller'];
+        $method = $info['method'];
+        $controller = new $controllerName();
+
+        if (method_exists($controller, $method)) {
+            call_user_func_array([$controller, $method], $matches);
+        } else {
+            echo "Method $method tidak ditemukan di $controllerName.";
+        }
+
+        $found = true;
+        break;
+    }
+}
+
+if (!$found) {
+    echo "404 - Halaman tidak ditemukan.";
 }

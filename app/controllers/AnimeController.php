@@ -9,7 +9,18 @@ class AnimeController {
         require 'app/views/anime/index.php';
     }
 
-    public function show() {
-        echo "Ini halaman detail anime (show)";
+  
+
+    public function show($id) {
+        $animeModel = new AnimeModel();
+        $anime = $animeModel->getAnimeById($id);
+
+        if (!$anime) {
+            echo "Anime tidak ditemukan.";
+            return;
+        }
+
+        require 'app/views/anime/show.php';
     }
 }
+

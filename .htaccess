@@ -1,7 +1,7 @@
 RewriteEngine On
 RewriteBase /anime-list-uas/
 
-# Jika file atau folder tidak ditemukan, arahkan ke index.php
+# Jika bukan file atau folder, alihkan ke index.php
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

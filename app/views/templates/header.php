@@ -4,4 +4,5 @@
     <title>Anime List</title>
     <!-- Mengarah ke file CSS tanpa /public -->
     <link rel="stylesheet" href="public/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
