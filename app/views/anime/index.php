@@ -1,6 +1,19 @@
-<?php include 'app/views/templates/header.php'; ?>
+<?php 
+include 'app/views/templates/header.php'; 
+
+?>
 
 <h1>Top Anime</h1>
+
+<?php if (!empty($_SESSION['error_message'])): ?>
+<div style="color: red;"><?= htmlspecialchars($_SESSION['error_message']) ?></div>
+<?php unset($_SESSION['error_message']); ?>
+<?php endif; ?>
+
+<?php if (!empty($_SESSION['success_message'])): ?>
+<div style="color: green;"><?= htmlspecialchars($_SESSION['success_message']) ?></div>
+<?php unset($_SESSION['success_message']); ?>
+<?php endif; ?>
 
 <!-- Tombol Login -->
 <div style="text-align: right; margin-bottom: 20px;">

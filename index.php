@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'config/database.php';
 $routes = require __DIR__ . '/routes.php';
 

@@ -15,21 +15,31 @@ class AuthController {
     }
 
     // Fungsi untuk proses registrasi
-    public function register() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $username = $_POST['username'];
-            $email = $_POST['email'];
-            $password = $_POST['password'];
-            $role = $_POST['role'] ?? 'user';
+    public function register()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $username = $_POST['username'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $role = $_POST['role'];
 
-            if ($this->userModel->register($username, $email, $password, $role)) {
-                header('Location: /login'); // Redirect ke halaman login setelah registrasi
-                exit;
-            } else {
-                echo "Registrasi gagal!";
-            }
+        // Coba untuk melakukan registrasi
+        $result = $this->userModel->register($username, $email, $password, $role);
+
+        // Jika hasilnya adalah string error (username sudah ada), tampilkan pesan
+        if ($result !== true) {
+            $_SESSION['error_message'] = $result;
+            include 'app/views/auth/register.php';
+        } else {
+            // Redirect atau tampilkan sukses
+            $_SESSION['success_message'] = "Registrasi berhasil! Silakan login.";
+            header("Location: /anime-list-uas/login");
+            exit;
         }
+    } else {
+        include 'app/views/auth/register.php';
     }
+}
 
     // Fungsi untuk tampilkan form login
     public function loginForm() {
@@ -47,10 +57,12 @@ class AuthController {
             if ($user) {
                 session_start();
                 $_SESSION['user'] = $user; // Simpan data user ke session
-                header('Location: /'); // Redirect ke halaman utama setelah login sukses
+                $_SESSION['success_message'] = "Login berhasil!";
+                header('Location: /anime-list-uas/'); // Redirect ke halaman utama setelah login sukses
                 exit;
             } else {
-                echo "Login gagal!";
+                $_SESSION['error_message'] = "Login gagal! Username atau password salah.";
+                
             }
         }
     }
