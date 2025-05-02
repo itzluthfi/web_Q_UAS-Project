@@ -2,7 +2,7 @@
 
 Anggota:
 Muhammad Brillian Alif 06.2023.1.07663
-Kuthfi Shidqi Habibulloh 06.2023.1.07702
+Luthfi Shidqi Habibulloh 06.2023.1.07702
 
 # Judul:
 
