@@ -34,7 +34,7 @@ My Anime List (MAL) adalah platform digital inovatif yang dirancang untuk memenu
 ## Langkah Instalasi:
 
 1. Clone Repository
-   git clone https://github.com/username/anime-list.git
+   git clone https://github.com/itzluthfi/web_Q_UAS-Project.git
    cd anime-list
 2. Pindahkan ke Web Server Directory
    Jika menggunakan XAMPP:

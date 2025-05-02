@@ -3,49 +3,76 @@ session_start();
 require_once 'config/database.php';
 $routes = require __DIR__ . '/routes.php';
 
+// Autoload
 spl_autoload_register(function ($class) {
-    if (file_exists("app/controllers/$class.php")) {
-        require_once "app/controllers/$class.php";
-    } elseif (file_exists("app/models/$class.php")) {
-        require_once "app/models/$class.php";
+    foreach (['app/controllers/', 'app/models/', 'app/middleware/'] as $path) {
+        $file = $path . $class . '.php';
+        if (file_exists($file)) {
+            require_once $file;
+            return;
+        }
     }
 });
 
-// Tangkap URI
-$base = '/anime-list-uas';
+$base = '/anime-list-uas'; // Ubah sesuai folder kamu
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = str_replace($base, '', $uri);
 $uri = rtrim($uri, '/') ?: '/';
+
+// echo "Base: $base<br>";
 // echo "URI: $uri<br>";
-// print_r($routes);
 
 
-// Proses routing dengan dukungan parameter
+// Flatten group routes
+$flattenedRoutes = [];
+
+foreach ($routes as $key => $value) {
+    if (isset($value['routes']) && isset($value['middleware'])) {
+        foreach ($value['routes'] as $path => $info) {
+            $infoMiddleware = isset($info['middleware']) ? $info['middleware'] : [];
+            $mergedMiddleware = array_merge($value['middleware'], (array) $infoMiddleware);
+            $info['middleware'] = $mergedMiddleware;
+            $flattenedRoutes[$path] = $info;
+        }
+    } else {
+        $flattenedRoutes[$key] = $value;
+    }
+}
+
+// echo "<pre>";
+// print_r($flattenedRoutes);
+// echo "</pre>";
+
+// Routing
 $found = false;
 
-foreach ($routes as $route => $info) {
-    // Tangani root '/' secara eksplisit
-    if ($route === $uri) {
-        $controllerName = $info['controller'];
-        $method = $info['method'];
-        $controller = new $controllerName();
 
-        if (method_exists($controller, $method)) {
-            $controller->$method();
-        } else {
-            echo "Method $method tidak ditemukan di $controllerName.";
-        }
+foreach ($flattenedRoutes as $route => $info) {
+    $pattern = preg_replace('#\{[\w]+\}#', '([\w-]+)', $route);
 
-        $found = true;
-        break;
+    // Jika route adalah '/', jangan rtrim '/'
+    if ($route !== '/') {
+        $pattern = rtrim($pattern, '/');
     }
 
-    // Tangani route dinamis seperti /anime/show/{id}
-    $pattern = preg_replace('#\{[\w]+\}#', '([\w-]+)', $route);
-    $pattern = '#^' . rtrim($pattern, '/') . '$#';
+    $pattern = '#^' . $pattern . '$#';
+
 
     if (preg_match($pattern, $uri, $matches)) {
         array_shift($matches);
+
+        // Jalankan middleware
+        if (isset($info['middleware'])) {
+            $middlewares = is_array($info['middleware']) ? $info['middleware'] : [$info['middleware']];
+            foreach ($middlewares as $middlewareClass) {
+                if (class_exists($middlewareClass) && method_exists($middlewareClass, 'handle')) {
+                    $middlewareClass::handle();
+                } else {
+                    echo "Middleware $middlewareClass tidak valid.<br>";
+                    exit;
+                }
+            }
+        }
 
         $controllerName = $info['controller'];
         $method = $info['method'];
