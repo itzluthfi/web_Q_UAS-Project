@@ -65,6 +65,7 @@
 
 <body class="min-h-screen bg-gradient-to-br from-gray-900 to-black text-gray-100">
     <div class="anime-backdrop pt-16">
+        <?php include 'app/views/templates/navbar.php'; ?>
         <div class="max-w-4xl mx-auto bg-gray-800 shadow-xl rounded-lg overflow-hidden glow-effect">
             <!-- Title and Image -->
             <div class="md:flex p-6">
