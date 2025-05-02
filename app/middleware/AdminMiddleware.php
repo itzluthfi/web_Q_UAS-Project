@@ -8,5 +8,6 @@ class AdminMiddleware {
             // echo "<script>alert(Akses ditolak: Anda bukan admin.);</script>";
             exit;
         }
+        
     }
 }

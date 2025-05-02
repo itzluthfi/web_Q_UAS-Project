@@ -80,12 +80,14 @@ foreach ($flattenedRoutes as $route => $info) {
 
         if (method_exists($controller, $method)) {
             call_user_func_array([$controller, $method], $matches);
+            $found = true;
+            break;
+
         } else {
             echo "Method $method tidak ditemukan di $controllerName.";
+
         }
 
-        $found = true;
-        break;
     }
 }
 

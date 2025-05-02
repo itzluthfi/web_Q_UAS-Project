@@ -1,5 +1,5 @@
 <?php
-//Group middleware 😏
+//Group middleware 
 return [
     // Guest only
     [
@@ -27,6 +27,7 @@ return [
         'middleware' => ['AuthMiddleware'],
         'routes' => [
             '/logout' => ['controller' => 'AuthController', 'method' => 'logout'],
+            
         ]
     ],
 
@@ -35,6 +36,7 @@ return [
         'middleware' => [],
         'routes' => [
             '/' => ['controller' => 'AnimeController', 'method' => 'index'],
+            '/anime/search' => ['controller' => 'AnimeController', 'method' => 'search'],
         ]
     ]
 ];

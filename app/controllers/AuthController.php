@@ -9,12 +9,10 @@ class AuthController {
         $this->userModel = new UserModel();
     }
 
-    // Fungsi untuk tampilkan form registrasi
     public function registerForm() {
         require 'app/views/auth/register.php';
     }
 
-    // Fungsi untuk proses registrasi
     public function register()
 {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -41,12 +39,10 @@ class AuthController {
     }
 }
 
-    // Fungsi untuk tampilkan form login
     public function loginForm() {
         require 'app/views/auth/login.php';
     }
 
-    // Fungsi untuk proses login
     public function login() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $username = $_POST['username'];
@@ -67,11 +63,10 @@ class AuthController {
         }
     }
 
-    // Fungsi untuk logout
     public function logout() {
         session_start();
         session_destroy();
-        header('Location: /login'); // Redirect ke halaman login setelah logout
+        header('Location: /anime-list-uas/'); // Redirect ke halaman beranda 
         exit;
     }
 }

@@ -21,4 +21,22 @@ class AnimeModel {
         }
         return [];
     }
+
+    public function searchAnime($query) {
+        $url = "https://api.jikan.moe/v4/anime?q=" . urlencode($query) . "&limit=10";
+        $response = file_get_contents($url);
+        $data = json_decode($response, true);
+    
+        return $data['data'] ?? [];
+    }
+
+    public function getRecommendations($animeId) {
+        $url = "https://api.jikan.moe/v4/anime/$animeId/recommendations";
+        $response = file_get_contents($url);
+        $data = json_decode($response, true);
+    
+        return $data['data'] ?? [];
+    }
+    
+    
 }
