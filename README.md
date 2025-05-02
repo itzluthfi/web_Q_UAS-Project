@@ -46,7 +46,7 @@ Pindahkan folder anime-list/ ke direktori C:\laragon\www\.
 3. Setup Database
    Buka phpMyAdmin melalui XAMPP atau Laragon.
 
-Buat database baru (misalnya: anime_list_db).
+Buat database baru : ( db_anime_list ).
 
 Import file SQL jika disediakan, atau buat struktur tabel berdasarkan kebutuhan aplikasi.
 
