@@ -1,14 +1,30 @@
 <?php
-//Group middleware 
+    // Group middleware
 return [
     // Guest only
     [
         'middleware' => ['GuestMiddleware'],
         'routes' => [
-            '/login' => ['controller' => 'AuthController', 'method' => 'loginForm'],
-            '/login/submit' => ['controller' => 'AuthController', 'method' => 'login'],
-            '/register' => ['controller' => 'AuthController', 'method' => 'registerForm'],
-            '/register/submit' => ['controller' => 'AuthController', 'method' => 'register'],
+            '/login' => [
+                'controller' => 'AuthController',
+                'function' => 'loginForm',
+                'method' => 'GET',
+            ],
+            '/login/submit' => [
+                'controller' => 'AuthController',
+                'function' => 'login',
+                'method' => 'POST',
+            ],
+            '/register' => [
+                'controller' => 'AuthController',
+                'function' => 'registerForm',
+                'method' => 'GET',
+            ],
+            '/register/submit' => [
+                'controller' => 'AuthController',
+                'function' => 'register',
+                'method' => 'POST',
+            ],
         ]
     ],
 
@@ -16,18 +32,28 @@ return [
     [
         'middleware' => ['AuthMiddleware', 'AdminMiddleware'],
         'routes' => [
-            '/admin/users' => ['controller' => 'AdminController', 'method' => 'manageUsers'],
-            '/anime/show/{id}' => ['controller' => 'AnimeController', 'method' => 'show'],
-
+            '/admin/users' => [
+                'controller' => 'AdminController',
+                'function' => 'manageUsers',
+                'method' => 'GET',
+            ],
+            '/anime/show/{id}' => [
+                'controller' => 'AnimeController',
+                'function' => 'show',
+                'method' => 'GET',
+            ],
         ]
     ],
 
-    // Authenticated users 
+    // Authenticated users
     [
         'middleware' => ['AuthMiddleware'],
         'routes' => [
-            '/logout' => ['controller' => 'AuthController', 'method' => 'logout'],
-            
+            '/logout' => [
+                'controller' => 'AuthController',
+                'function' => 'logout',
+                'method' => 'POST',
+            ],
         ]
     ],
 
@@ -35,8 +61,16 @@ return [
     [
         'middleware' => [],
         'routes' => [
-            '/' => ['controller' => 'AnimeController', 'method' => 'index'],
-            '/anime/search' => ['controller' => 'AnimeController', 'method' => 'search'],
+            '/' => [
+                'controller' => 'AnimeController',
+                'function' => 'index',
+                'method' => 'GET',
+            ],
+            '/anime/search' => [
+                'controller' => 'AnimeController',
+                'function' => 'search',
+                'method' => 'GET', // for search query
+            ],
         ]
     ]
 ];

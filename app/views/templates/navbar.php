@@ -179,14 +179,14 @@ body {
                 <?php if(isset($_SESSION['user'])): ?>
                 <!-- Profile and Settings for logged in users -->
                 <div class="hidden md:flex md:items-center">
-                    <a href="#" class="p-2 rounded-full text-gray-400 hover:text-white focus:outline-none">
+                    <!-- <a href="#" class="p-2 rounded-full text-gray-400 hover:text-white focus:outline-none">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
-                    </a>
-                    <a href="#" class="p-2 rounded-full text-gray-400 hover:text-white focus:outline-none">
+                    </a> -->
+                    <a href="#" class="setting p-2 rounded-full text-gray-400 hover:text-white focus:outline-none">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -200,13 +200,20 @@ body {
                     <div class="ml-3 relative">
                         <div>
                             <button type="button"
-                                class="flex text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-purple-500"
+                                class="flex items-center  text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-purple-500 hover:bg-gray-700 transition"
                                 id="user-menu-button">
                                 <span class="sr-only">Open user menu</span>
                                 <div class="h-8 w-8 rounded-full bg-purple-600 flex items-center justify-center">
                                     <span class="font-bold text-white">U</span>
                                 </div>
+                                <!-- Panah dropdown -->
+                                <svg class="w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
                             </button>
+
                         </div>
 
                         <!-- Dropdown menu, show/hide based on menu state. -->
@@ -278,19 +285,20 @@ body {
         </div>
 
         <!-- Mobile Search -->
-        <div class="px-2 pt-2 pb-3">
+        <form action="/anime-list-uas/anime/search" method="GET" class="px-2 pt-2 pb-3 md:hidden">
             <div class="relative">
-                <input type="text" placeholder="Cari anime..."
+                <input type="text" name="q" placeholder="Cari anime..." required
                     class="input-dark w-full pl-10 pr-4 py-2 rounded-lg text-sm focus:outline-none">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <button type="submit" class="absolute inset-y-0 left-0 pl-3 flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
-                </div>
+                </button>
             </div>
-        </div>
+        </form>
+
 
         <?php if(isset($_SESSION['user'])): ?>
         <!-- Mobile Profile Links for logged in users -->
@@ -325,7 +333,7 @@ body {
         <!-- Mobile Auth Buttons for guests -->
         <div class="pt-4 pb-3 border-t border-gray-700">
             <div class="flex items-center justify-center space-x-4 px-5">
-                <a href="./login"
+                <a href="/anime-list-uas/login"
                     class="w-1/2 text-center bg-gray-700 text-white px-4 py-2 rounded-md text-base font-medium hover:bg-gray-600 transition-colors">
                     Sign In
                 </a>

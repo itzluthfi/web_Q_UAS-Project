@@ -19,9 +19,8 @@ $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = str_replace($base, '', $uri);
 $uri = rtrim($uri, '/') ?: '/';
 
-// echo "Base: $base<br>";
-// echo "URI: $uri<br>";
-
+// HTTP Method (GET, POST, etc)
+$httpMethod = $_SERVER['REQUEST_METHOD'];
 
 // Flatten group routes
 $flattenedRoutes = [];
@@ -39,13 +38,8 @@ foreach ($routes as $key => $value) {
     }
 }
 
-// echo "<pre>";
-// print_r($flattenedRoutes);
-// echo "</pre>";
-
 // Routing
 $found = false;
-
 
 foreach ($flattenedRoutes as $route => $info) {
     $pattern = preg_replace('#\{[\w]+\}#', '([\w-]+)', $route);
@@ -57,8 +51,13 @@ foreach ($flattenedRoutes as $route => $info) {
 
     $pattern = '#^' . $pattern . '$#';
 
-
     if (preg_match($pattern, $uri, $matches)) {
+        // Check if HTTP method matches
+        if (isset($info['method']) && strtoupper($info['method']) !== $httpMethod) {
+            // Skip if method doesn't match
+            continue;
+        }
+
         array_shift($matches);
 
         // Jalankan middleware
@@ -75,19 +74,16 @@ foreach ($flattenedRoutes as $route => $info) {
         }
 
         $controllerName = $info['controller'];
-        $method = $info['method'];
+        $function = $info['function']; // Menggunakan 'function' sekarang
         $controller = new $controllerName();
 
-        if (method_exists($controller, $method)) {
-            call_user_func_array([$controller, $method], $matches);
+        if (method_exists($controller, $function)) {
+            call_user_func_array([$controller, $function], $matches);
             $found = true;
             break;
-
         } else {
-            echo "Method $method tidak ditemukan di $controllerName.";
-
+            echo "Function $function tidak ditemukan di $controllerName.";
         }
-
     }
 }
 
