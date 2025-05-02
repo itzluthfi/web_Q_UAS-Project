@@ -58,14 +58,15 @@ body {
 }
 </style>
 
-<body>
-    <div class="container mx-auto px-4 py-6">
+
+    
         <!-- <h1 class="text-3xl font-bold text-center text-indigo-600 mb-8">Top Anime</h1> -->
 
         <!-- Alert Message -->
 
-        <body class="min-h-screen bg-gradient-to-br from-gray-900 to-black text-gray-100">
-            <div class="container mx-auto px-4 py-6">
+        <body class="min-h-screen bg-gradient-to-br from-gray-900 to-black text-gray-100"> 
+            <?php include 'app/views/templates/navbar.php'; ?>
+        <div class="container mx-auto px-4 py-6">
                 <h1 class="text-3xl font-bold text-center text-purple-400 mb-8">Anime List</h1>
 
                 <!-- Alert Message -->
@@ -97,53 +98,7 @@ body {
                 <?php unset($_SESSION['success_message']); ?>
                 <?php endif; ?>
 
-                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-                    <!-- Search Form -->
-                    <form method="GET" action="" class="mb-4 md:mb-0 flex w-full md:w-2/3 lg:w-1/2">
-                        <input type="text" name="q" placeholder="Cari anime..."
-                            class="input-dark border border-gray-700 rounded-l px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-purple-500">
-                        <button type="submit"
-                            class="bg-purple-700 text-white px-4 py-2 rounded-r hover:bg-purple-600 transition-colors btn-glow">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                    </form>
-
-                    <?php if(!isset($_SESSION['user'])): ?>
-                    <!-- Login Button -->
-                    <div class="flex">
-                        <a href="./login"
-                            class="bg-purple-700 text-white px-6 py-2 rounded hover:bg-purple-600 transition-colors flex items-center btn-glow">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                            Login
-                        </a>
-                    </div>
-                    <?php else: ?>
-                    <!-- User is logged in, you can add profile or logout button here -->
-                    <div class="flex">
-                        <a href="./logout"
-                            class="bg-gray-700 text-white px-6 py-2 rounded hover:bg-gray-600 transition-colors flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                            Logout
-                        </a>
-                    </div>
-                    <?php endif; ?>
-                </div>
-
+               
                 <!-- Anime Grid -->
                 <?php if (!empty($animeList)): ?>
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -195,4 +150,4 @@ body {
                 <?php endif; ?>
             </div>
         </body>
-        <?php include 'app/views/templates/footer.php'; ?>
+    <?php include 'app/views/templates/footer.php'; ?>
