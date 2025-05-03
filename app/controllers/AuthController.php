@@ -64,9 +64,12 @@ class AuthController {
     }
 
     public function logout() {
-        session_start();
-        session_destroy();
-        header('Location: /anime-list-uas/'); // Redirect ke halaman beranda 
-        exit;
+   
+            session_start();
+            session_destroy();
+            header('Location: /anime-list-uas/');
+            exit;
+       
     }
+    
 }

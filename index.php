@@ -1,12 +1,14 @@
 <?php
 session_start();
 require_once 'config/database.php';
-$routes = require __DIR__ . '/routes.php';
+require_once 'config/route.php'; // File class Route
+require_once 'config/helper.php'; // File class Helper 
+require_once 'routes.php';       // File definisi route
 
-// Autoload
+// Autoload controller, model, middleware
 spl_autoload_register(function ($class) {
-    foreach (['app/controllers/', 'app/models/', 'app/middleware/'] as $path) {
-        $file = $path . $class . '.php';
+    foreach (['app/controllers/', 'app/models/', 'app/middleware/'] as $dir) {
+        $file = $dir . $class . '.php';
         if (file_exists($file)) {
             require_once $file;
             return;
@@ -14,37 +16,21 @@ spl_autoload_register(function ($class) {
     }
 });
 
-$base = '/anime-list-uas'; // Ubah sesuai folder kamu
+$base = '/anime-list-uas'; // Ganti sesuai subfolder kamu
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = str_replace($base, '', $uri);
 $uri = rtrim($uri, '/') ?: '/';
 
-// HTTP Method (GET, POST, etc)
 $httpMethod = $_SERVER['REQUEST_METHOD'];
+$routes = Route::all();
 
-// Flatten group routes
-$flattenedRoutes = [];
-
-foreach ($routes as $key => $value) {
-    if (isset($value['routes']) && isset($value['middleware'])) {
-        foreach ($value['routes'] as $path => $info) {
-            $infoMiddleware = isset($info['middleware']) ? $info['middleware'] : [];
-            $mergedMiddleware = array_merge($value['middleware'], (array) $infoMiddleware);
-            $info['middleware'] = $mergedMiddleware;
-            $flattenedRoutes[$path] = $info;
-        }
-    } else {
-        $flattenedRoutes[$key] = $value;
-    }
-}
-
-// Routing
 $found = false;
 
-foreach ($flattenedRoutes as $route => $info) {
+foreach ($routes as $route => $info) {
+    // Ubah {param} ke regex (contoh: /anime/show/{id} -> /anime/show/([\w-]+))
     $pattern = preg_replace('#\{[\w]+\}#', '([\w-]+)', $route);
 
-    // Jika route adalah '/', jangan rtrim '/'
+    // Jangan rtrim '/' untuk root
     if ($route !== '/') {
         $pattern = rtrim($pattern, '/');
     }
@@ -52,15 +38,14 @@ foreach ($flattenedRoutes as $route => $info) {
     $pattern = '#^' . $pattern . '$#';
 
     if (preg_match($pattern, $uri, $matches)) {
-        // Check if HTTP method matches
+        // Cek method HTTP
         if (isset($info['method']) && strtoupper($info['method']) !== $httpMethod) {
-            // Skip if method doesn't match
             continue;
         }
 
-        array_shift($matches);
+        array_shift($matches); // hapus full match dari array
 
-        // Jalankan middleware
+        // Jalankan semua middleware
         if (isset($info['middleware'])) {
             $middlewares = is_array($info['middleware']) ? $info['middleware'] : [$info['middleware']];
             foreach ($middlewares as $middlewareClass) {
@@ -74,7 +59,8 @@ foreach ($flattenedRoutes as $route => $info) {
         }
 
         $controllerName = $info['controller'];
-        $function = $info['function']; // Menggunakan 'function' sekarang
+        $function = $info['function'];
+
         $controller = new $controllerName();
 
         if (method_exists($controller, $function)) {
@@ -83,6 +69,7 @@ foreach ($flattenedRoutes as $route => $info) {
             break;
         } else {
             echo "Function $function tidak ditemukan di $controllerName.";
+            exit;
         }
     }
 }

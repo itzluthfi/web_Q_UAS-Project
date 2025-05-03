@@ -131,8 +131,10 @@ body {
                                 d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
                                 clip-rule="evenodd" />
                         </svg>
-                        Eksplor
+                        Genre ▾
                     </a>
+
+
 
                     <?php if(isset($_SESSION['user'])): ?>
                     <!-- Menu tambahan untuk user yang sudah login -->
@@ -226,16 +228,22 @@ body {
                                 role="menuitem">Pengaturan</a>
                             <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
                                 role="menuitem">Anime Favorit</a>
-                            <a href="#" onclick="logout()"
-                                class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white border-t border-gray-700"
-                                role="menuitem">Keluar</a>
+                            <form action="<?= route('logout') ?>" method="POST" class="inline">
+                                <button type="submit"
+                                    class="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700">
+                                    Logout
+                                </button>
+                            </form>
+
+
                         </div>
                     </div>
                 </div>
                 <?php else: ?>
                 <!-- Auth Buttons (Sign In / Sign Up) for guests -->
                 <div class="hidden md:flex md:items-center">
-                    <a href="./login" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                    <a href="<?= route('login') ?>"
+                        class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                         Sign In
                     </a>
                     <a href="./register"
@@ -325,15 +333,17 @@ body {
                 <a href="#"
                     class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Anime
                     Favorit</a>
-                <a href="#" onclick="logout()"
-                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Keluar</a>
+                <form id="logout-form" action="<?= route('logout') ?>" method="POST">
+                    <button onclick="confirm('Apakah Anda yakin ingin keluar?')" type="submit"
+                        class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Keluar</button>
+                </form>
             </div>
         </div>
         <?php else: ?>
         <!-- Mobile Auth Buttons for guests -->
         <div class="pt-4 pb-3 border-t border-gray-700">
             <div class="flex items-center justify-center space-x-4 px-5">
-                <a href="/anime-list-uas/login"
+                <a href="<?= route('login') ?>"
                     class="w-1/2 text-center bg-gray-700 text-white px-4 py-2 rounded-md text-base font-medium hover:bg-gray-600 transition-colors">
                     Sign In
                 </a>
@@ -347,13 +357,8 @@ body {
     </div>
 </nav>
 
-<script>
-function logout() {
-    if (confirm("Apakah Anda yakin ingin logout?")) {
-        window.location.href = "./logout"; // arahkan ke controller logout
-    }
-}
-</script>
+
+
 
 <!-- JavaScript for Navbar Functionality -->
 <script>

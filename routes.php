@@ -1,76 +1,24 @@
 <?php
-    // Group middleware
-return [
-    // Guest only
-    [
-        'middleware' => ['GuestMiddleware'],
-        'routes' => [
-            '/login' => [
-                'controller' => 'AuthController',
-                'function' => 'loginForm',
-                'method' => 'GET',
-            ],
-            '/login/submit' => [
-                'controller' => 'AuthController',
-                'function' => 'login',
-                'method' => 'POST',
-            ],
-            '/register' => [
-                'controller' => 'AuthController',
-                'function' => 'registerForm',
-                'method' => 'GET',
-            ],
-            '/register/submit' => [
-                'controller' => 'AuthController',
-                'function' => 'register',
-                'method' => 'POST',
-            ],
-        ]
-    ],
 
-    // Admin only
-    [
-        'middleware' => ['AuthMiddleware', 'AdminMiddleware'],
-        'routes' => [
-            '/admin/users' => [
-                'controller' => 'AdminController',
-                'function' => 'manageUsers',
-                'method' => 'GET',
-            ],
-            '/anime/show/{id}' => [
-                'controller' => 'AnimeController',
-                'function' => 'show',
-                'method' => 'GET',
-            ],
-        ]
-    ],
+require_once 'config/route.php';
 
-    // Authenticated users
-    [
-        'middleware' => ['AuthMiddleware'],
-        'routes' => [
-            '/logout' => [
-                'controller' => 'AuthController',
-                'function' => 'logout',
-                'method' => 'POST',
-            ],
-        ]
-    ],
+Route::middleware(['GuestMiddleware'])->group(function () {
+    Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
 
-    // Public (no middleware)
-    [
-        'middleware' => [],
-        'routes' => [
-            '/' => [
-                'controller' => 'AnimeController',
-                'function' => 'index',
-                'method' => 'GET',
-            ],
-            '/anime/search' => [
-                'controller' => 'AnimeController',
-                'function' => 'search',
-                'method' => 'GET', // for search query
-            ],
-        ]
-    ]
-];
+    Route::post('/login/submit', 'AuthController', 'login')->name('login.submit');
+    Route::get('/register', 'AuthController', 'registerForm');
+    Route::post('/register/submit', 'AuthController', 'register');
+});
+
+Route::middleware(['AuthMiddleware', 'AdminMiddleware'])->group(function () {
+    Route::get('/admin/users', 'AdminController', 'manageUsers');
+    Route::get('/anime/show/{id}', 'AnimeController', 'show');
+});
+
+Route::middleware(['AuthMiddleware'])->group(function () {
+    Route::post('/logout', 'AuthController', 'logout')->name('logout');
+    Route::get('/anime/show/{id}', 'AnimeController', 'show');
+});
+
+Route::get('/', 'AnimeController', 'index');
+Route::get('/anime/search', 'AnimeController', 'search');
