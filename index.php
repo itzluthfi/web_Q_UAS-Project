@@ -75,5 +75,7 @@ foreach ($routes as $route => $info) {
 }
 
 if (!$found) {
-    echo "404 - Halaman tidak ditemukan.";
+    http_response_code(404);
+    require 'app/views/errors/404.php';
+    exit;
 }
