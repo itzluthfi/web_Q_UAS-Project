@@ -10,7 +10,7 @@ class AnimeController {
             echo "Anime List tidak ditemukan.";
             return;
         }
-        require 'app/views/anime/index.php';
+        require 'app/views/user/anime/index.php';
     }
 
 
@@ -23,7 +23,7 @@ class AnimeController {
             return;
         }
 
-        require 'app/views/anime/show.php';
+        require 'app/views/user/anime/show.php';
     }
 
     public function recommendations($id) {
@@ -35,7 +35,7 @@ class AnimeController {
             return;
         }
     
-        require 'app/views/anime/recommendations.php';
+        require 'app/views/user/anime/recommendations.php';
     }
 
     public function search() {
@@ -49,7 +49,7 @@ class AnimeController {
     $animeModel = new AnimeModel();
     $animeList = $animeModel->searchAnime($query);
 
-    require 'app/views/anime/index.php'; // tampilkan view yang sama
+    require 'app/views/user/anime/index.php'; // tampilkan view yang sama
 }
 
     

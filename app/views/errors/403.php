@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 Not Found - Anime Error Page</title>
+    <title>403 Forbidden - Anime Error Page</title>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@latest/dist/full.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -25,28 +25,27 @@
 
 <body class="bg-anime-dark text-gray-200 min-h-screen flex items-center justify-center p-4">
     <div class="max-w-md w-full bg-gray-900 rounded-lg shadow-xl overflow-hidden border border-anime-purple/30">
-
-        <!-- Fire Force Banner -->
-        <div class="flex justify-center">
-            <img src="http://localhost/anime-list-uas/public/assets/fire-force.jpg" alt="Fire Force Banner"
-                class="w-full max-h-48 object-cover rounded-t-lg border-b-2 border-anime-purple">
-        </div>
-
         <div class="p-6">
-            <!-- Anime Character Placeholder -->
+            <!-- Simple anime character silhouette -->
             <!-- <div class="flex justify-center mb-6">
                 <img src="http://localhost/anime-list-uas/public/assets/fire-force.jpg" alt="Anime Character"
                     class="w-32 h-32 rounded-full bg-gray-800 border-2 border-anime-purple p-1">
             </div> -->
 
-            <!-- Error code and message -->
-            <div class="text-center mb-6">
-                <h1 class="text-6xl font-bold text-anime-purple mb-2">404</h1>
-                <h2 class="text-xl font-medium mb-2">Page Not Found</h2>
-                <p class="text-gray-400 text-sm">The page you're looking for doesn't seem to exist.</p>
+            <!-- Fire Force Banner -->
+            <div class="flex justify-center">
+                <img src="http://localhost/anime-list-uas/public/assets/fire-force.jpg" alt="Fire Force Banner"
+                    class="w-full max-h-48 object-cover rounded-t-lg border-b-2 border-anime-purple">
             </div>
 
-            <!-- Divider -->
+            <!-- Error code and message -->
+            <div class="text-center mb-6">
+                <h1 class="text-6xl font-bold text-anime-purple mb-2">403</h1>
+                <h2 class="text-xl font-medium mb-2">Access Forbidden</h2>
+                <p class="text-gray-400 text-sm">You don't have permission to access this area.</p>
+            </div>
+
+            <!-- Simple divider -->
             <div class="flex items-center justify-center mb-6">
                 <div class="h-px w-16 bg-anime-purple opacity-50"></div>
                 <div class="mx-2">
@@ -65,13 +64,13 @@
             </div>
         </div>
 
-        <!-- Footer -->
+        <!-- Simple anime-style footer -->
         <div class="bg-gray-950 p-3 text-center text-xs text-gray-500">
             <p>Your journey continues elsewhere...</p>
         </div>
     </div>
 
-    <!-- Floating Icons -->
+    <!-- Minimal floating elements -->
     <div class="fixed top-10 left-10 animate-pulse opacity-20">
         <i class="fas fa-moon text-anime-purple text-xl"></i>
     </div>

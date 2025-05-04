@@ -115,7 +115,7 @@ body {
 
                 <!-- Desktop Navigation Links -->
                 <div class="hidden md:ml-6 md:flex md:items-center md:space-x-4">
-                    <a href="#" class="nav-link active px-3 py-2 text-sm font-medium text-white">
+                    <a href="<?= route('home') ?>" class="nav-link active px-3 py-2 text-sm font-medium text-white">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20"
                             fill="currentColor">
                             <path
