@@ -13,12 +13,13 @@ Route::middleware(['GuestMiddleware'])->group(function () {
 //hanya admin
 Route::middleware(['AuthMiddleware', 'AdminMiddleware'])->group(function () {
     Route::get('/admin/users', [AdminController::class, 'manageUsers'])->name('admin.users');
-    Route::get('/anime/show/{id}', [AnimeController::class, 'show'])->name('anime.show.admin');
 });
 
 //yg sudah login
 Route::middleware(['AuthMiddleware'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/anime/show/{id}', [AnimeController::class, 'show'])->name('anime.show');
+
 });
 
 //public

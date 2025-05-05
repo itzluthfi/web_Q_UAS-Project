@@ -1,9 +1,9 @@
 <?php
 session_start();
 require_once 'config/database.php';
-require_once 'config/route.php'; // File class Route
-require_once 'config/helper.php'; // File class Helper 
-require_once 'routes.php';       // File definisi route
+require_once 'config/routeHelper.php';
+require_once 'config/viewHelper.php';
+require_once 'routes.php';      
 
 // Autoload controller, model, middleware
 spl_autoload_register(function ($class) {
@@ -23,59 +23,62 @@ $uri = rtrim($uri, '/') ?: '/';
 
 $httpMethod = $_SERVER['REQUEST_METHOD'];
 $routes = Route::all();
+// echo "<pre>";
+// print_r($routes);
+// echo "</pre>";
 
 $found = false;
 
 foreach ($routes as $route => $info) {
-    // Ubah {param} ke regex (contoh: /anime/show/{id} -> /anime/show/([\w-]+))
-    $pattern = preg_replace('#\{[\w]+\}#', '([\w-]+)', $route);
+// Ubah {param} ke regex (contoh: /anime/show/{id} -> /anime/show/([\w-]+))
+$pattern = preg_replace('#\{[\w]+\}#', '([\w-]+)', $route);
 
-    // Jangan rtrim '/' untuk root
-    if ($route !== '/') {
-        $pattern = rtrim($pattern, '/');
-    }
+// Jangan rtrim '/' untuk root
+if ($route !== '/') {
+$pattern = rtrim($pattern, '/');
+}
 
-    $pattern = '#^' . $pattern . '$#';
+$pattern = '#^' . $pattern . '$#';
 
-    if (preg_match($pattern, $uri, $matches)) {
-        // Cek method HTTP
-        if (isset($info['method']) && strtoupper($info['method']) !== $httpMethod) {
-            continue;
-        }
+if (preg_match($pattern, $uri, $matches)) {
+// Cek method HTTP
+if (isset($info['method']) && strtoupper($info['method']) !== $httpMethod) {
+continue;
+}
 
-        array_shift($matches); // hapus full match dari array
+array_shift($matches); // hapus full match dari array
 
-        // Jalankan semua middleware
-        if (isset($info['middleware'])) {
-            $middlewares = is_array($info['middleware']) ? $info['middleware'] : [$info['middleware']];
-            foreach ($middlewares as $middlewareClass) {
-                if (class_exists($middlewareClass) && method_exists($middlewareClass, 'handle')) {
-                    $middlewareClass::handle();
-                } else {
-                    echo "Middleware $middlewareClass tidak valid.<br>";
-                    exit;
-                }
-            }
-        }
+// Jalankan semua middleware
+if (isset($info['middleware'])) {
+$middlewares = is_array($info['middleware']) ? $info['middleware'] : [$info['middleware']];
+foreach ($middlewares as $middlewareClass) {
+if (class_exists($middlewareClass) && method_exists($middlewareClass, 'handle')) {
+$middlewareClass::handle();
+} else {
+echo "Middleware $middlewareClass tidak valid.<br>";
+exit;
+}
+}
+}
 
-        $controllerName = $info['controller'];
-        $function = $info['function'];
+$controllerName = $info['controller'];
+$function = $info['function'];
 
-        $controller = new $controllerName();
+$controller = new $controllerName();
 
-        if (method_exists($controller, $function)) {
-            call_user_func_array([$controller, $function], $matches);
-            $found = true;
-            break;
-        } else {
-            echo "Function $function tidak ditemukan di $controllerName.";
-            exit;
-        }
-    }
+if (method_exists($controller, $function)) {
+call_user_func_array([$controller, $function], $matches);
+$found = true;
+break;
+} else {
+echo "Function $function tidak ditemukan di $controllerName.";
+exit;
+}
+}
 }
 
 if (!$found) {
-    http_response_code(404);
-    require 'app/views/errors/404.php';
-    exit;
+http_response_code(404);
+require 'app/views/errors/404.php';
+exit;
 }

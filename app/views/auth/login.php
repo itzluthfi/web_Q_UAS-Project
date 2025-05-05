@@ -10,7 +10,7 @@ body {
 }
 
 .anime-bg {
-    background-image: url('https://i.imgur.com/JYmKbGg.jpg');
+    background-image: url('./public/assets/fire-force.jpg');
     background-size: cover;
     background-position: center;
 }
