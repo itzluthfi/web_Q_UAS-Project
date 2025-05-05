@@ -26,6 +26,7 @@ $routes = Route::all();
 // echo "<pre>";
 // print_r($routes);
 // echo "</pre>";
+// die();
 
 $found = false;
 

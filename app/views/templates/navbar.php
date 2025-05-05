@@ -242,7 +242,7 @@ body {
                 <?php else: ?>
                 <!-- Auth Buttons (Sign In / Sign Up) for guests -->
                 <div class="hidden md:flex md:items-center">
-                    <a href="<?= route('login') ?>"
+                    <a href="<?= route('/login') ?>"
                         class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                         Sign In
                     </a>

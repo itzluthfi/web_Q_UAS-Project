@@ -1,6 +1,6 @@
 <?php
 
-require_once 'models/UserModel.php';
+require_once 'app/models/UserModel.php';
 
 class AdminController {
     private $userModel;
@@ -10,29 +10,24 @@ class AdminController {
     }
 
     // Tampilkan semua user
-    public function manageUsers() {
+    public function index() {
         try {
             $users = $this->userModel->getAllUsers();
-            require 'views/admin/users/index.php';
+            return view('admin/users/index',compact('users'));
         } catch (Exception $e) {
             $this->handleError("Gagal memuat data pengguna: " . $e->getMessage());
         }
     }
 
-    // Tampilkan form edit user
-    public function edit($id) {
+    public function dashboard() {
         try {
-            $user = $this->userModel->getUserById($id);
-
-            if (!$user) {
-                throw new Exception("User tidak ditemukan.");
-            }
-
-            require 'views/admin/users/edit.php';
+            $users = $this->userModel->getAllUsers();
+            return view('admin/dashboard',compact('users'));
         } catch (Exception $e) {
-            $this->handleError("Gagal membuka form edit: " . $e->getMessage());
+            $this->handleError("Gagal memuat data pengguna: " . $e->getMessage());
         }
     }
+   
 
     // Update user
     public function update($id) {
