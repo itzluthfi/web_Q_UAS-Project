@@ -25,5 +25,6 @@ Route::middleware(['AuthMiddleware'])->group(function () {
 });
 
 //public
-Route::get('/', [AnimeController::class, 'index'])->name('home');
+Route::get('/', [AnimeController::class, 'beranda'])->name('home');
+Route::get('/anime/viewAllBy/{label}', [AnimeController::class, 'viewAllByLabel'])->name('anime.viewAllByLabel');
 Route::get('/anime/search', [AnimeController::class, 'search'])->name('anime.search');

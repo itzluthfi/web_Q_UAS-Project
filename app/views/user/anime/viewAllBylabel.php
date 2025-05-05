@@ -67,7 +67,17 @@ body {
 <body class="min-h-screen bg-gradient-to-br from-gray-900 to-black text-gray-100">
     <?php include 'app/views/templates/navbar.php'; ?>
     <div class="container mx-auto px-4 py-6">
-        <h1 class="text-3xl font-bold text-center text-purple-400 mb-8">Anime List</h1>
+        <h1 class="text-3xl font-bold text-center text-white mb-8">
+            <?php
+            if (isset($query) && $query) {
+                echo $jmlResult . ' hasil ditemukan untuk pencarian: "' . htmlspecialchars($query) . '"';
+            } else {
+                echo 'Daftar Anime ' . ucfirst($label);
+            }
+            ?>
+        </h1>
+
+
 
         <!-- Alert Message -->
         <?php if (!empty($_SESSION['error_message'])): ?>
@@ -125,7 +135,7 @@ body {
                     <p class="text-sm text-gray-400 mb-3"><strong>Tayang:</strong>
                         <?= $anime['aired']['string'] ?></p>
                     <p class="text-sm text-gray-400 mt-2 h-16 overflow-hidden">
-                        <?= substr($anime['synopsis'], 0, 120) ?>...</p>
+                        <?= htmlspecialchars(substr($anime['synopsis'] ?? 'No synopsis available', 0, 100)) ?>...</p>
                     <a href="<?= route('anime.show', ['id' => $anime['mal_id']]) ?>"
                         class="inline-block mt-4 bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-600 transition-colors btn-glow">
                         Lihat Detail

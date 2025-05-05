@@ -3,16 +3,43 @@
 require_once 'app/models/AnimeModel.php';
 
 class AnimeController {
-    public function index() {
+    public function beranda() {
         $animeModel = new AnimeModel();
-        $animeList = $animeModel->getTopAnime(10); // Ambil 10 anime
-          if (!$animeList) {
+        $animeTop = $animeModel->getTopAnime(10); // Ambil 10 anime
+        $animeRandoms = $animeModel->getRandomAnimes(3); // Ambil 3 anime
+        $animePopular = $animeModel->getPopularAnime();
+        $animeCurrentSeasonal = $animeModel->getCurrentSeasonAnime();
+        //   if (!$animeTop) {
+        //     echo "Anime List tidak ditemukan.";
+        //     return;
+        // }
+
+        // require 'app/views/user/anime/index.php';
+        return view('user/anime/beranda',compact('animeTop','animePopular','animeCurrentSeasonal','animeRandoms'));
+    }
+    
+    public function viewAllByLabel($label) {
+        $animeModel = new AnimeModel();
+    
+        // Susun nama method dinamis, misal: 'get' . 'Top' . 'Anime'
+        $method = 'get' . ucfirst($label) . 'Anime';
+    
+        // Cek apakah method tersebut ada di AnimeModel
+        if (method_exists($animeModel, $method)) {
+            $animeList = $animeModel->$method(10);
+        } else {
+            echo "Label '$label' tidak valid.";
+            return;
+        }
+    
+        if (!$animeList) {
             echo "Anime List tidak ditemukan.";
             return;
         }
-        // require 'app/views/user/anime/index.php';
-        return view('user/anime/index',compact('animeList'));
+    
+        return view('user/anime/viewAllByLabel', compact('animeList','label'));
     }
+    
 
 
     public function show($id) {
@@ -43,18 +70,22 @@ class AnimeController {
     }
 
     public function search() {
-    if (!isset($_GET['q'])) {
-        $_SESSION['error_message'] = "Masukkan kata kunci pencarian.";
-        header('Location: /anime-list-uas/');
-        exit;
+        if (!isset($_GET['q'])) {
+            $_SESSION['error_message'] = "Masukkan kata kunci pencarian.";
+            header('Location: /anime-list-uas/');
+            exit;
+        }
+    
+        $query = $_GET['q'];
+        $animeModel = new AnimeModel();
+        $result = $animeModel->searchAnime($query);
+    
+        $animeList = $result['results'];
+        $jmlResult = $result['total'];
+    
+        require 'app/views/user/anime/viewAllByLabel.php';
     }
-
-    $query = $_GET['q'];
-    $animeModel = new AnimeModel();
-    $animeList = $animeModel->searchAnime($query);
-
-    require 'app/views/user/anime/index.php'; // tampilkan view yang sama
-}
+    
 
     
 }
