@@ -9,6 +9,7 @@ class AnimeController {
         $animeRandoms = $animeModel->getRandomAnimes(3); // Ambil 3 anime
         $animePopular = $animeModel->getPopularAnime();
         $animeCurrentSeasonal = $animeModel->getCurrentSeasonAnime();
+        $categories = $animeModel->getAllGenres();
         //   if (!$animeTop) {
         //     echo "Anime List tidak ditemukan.";
         //     return;

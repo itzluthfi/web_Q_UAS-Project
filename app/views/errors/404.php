@@ -33,11 +33,6 @@
         </div>
 
         <div class="p-6">
-            <!-- Anime Character Placeholder -->
-            <!-- <div class="flex justify-center mb-6">
-                <img src="http://localhost/anime-list-uas/public/assets/fire-force.jpg" alt="Anime Character"
-                    class="w-32 h-32 rounded-full bg-gray-800 border-2 border-anime-purple p-1">
-            </div> -->
 
             <!-- Error code and message -->
             <div class="text-center mb-6">

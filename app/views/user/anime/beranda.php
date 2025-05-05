@@ -117,7 +117,7 @@ body {
                             <?= htmlspecialchars(substr($anime['synopsis'] ?? 'No synopsis available', 0, 150)) ?>...
                         </p>
                         <div class="flex space-x-4">
-                            <a href="#"
+                            <a href="<?= route('anime.show', ['id' => $anime['mal_id']]) ?>"
                                 class="bg-purple-700 hover:bg-purple-600 text-white px-6 py-2 rounded-lg transition-all btn-glow flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
                                     fill="currentColor">
@@ -125,7 +125,7 @@ body {
                                         d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
                                         clip-rule="evenodd" />
                                 </svg>
-                                Watch Now
+                                Details
                             </a>
                             <a href="#"
                                 class="border border-gray-400 hover:border-purple-500 text-white px-6 py-2 rounded-lg transition-all flex items-center">
@@ -275,9 +275,9 @@ body {
                         <p class="text-sm text-gray-400 mt-2 h-16 overflow-hidden">
                             <?= htmlspecialchars(substr($anime['synopsis'] ?? 'No synopsis available', 0, 100)) ?>...
                         </p>
-                        <a href="#"
+                        <a href="<?= route('anime.show', ['id' => $anime['mal_id']]) ?>"
                             class="inline-block mt-4 bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-600 transition-colors btn-glow">
-                            Watch Now
+                            Details
                         </a>
                     </div>
                 </div>
@@ -349,9 +349,9 @@ body {
                         <p class="text-sm text-gray-400 mt-2 h-16 overflow-hidden">
                             <?= htmlspecialchars(substr($anime['synopsis'] ?? 'No synopsis available', 0, 100)) ?>...
                         </p>
-                        <a href="#"
+                        <a href="<?= route('anime.show', ['id' => $anime['mal_id']]) ?>"
                             class="inline-block mt-4 bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-600 transition-colors btn-glow">
-                            Watch Now
+                            Details
                         </a>
                     </div>
                 </div>

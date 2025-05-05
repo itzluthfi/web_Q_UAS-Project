@@ -190,4 +190,15 @@ class AnimeModel {
         return $data['data'] ?? [];
     }
 
+
+    // === Ambil Semua Genre dari Jikan API ===
+    public function getAllGenres()
+    {
+        $url = "https://api.jikan.moe/v4/genres/anime";
+        $response = file_get_contents($url);
+        $data = json_decode($response, true);
+
+        return $data['data'] ?? [];
+    }
+
 }
