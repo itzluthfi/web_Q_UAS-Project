@@ -25,7 +25,7 @@ class AnimeController extends Controller
     public function beranda()
     {
         $animeTop = $this->animeModel->getTopAnime(10);
-        $animeRandoms = $this->animeModel->getRandomAnimes(3);
+        $animeUpcomings = $this->animeModel->getUpcomingAnime(5);
         $animePopular = $this->animeModel->getPopularAnime();
         $animeCurrentSeasonal = $this->animeModel->getCurrentSeasonAnime();
         $categories = $this->animeModel->getAllGenres();
@@ -34,7 +34,7 @@ class AnimeController extends Controller
             'animeTop', 
             'animePopular', 
             'animeCurrentSeasonal', 
-            'animeRandoms',
+            'animeUpcomings',
             'categories'
         ));
     }
