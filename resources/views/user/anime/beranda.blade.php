@@ -97,7 +97,7 @@ body {
         <div class="relative overflow-hidden mb-12 rounded-xl glow-effect">
             <!-- Carousel Container -->
             <div class="carousel-container flex transition-transform duration-500 ease-in-out">
-                <?php foreach (array_slice($animeRandoms, 0, 3) as $index => $anime): ?>
+                <?php foreach (array_slice($animeUpcomings, 0, 5) as $index => $anime): ?>
                 <!-- Carousel Item -->
                 <div class="carousel-item w-full flex-shrink-0 relative">
                     <img src="<?= $anime['images']['jpg']['large_image_url'] ?? 'https://via.placeholder.com/800x400?text=No+Image' ?>"
@@ -107,7 +107,7 @@ body {
                         class="absolute inset-0 flex flex-col justify-end p-8 bg-gradient-to-t from-black/80 to-transparent">
                         <span
                             class="bg-red-700 text-white px-3 py-1 rounded-full text-sm font-medium inline-block mb-3 w-max">
-                            <?= $index === 0 ? 'Trending' : ($index === 1 ? 'New Season' : 'Popular') ?>
+                            <?=  'Upcoming' ?>
                         </span>
                         <h2 class="text-3xl md:text-4xl font-bold text-white mb-2">
                             <?= htmlspecialchars($anime['title']) ?></h2>
@@ -165,7 +165,7 @@ body {
 
             <!-- Carousel Indicators -->
             <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-10">
-                <?php foreach (array_slice($animeTop, 0, 3) as $index => $anime): ?>
+                <?php foreach (array_slice($animeUpcomings, 0, 5) as $index => $anime): ?>
                 <button
                     class="w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-colors carousel-indicator <?= $index === 0 ? 'active' : '' ?>"
                     data-index="<?= $index ?>"></button>
