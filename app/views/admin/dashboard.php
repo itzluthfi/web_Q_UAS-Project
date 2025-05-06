@@ -108,10 +108,11 @@
             bottom: 0;
             z-index: 40;
             overflow-y: auto;
+            transition: transform 0.3s ease;
         }
         /* Main content area */
         .main-wrapper {
-            margin-left: 260px;
+            transition: margin-left 0.3s ease;
         }
         /* Dropdown menu */
         .dropdown-menu {
@@ -144,171 +145,206 @@
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
-                transition: transform 0.3s ease;
             }
             .sidebar.show {
                 transform: translateX(0);
             }
             .main-wrapper {
-                margin-left: 0;
-            }
-            .mobile-menu-button {
-                display: block;
+                margin-left: 0 !important;
             }
         }
-        @media (min-width: 769px) {
-            .mobile-menu-button {
-                display: none;
-            }
+        /* Overlay for mobile sidebar */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 30;
+        }
+        .sidebar-overlay.show {
+            display: block;
+        }
+        /* Improved animation for cards */
+        .anime-card-image {
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.3s ease;
+        }
+        .anime-card:hover .anime-card-image {
+            transform: scale(1.05);
+        }
+        /* Notification badge */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            height: 18px;
+            width: 18px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* Collapsed sidebar styles */
+        .sidebar.collapsed {
+            width: 70px;
+        }
+        .sidebar.collapsed .sidebar-text {
+            display: none;
+        }
+        .sidebar.collapsed .sidebar-logo-text {
+            display: none;
+        }
+        .sidebar.collapsed .sidebar-group-label {
+            display: none;
+        }
+        .main-wrapper.sidebar-collapsed {
+            margin-left: 70px;
         }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-gray-900 to-black text-gray-100">
+    <!-- Sidebar Overlay (for mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
     <!-- Sidebar -->
-    <aside class="sidebar bg-gray-900 border-r border-gray-800">
-        <!-- Logo -->
-        <div class="p-4 border-b border-gray-800">
-            <div class="flex items-center">
-                <div class="h-10 w-10 bg-purple-700 rounded-full flex items-center justify-center mr-2 glow-effect">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
-                    </svg>
-                </div>
-                <span class="text-white font-bold text-xl">MyAnimeList</span>
-            </div>
-        </div>
-        
-        <!-- Navigation -->
-        <nav class="mt-4">
-            <div class="px-4 py-2">
-                <h5 class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Menu Utama</h5>
-            </div>
-            
-            <a href="#" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-                </svg>
-                Halaman Utama
-            </a>
-            
-            <a href="<?= route('admin.dashboard')?>" class="sidebar-link active flex items-center px-4 py-3 text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
-                    <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
-                </svg>
-                Dashboard
-            </a>
-            
-            <a href="#" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-                </svg>
-                Profil Saya
-            </a>
-            
-            <div class="px-4 py-2 mt-4">
-                <h5 class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Manajemen</h5>
-            </div>
-            
-            <a href="<?= route('admin.users')?>" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
-                </svg>
-                Pengguna
-            </a>
-            
-            <a href="#" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
-                </svg>
-                Anime
-            </a>
-            
-            <a href="#" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
-                </svg>
-                Manga
-            </a>
-            
-            <div class="px-4 py-2 mt-4">
-                <h5 class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Sistem</h5>
-            </div>
-            
-            <a href="#" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
-                </svg>
-                Pengaturan
-            </a>
-            
-            <a href="#" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-                </svg>
-                Informasi Penting
-            </a>
-        </nav>
-    </aside>
+    <?php include __DIR__ . '/../templates/sidebarAdmin.php';?>
 
     <!-- Main Content Wrapper -->
-    <div class="main-wrapper">
+    <div class="main-wrapper" id="mainWrapper" style="margin-left: 260px;">
         <!-- Top Navbar -->
-        <nav class="bg-gray-900 border-b border-gray-800 sticky top-0 z-30">
-            <div class="px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between h-16">
-                    <!-- Page Title -->
-                    <div class="flex items-center">
-                        <!-- Mobile menu button -->
-                        <button class="mobile-menu-button mr-2 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                            <span class="sr-only">Open main menu</span>
-                            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                            </svg>
-                        </button>
-                        
-                        <h1 class="text-xl font-medium text-white">Dashboard - MyAnimeList Admin</h1>
-                    </div>
-                    
-                    <!-- User Profile -->
-                    <div class="flex items-center">
-                        <div class="relative" id="user-menu">
-                            <button class="flex items-center space-x-3 focus:outline-none">
-                                <div class="h-8 w-8 rounded-full bg-purple-600 flex items-center justify-center">
-                                    <span class="font-bold text-white">A</span>
-                                </div>
-                                <span class="hidden md:block text-sm font-medium text-white">Admin User</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                            
-                            <!-- Dropdown Menu -->
-                            <div class="dropdown-menu" id="user-dropdown">
-                                <div class="py-1">
-                                    <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Profil Saya</a>
-                                    <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Pengaturan</a>
-                                    <div class="border-t border-gray-700 my-1"></div>
-                                    <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Keluar</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
+        <?php include __DIR__ . '/../templates/navbarAdmin.php';?>
 
         <!-- Main Content -->
         <main class="p-6">
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="dashboard-card p-4 flex items-center">
+                    <div class="rounded-full bg-purple-900/30 p-3 mr-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-gray-400 text-sm">Total Kunjungan</p>
+                        <h3 class="text-2xl font-bold text-white">12,721</h3>
+                        <p class="text-green-500 text-xs flex items-center mt-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                            </svg>
+                            12.5% dari bulan lalu
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card p-4 flex items-center">
+                    <div class="rounded-full bg-blue-900/30 p-3 mr-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-gray-400 text-sm">Total Pengguna</p>
+                        <h3 class="text-2xl font-bold text-white">3,428</h3>
+                        <p class="text-green-500 text-xs flex items-center mt-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                            </svg>
+                            8.2% dari bulan lalu
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card p-4 flex items-center">
+                    <div class="rounded-full bg-pink-900/30 p-3 mr-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-gray-400 text-sm">Total Anime</p>
+                        <h3 class="text-2xl font-bold text-white">1,257</h3>
+                        <p class="text-green-500 text-xs flex items-center mt-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                            </svg>
+                            5.3% dari bulan lalu
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card p-4 flex items-center">
+                    <div class="rounded-full bg-green-900/30 p-3 mr-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-gray-400 text-sm">Total Manga</p>
+                        <h3 class="text-2xl font-bold text-white">892</h3>
+                        <p class="text-green-500 text-xs flex items-center mt-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                            </svg>
+                            3.7% dari bulan lalu
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Dashboard Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <!-- Jadwal Kuis Card -->
                 <div class="dashboard-card p-6">
                     <h2 class="text-xl font-semibold text-purple-400 mb-2">Jadwal Anime Terbaru</h2>
-                    <p class="text-gray-400 mb-4">0 anime akan tayang hari ini</p>
+                    <p class="text-gray-400 mb-4">3 anime akan tayang hari ini</p>
                     
-                    <div class="bg-gray-800 rounded-lg p-4 text-center text-gray-400">
-                        Tidak ada anime yang akan tayang hari ini
+                    <div class="space-y-3">
+                        <div class="bg-gray-800 rounded-lg p-3 flex items-center">
+                            <div class="h-10 w-10 bg-purple-900/30 rounded-md flex items-center justify-center mr-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-white font-medium">One Piece</h4>
+                                <p class="text-gray-400 text-sm">Episode 1081 - 18:30 WIB</p>
+                            </div>
+                            <span class="px-2 py-1 bg-purple-900/30 text-purple-400 text-xs rounded-full">TV</span>
+                        </div>
+                        
+                        <div class="bg-gray-800 rounded-lg p-3 flex items-center">
+                            <div class="h-10 w-10 bg-purple-900/30 rounded-md flex items-center justify-center mr-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-white font-medium">Jujutsu Kaisen</h4>
+                                <p class="text-gray-400 text-sm">Episode 15 - 20:00 WIB</p>
+                            </div>
+                            <span class="px-2 py-1 bg-purple-900/30 text-purple-400 text-xs rounded-full">TV</span>
+                        </div>
+                        
+                        <div class="bg-gray-800 rounded-lg p-3 flex items-center">
+                            <div class="h-10 w-10 bg-purple-900/30 rounded-md flex items-center justify-center mr-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-white font-medium">Demon Slayer</h4>
+                                <p class="text-gray-400 text-sm">Episode 8 - 22:30 WIB</p>
+                            </div>
+                            <span class="px-2 py-1 bg-purple-900/30 text-purple-400 text-xs rounded-full">TV</span>
+                        </div>
                     </div>
                     
                     <div class="mt-6">
@@ -323,13 +359,66 @@
                     </div>
                 </div>
                 
-                <!-- Aslab Aktif Card -->
+                <!-- Pengguna Aktif Card -->
                 <div class="dashboard-card p-6">
                     <h2 class="text-xl font-semibold text-purple-400 mb-2">Pengguna Aktif</h2>
-                    <p class="text-gray-400 mb-4">0 pengguna aktif saat ini</p>
+                    <p class="text-gray-400 mb-4">5 pengguna aktif saat ini</p>
                     
-                    <div class="bg-gray-800 rounded-lg p-4 text-center text-gray-400">
-                        Tidak ada pengguna yang aktif saat ini
+                    <div class="space-y-3">
+                        <div class="bg-gray-800 rounded-lg p-3 flex items-center">
+                            <div class="h-10 w-10 rounded-full bg-purple-600 flex items-center justify-center mr-3">
+                                <span class="font-bold text-white">N</span>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-white font-medium">naruto_uzumaki</h4>
+                                <p class="text-gray-400 text-sm">Aktif 5 menit yang lalu</p>
+                            </div>
+                            <span class="px-2 py-1 bg-green-900/30 text-green-400 text-xs rounded-full">Online</span>
+                        </div>
+                        
+                        <div class="bg-gray-800 rounded-lg p-3 flex items-center">
+                            <div class="h-10 w-10 rounded-full bg-purple-600 flex items-center justify-center mr-3">
+                                <span class="font-bold text-white">S</span>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-white font-medium">sasuke_uchiha</h4>
+                                <p class="text-gray-400 text-sm">Aktif 12 menit yang lalu</p>
+                            </div>
+                            <span class="px-2 py-1 bg-green-900/30 text-green-400 text-xs rounded-full">Online</span>
+                        </div>
+                        
+                        <div class="bg-gray-800 rounded-lg p-3 flex items-center">
+                            <div class="h-10 w-10 rounded-full bg-purple-600 flex items-center justify-center mr-3">
+                                <span class="font-bold text-white">S</span>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-white font-medium">sakura_haruno</h4>
+                                <p class="text-gray-400 text-sm">Aktif 18 menit yang lalu</p>
+                            </div>
+                            <span class="px-2 py-1 bg-green-900/30 text-green-400 text-xs rounded-full">Online</span>
+                        </div>
+                        
+                        <div class="bg-gray-800 rounded-lg p-3 flex items-center">
+                            <div class="h-10 w-10 rounded-full bg-purple-600 flex items-center justify-center mr-3">
+                                <span class="font-bold text-white">H</span>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-white font-medium">hinata_hyuga</h4>
+                                <p class="text-gray-400 text-sm">Aktif 25 menit yang lalu</p>
+                            </div>
+                            <span class="px-2 py-1 bg-green-900/30 text-green-400 text-xs rounded-full">Online</span>
+                        </div>
+                        
+                        <div class="bg-gray-800 rounded-lg p-3 flex items-center">
+                            <div class="h-10 w-10 rounded-full bg-purple-600 flex items-center justify-center mr-3">
+                                <span class="font-bold text-white">S</span>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-white font-medium">shikamaru_nara</h4>
+                                <p class="text-gray-400 text-sm">Aktif 30 menit yang lalu</p>
+                            </div>
+                            <span class="px-2 py-1 bg-green-900/30 text-green-400 text-xs rounded-full">Online</span>
+                        </div>
                     </div>
                     
                     <div class="mt-6">
@@ -366,50 +455,179 @@
                                 <th class="px-6 py-3 text-left text-xs text-gray-300 uppercase tracking-wider">Peran</th>
                                 <th class="px-6 py-3 text-left text-xs text-gray-300 uppercase tracking-wider">Status</th>
                                 <th class="px-6 py-3 text-left text-xs text-gray-300 uppercase tracking-wider">Tanggal Daftar</th>
+                                <th class="px-6 py-3 text-right text-xs text-gray-300 uppercase tracking-wider">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-700">
-                            <?php
-                            // Contoh data pengguna terbaru (dalam implementasi nyata, ini akan diambil dari database)
-                            $recentUsers = [
-                                ['username' => 'naruto_uzumaki', 'email' => 'naruto@konoha.com', 'role' => 'user', 'status' => 'active', 'created_at' => '2023-02-20'],
-                                ['username' => 'sasuke_uchiha', 'email' => 'sasuke@konoha.com', 'role' => 'user', 'status' => 'active', 'created_at' => '2023-02-21'],
-                                ['username' => 'sakura_haruno', 'email' => 'sakura@konoha.com', 'role' => 'user', 'status' => 'inactive', 'created_at' => '2023-03-05'],
-                                ['username' => 'hinata_hyuga', 'email' => 'hinata@konoha.com', 'role' => 'user', 'status' => 'active', 'created_at' => '2023-03-15'],
-                                ['username' => 'shikamaru_nara', 'email' => 'shikamaru@konoha.com', 'role' => 'user', 'status' => 'active', 'created_at' => '2023-03-20'],
-                            ];
-                            
-                            foreach ($recentUsers as $user):
-                            ?>
+                            <!-- User Row 1 -->
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <div class="h-8 w-8 rounded-full bg-purple-600 flex items-center justify-center mr-3">
-                                            <span class="font-bold text-white"><?= strtoupper(substr($user['username'], 0, 1)) ?></span>
+                                            <span class="font-bold text-white">N</span>
                                         </div>
-                                        <div class="text-sm font-medium text-white"><?= $user['username'] ?></div>
+                                        <div class="text-sm font-medium text-white">naruto_uzumaki</div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300"><?= $user['email'] ?></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">naruto@konoha.com</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="badge <?= $user['role'] === 'admin' ? 'badge-admin' : 'badge-user' ?>">
-                                        <?= ucfirst($user['role']) ?>
+                                    <span class="badge badge-user">User</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                        Aktif
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <?php if ($user['status'] === 'active'): ?>
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            Aktif
-                                        </span>
-                                    <?php else: ?>
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                                            Tidak Aktif
-                                        </span>
-                                    <?php endif; ?>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">2023-02-20</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <button onclick="openEditModal('1')" class="text-purple-400 hover:text-purple-300 mr-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                        </svg>
+                                    </button>
+                                    <button class="text-red-400 hover:text-red-300">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300"><?= $user['created_at'] ?></td>
                             </tr>
-                            <?php endforeach; ?>
+                            
+                            <!-- User Row 2 -->
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="h-8 w-8 rounded-full bg-purple-600 flex items-center justify-center mr-3">
+                                            <span class="font-bold text-white">S</span>
+                                        </div>
+                                        <div class="text-sm font-medium text-white">sasuke_uchiha</div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">sasuke@konoha.com</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="badge badge-user">User</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                        Aktif
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">2023-02-21</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <button onclick="openEditModal('2')" class="text-purple-400 hover:text-purple-300 mr-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                        </svg>
+                                    </button>
+                                    <button class="text-red-400 hover:text-red-300">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <!-- User Row 3 -->
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="h-8 w-8 rounded-full bg-purple-600 flex items-center justify-center mr-3">
+                                            <span class="font-bold text-white">S</span>
+                                        </div>
+                                        <div class="text-sm font-medium text-white">sakura_haruno</div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">sakura@konoha.com</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="badge badge-user">User</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                        Tidak Aktif
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">2023-03-05</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <button onclick="openEditModal('3')" class="text-purple-400 hover:text-purple-300 mr-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                        </svg>
+                                    </button>
+                                    <button class="text-red-400 hover:text-red-300">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <!-- User Row 4 -->
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="h-8 w-8 rounded-full bg-purple-600 flex items-center justify-center mr-3">
+                                            <span class="font-bold text-white">H</span>
+                                        </div>
+                                        <div class="text-sm font-medium text-white">hinata_hyuga</div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">hinata@konoha.com</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="badge badge-user">User</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                        Aktif
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">2023-03-15</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <button onclick="openEditModal('4')" class="text-purple-400 hover:text-purple-300 mr-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                        </svg>
+                                    </button>
+                                    <button class="text-red-400 hover:text-red-300">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <!-- User Row 5 -->
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="h-8 w-8 rounded-full bg-purple-600 flex items-center justify-center mr-3">
+                                            <span class="font-bold text-white">S</span>
+                                        </div>
+                                        <div class="text-sm font-medium text-white">shikamaru_nara</div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">shikamaru@konoha.com</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="badge badge-user">User</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                        Aktif
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">2023-03-20</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <button onclick="openEditModal('5')" class="text-purple-400 hover:text-purple-300 mr-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                        </svg>
+                                    </button>
+                                    <button class="text-red-400 hover:text-red-300">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -429,8 +647,9 @@
                 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <!-- Anime Card 1 -->
-                    <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all">
-                        <div class="h-40 bg-gray-700 relative">
+                    <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all anime-card">
+                        <div class="h-40 bg-gray-700 relative overflow-hidden">
+                            <div class="anime-card-image absolute inset-0 bg-purple-900/20"></div>
                             <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-60"></div>
                             <div class="absolute bottom-2 left-2">
                                 <span class="px-2 py-1 bg-purple-700 text-xs text-white rounded">TV</span>
@@ -450,8 +669,9 @@
                     </div>
                     
                     <!-- Anime Card 2 -->
-                    <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all">
-                        <div class="h-40 bg-gray-700 relative">
+                    <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all anime-card">
+                        <div class="h-40 bg-gray-700 relative overflow-hidden">
+                            <div class="anime-card-image absolute inset-0 bg-purple-900/20"></div>
                             <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-60"></div>
                             <div class="absolute bottom-2 left-2">
                                 <span class="px-2 py-1 bg-purple-700 text-xs text-white rounded">TV</span>
@@ -471,8 +691,9 @@
                     </div>
                     
                     <!-- Anime Card 3 -->
-                    <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all">
-                        <div class="h-40 bg-gray-700 relative">
+                    <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all anime-card">
+                        <div class="h-40 bg-gray-700 relative overflow-hidden">
+                            <div class="anime-card-image absolute inset-0 bg-purple-900/20"></div>
                             <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-60"></div>
                             <div class="absolute bottom-2 left-2">
                                 <span class="px-2 py-1 bg-purple-700 text-xs text-white rounded">TV</span>
@@ -492,8 +713,9 @@
                     </div>
                     
                     <!-- Anime Card 4 -->
-                    <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all">
-                        <div class="h-40 bg-gray-700 relative">
+                    <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all anime-card">
+                        <div class="h-40 bg-gray-700 relative overflow-hidden">
+                            <div class="anime-card-image absolute inset-0 bg-purple-900/20"></div>
                             <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-60"></div>
                             <div class="absolute bottom-2 left-2">
                                 <span class="px-2 py-1 bg-purple-700 text-xs text-white rounded">Movie</span>
@@ -612,24 +834,71 @@
             });
         }
         
-        // Mobile menu toggle
-        const mobileMenuButton = document.querySelector('.mobile-menu-button');
-        const sidebar = document.querySelector('.sidebar');
+        // Sidebar toggle functionality
+        const toggleSidebarBtn = document.getElementById('toggleSidebarBtn');
+        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const mainWrapper = document.getElementById('mainWrapper');
         
-        if (mobileMenuButton && sidebar) {
-            mobileMenuButton.addEventListener('click', function() {
-                sidebar.classList.toggle('show');
-            });
-            
-            // Close sidebar when clicking outside on mobile
-            document.addEventListener('click', function(e) {
-                if (window.innerWidth < 769 && 
-                    !sidebar.contains(e.target) && 
-                    !mobileMenuButton.contains(e.target) && 
-                    sidebar.classList.contains('show')) {
-                    sidebar.classList.remove('show');
+        // Function to toggle sidebar in desktop mode
+        function toggleDesktopSidebar() {
+            if (window.innerWidth >= 768) {
+                sidebar.classList.toggle('collapsed');
+                mainWrapper.classList.toggle('sidebar-collapsed');
+                
+                if (sidebar.classList.contains('collapsed')) {
+                    mainWrapper.style.marginLeft = '70px';
+                } else {
+                    mainWrapper.style.marginLeft = '260px';
+                }
+            }
+        }
+        
+        // Function to open sidebar in mobile mode
+        function openMobileSidebar() {
+            if (window.innerWidth < 768) {
+                sidebar.classList.add('show');
+                sidebarOverlay.classList.add('show');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling when sidebar is open
+            }
+        }
+        
+        // Function to close sidebar in mobile mode
+        function closeMobileSidebar() {
+            if (window.innerWidth < 768) {
+                sidebar.classList.remove('show');
+                sidebarOverlay.classList.remove('show');
+                document.body.style.overflow = ''; // Re-enable scrolling
+            }
+        }
+        
+        // Toggle sidebar on button click
+        if (toggleSidebarBtn) {
+            toggleSidebarBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (window.innerWidth >= 768) {
+                    // Desktop mode
+                    toggleDesktopSidebar();
+                } else {
+                    // Mobile mode
+                    if (sidebar.classList.contains('show')) {
+                        closeMobileSidebar();
+                    } else {
+                        openMobileSidebar();
+                    }
                 }
             });
+        }
+        
+        // Close sidebar when clicking the close button
+        if (closeSidebarBtn) {
+            closeSidebarBtn.addEventListener('click', closeMobileSidebar);
+        }
+        
+        // Close sidebar when clicking the overlay
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', closeMobileSidebar);
         }
         
         // Edit Modal Functions
@@ -650,9 +919,44 @@
         
         // Handle window resize for sidebar
         window.addEventListener('resize', function() {
-            if (window.innerWidth >= 769) {
+            if (window.innerWidth >= 768) {
+                // Reset mobile sidebar state
                 sidebar.classList.remove('show');
+                sidebarOverlay.classList.remove('show');
+                document.body.style.overflow = '';
+                
+                // Maintain desktop sidebar state
+                if (sidebar.classList.contains('collapsed')) {
+                    mainWrapper.style.marginLeft = '70px';
+                } else {
+                    mainWrapper.style.marginLeft = '260px';
+                }
+            } else {
+                // Reset to mobile view
+                mainWrapper.style.marginLeft = '0';
             }
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            if (editModal && !editModal.classList.contains('hidden')) {
+                const modalContent = editModal.querySelector('.inline-block');
+                if (modalContent && !modalContent.contains(e.target) && e.target !== modalContent) {
+                    closeEditModal();
+                }
+            }
+        });
+        
+        // Initialize anime card images with random gradients
+        document.addEventListener('DOMContentLoaded', function() {
+            const animeCardImages = document.querySelectorAll('.anime-card-image');
+            const colors = ['purple', 'blue', 'indigo', 'pink'];
+            
+            animeCardImages.forEach((image, index) => {
+                const color = colors[index % colors.length];
+                image.style.backgroundImage = `linear-gradient(45deg, var(--tw-gradient-stops))`;
+                image.classList.add(`from-${color}-900/30`, `to-${color}-600/10`);
+            });
         });
     </script>
 </body>
