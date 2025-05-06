@@ -1,6 +1,4 @@
-<?php 
-include 'app/views/templates/header.php'; 
-?>
+<x-header></x-header>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -55,9 +53,10 @@ select.input-dark {
 
     <div class="w-full max-w-4xl flex overflow-hidden rounded-xl shadow-2xl bg-gray-800 glow-effect">
         <!-- Bagian Anime Illustration - Sembunyikan di mobile -->
-        <div class="hidden md:block w-1/2 relative anime-bg">
+        <div class="hidden md:block w-1/2 relative anime-bg"
+            style="background-image: url('{{ asset('assets/images/LoginAndRegist.jpg') }}'); background-size: cover; background-position: center;">
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-            <div class="absolute bottom-0 left-0 p-8 text-white">
+            <div class="absolute bottom-0 left-0 p-8 text-white z-10">
                 <h2 class="text-2xl font-bold mb-2">My Anime List</h2>
                 <p class="text-sm opacity-80">Bergabunglah dan mulai koleksi animemu</p>
             </div>
@@ -230,7 +229,7 @@ select.input-dark {
             <div class="mt-6 text-center">
                 <p class="text-sm text-gray-400">
                     Sudah punya akun?
-                    <a href="./login" class="font-medium text-purple-400 hover:text-purple-300">
+                    <a href="{{ route('login') }}" class="font-medium text-purple-400 hover:text-purple-300">
                         Login di sini
                     </a>
                 </p>

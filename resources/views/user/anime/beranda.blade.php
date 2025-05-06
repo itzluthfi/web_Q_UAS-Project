@@ -1,4 +1,4 @@
-@include('templates.header')
+<x-header></x-header>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -59,7 +59,7 @@ body {
 </style>
 
 <body class="min-h-screen bg-gradient-to-br from-gray-900 to-black text-gray-100">
-    @include('templates.navbar')
+    <x-navbar></x-navbar>
     <div class="container mx-auto px-4 py-6">
 
         <!-- Alert Message -->
@@ -445,4 +445,4 @@ body {
         </script>
 
 </body>
-@include('templates.footer')
+<x-footer></x-footer>
