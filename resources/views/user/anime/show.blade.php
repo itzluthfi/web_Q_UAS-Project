@@ -3,6 +3,65 @@
 @section('title', 'Detail Anime - MyAnimeList')
 
 @section('content')
+<style>
+    .comment-transition:hover {
+        transform: translateX(5px);
+    }
+    /* Fix navbar positioning */
+    .navbar-fixed {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+    }
+    /* Add proper spacing for content */
+    .content-wrapper {
+        padding-top: 4rem; /* Adjust based on your navbar height */
+    }
+    /* Enhance related anime cards */
+    .related-anime-card {
+        transition: all 0.3s ease;
+    }
+    .related-anime-card:hover {
+        transform: translateY(-5px);
+    }
+    /* Enhance score badge */
+    .score-badge {
+        position: relative;
+        overflow: hidden;
+    }
+    .score-badge::before {
+        content: '';
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+        background: linear-gradient(45deg, rgba(255,215,0,0.1), rgba(255,215,0,0.3));
+        z-index: 0;
+        animation: pulse 2s infinite;
+        border-radius: 50%;
+    }
+    @keyframes pulse {
+        0% {
+            transform: scale(0.95);
+            opacity: 0.7;
+        }
+        50% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(0.95);
+            opacity: 0.7;
+        }
+    }
+    .score-value {
+        position: relative;
+        z-index: 1;
+    }
+    </style>
     <div class="anime-backdrop">
         <div class="max-w-4xl mx-auto bg-gray-800 shadow-xl rounded-lg overflow-hidden glow-effect">
             <!-- Title and Image -->
@@ -126,21 +185,27 @@
                     </button>
                 </form>
 
-                <!-- List Komentar -->
-                <div class="space-y-4">
-                    @foreach ($comments as $comment)
-                        <div class="p-4 bg-gray-700/50 border border-gray-600 rounded-lg shadow-md comment-transition">
-                            <div class="flex items-center mb-2">
-                                <div class="w-8 h-8 rounded-full bg-purple-700 flex items-center justify-center mr-3">
-                                    <span class="font-bold text-white">{{ substr($comment->user->username, 0, 1) }}</span>
-                                </div>
-                                <p class="font-semibold text-white">{{ $comment->user->username }}</p>
-                                <span class="ml-auto text-xs text-gray-400">{{ $comment->created_at->diffForHumans() }}</span>
+              <!-- List Komentar -->
+              <div class="space-y-4">
+                @forelse ($comments as $comment)
+                    <div class="p-4 bg-gray-700/50 border border-gray-600 rounded-lg shadow-md comment-transition">
+                        <div class="flex items-center mb-2">
+                            <div class="w-8 h-8 rounded-full bg-purple-700 flex items-center justify-center mr-3">
+                                <span class="font-bold text-white">{{ substr($comment->user->username, 0, 1) }}</span>
                             </div>
-                            <p class="text-gray-300">{{ $comment->body }}</p>
+                            <p class="font-semibold text-white">{{ $comment->user->username ?? 'Unknown' }}</p>
+
+                            <span class="ml-auto text-xs text-gray-400">{{ $comment->created_at->diffForHumans() }}</span>
                         </div>
-                    @endforeach
-                </div>
+                       
+                        <p class="text-gray-300">{{ $comment->content }}</p>
+                    </div>
+                @empty
+                    <p class="text-gray-400 italic">Belum ada komentar.</p>
+                @endforelse
+            </div>
+            
+
             </div>
         </div>
 
@@ -148,7 +213,7 @@
         <div class="max-w-4xl mx-auto mt-8 mb-12">
             <h2 class="text-2xl font-semibold mb-6 text-purple-300">Anime Terkait</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                @foreach ($relatedAnimes as $relatedAnime)
+                @forelse($relatedAnimes as $relatedAnime)
                     <div class="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:border-purple-500 transition related-anime-card">
                         <img src="{{ $relatedAnime['images']['jpg']['small_image_url'] }}" alt="{{ $relatedAnime['title'] }}" class="w-full h-32 object-cover">
                         <div class="p-2">
@@ -156,7 +221,11 @@
                             <p class="text-xs text-gray-400">{{ $relatedAnime['type'] }} • {{ $relatedAnime['episodes'] ?? 'N/A' }} Eps</p>
                         </div>
                     </div>
-                @endforeach
+                @empty
+                    <div class="col-span-full text-center text-white py-4">
+                        <p>Tidak ada anime terkait saat ini.</p>
+                    </div>
+                @endforelse
             </div>
         </div>
     </div>

@@ -1,9 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Http;
+
 
 use Illuminate\Http\Request;
 use App\Models\Anime; // Ganti jika AnimeModel kamu pakai nama lain
+use App\Models\Comment;
 
 class AnimeController extends Controller
 {
@@ -49,16 +52,36 @@ class AnimeController extends Controller
         return view('user.anime.viewAllByLabel', compact('animeList', 'label'));
     }
 
+
     public function show($id)
     {
-        $anime = $this->animeModel->getAnimeById($id);
-
+        // Ambil detail anime dari API
+        $anime = Anime::getAnimeById($id);
+    
         if (!$anime) {
             return abort(404, 'Anime detail tidak ditemukan.');
         }
+    
+        // Akses genre dengan array syntax
+        $genre = is_array($anime['genres']) 
+            ? implode(',', array_column($anime['genres'], 'name')) // atau 'mal_id' jika ingin ID genre
+            : $anime['genres'];
+    
+        // Ambil anime terkait berdasarkan genre ID pertama (jika ada)
+        $firstGenreId = $anime['genres'][0]['mal_id'] ?? null;
+        $relatedAnimes = [];
+    
+        if ($firstGenreId) {
+            $relatedAnimes = Anime::getAnimeByGenre($firstGenreId, 4);
+        }
 
-        return view('user.anime.show', compact('anime'));
+        $comments = Comment::with('user')->where('anime_id', $id)->get();
+        // dd($comments);
+    
+        // Kirim ke view
+        return view('user.anime.show', compact('anime', 'relatedAnimes','comments'));
     }
+
 
     public function recommendations($id)
     {

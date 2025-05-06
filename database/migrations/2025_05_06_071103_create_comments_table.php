@@ -13,7 +13,15 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');          // Relasi ke tabel users
+            $table->unsignedBigInteger('anime_id');         // ID anime yang dikomentari
+            $table->text('content');                         // Isi komentar
+            $table->unsignedBigInteger('parent_id')->nullable(); // ID komentar induk (jika nested)
             $table->timestamps();
+
+            // Foreign keys
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('parent_id')->references('id')->on('comments')->onDelete('cascade');
         });
     }
 

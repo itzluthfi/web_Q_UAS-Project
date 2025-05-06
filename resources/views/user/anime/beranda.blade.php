@@ -1,6 +1,9 @@
-<x-header></x-header>
+@extends('layouts.app')
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+@section('title', 'Detail Anime - MyAnimeList')
+
+
+@push('styles')
 <style>
 body {
     font-family: 'Poppins', sans-serif;
@@ -57,9 +60,10 @@ body {
     background: #6d28d9;
 }
 </style>
-
+@endpush
+@section('content')
 <body class="min-h-screen bg-gradient-to-br from-gray-900 to-black text-gray-100">
-    <x-navbar></x-navbar>
+    {{-- <x-navbar></x-navbar> --}}
     <div class="container mx-auto px-4 py-6">
 
         <!-- Alert Message -->
@@ -378,6 +382,8 @@ body {
                     receive updates from our company.</p>
             </div>
         </div>
+        @endsection
+        @push('scripts')
 
         <!-- JavaScript for Carousel -->
         <script>
@@ -443,6 +449,5 @@ body {
             updateCarousel();
         });
         </script>
-
+@endpush
 </body>
-<x-footer></x-footer>

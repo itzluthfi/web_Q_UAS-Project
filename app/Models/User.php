@@ -2,52 +2,45 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Hash;
 
-class User extends Model
+class User extends Authenticatable
 {
-    use HasFactory;
+    use  HasFactory, Notifiable;
 
-    // Tentukan nama tabel jika berbeda dari nama model (opsional)
-    // protected $table = 'users';
-
-    // Tentukan kolom yang dapat diisi (mass assignable)
+    /**
+     * Kolom yang boleh diisi secara massal.
+     */
     protected $fillable = [
-        'username', 
-        'email', 
-        'password', 
-        'role'
+        'username',
+        'email',
+        'password',
+        'role',
     ];
 
-    // Tentukan kolom yang harus disembunyikan (jika ada)
+    /**
+     * Kolom yang disembunyikan saat model dikonversi ke array atau JSON.
+     */
     protected $hidden = [
         'password',
+        'remember_token',
     ];
 
-    // Fungsi untuk registrasi pengguna baru
-    public static function register($username, $email, $password, $role = 'user')
+    /**
+     * Mutator untuk mengenkripsi password saat disimpan.
+     */
+    public function setPasswordAttribute($value)
     {
-        $passwordHash = Hash::make($password); // Hash password menggunakan Hash facade
-
-        return self::create([
-            'username' => $username,
-            'email' => $email,
-            'password' => $passwordHash,
-            'role' => $role,
-        ]);
+        $this->attributes['password'] = bcrypt($value);
     }
 
-    // Fungsi untuk login pengguna
-    public static function login($username, $password)
-    {
-        $user = self::where('username', $username)->first(); // Ambil user berdasarkan username
-
-        if ($user && Hash::check($password, $user->password)) {
-            return $user; // Return user data jika password cocok
-        }
-
-        return null; // Return null jika login gagal
-    }
+    /**
+     * Kolom yang di-cast ke tipe tertentu.
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
 }

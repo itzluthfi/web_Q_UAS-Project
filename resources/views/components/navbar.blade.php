@@ -2,7 +2,98 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-    /* Sisipkan style yang sama seperti sebelumnya */
+    body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #0f1116;
+}
+
+.glow-effect {
+    box-shadow: 0 0 15px rgba(101, 31, 255, 0.4);
+}
+
+.btn-glow:hover {
+    box-shadow: 0 0 20px rgba(101, 31, 255, 0.6);
+}
+
+.input-dark {
+    background-color: rgba(30, 32, 44, 0.8);
+    border-color: #2e3346;
+    color: #e2e8f0;
+}
+
+.input-dark::placeholder {
+    color: #64748b;
+}
+
+.input-dark:focus {
+    border-color: #651fff;
+    box-shadow: 0 0 0 2px rgba(101, 31, 255, 0.2);
+}
+
+.nav-link {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: #a855f7;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+}
+
+.nav-link:hover {
+    color: #a855f7;
+}
+
+.nav-link.active {
+    color: #a855f7;
+    font-weight: 500;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1f2937;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #4c1d95;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #6d28d9;
+}
+
+/* Mobile menu animation */
+.mobile-menu {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.mobile-menu.hidden {
+    transform: translateY(-10px);
+    opacity: 0;
+}
+
+/* Tambahan untuk memastikan hamburger menu tersembunyi di desktop */
+@media (min-width: 768px) {
+    .mobile-menu-button {
+        display: none !important;
+    }
+}
 </style>
 
 <nav class="bg-gray-900 border-b border-gray-800 sticky top-0 z-50">

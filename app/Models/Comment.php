@@ -20,6 +20,14 @@ class Comment extends Model
         'parent_id'
     ];
 
+
+    // Menentukan hubungan dengan model Anime
+    // public function anime()
+    // {
+    //     return $this->belongsTo(Anime::class);
+    // }
+
+
     // Tentukan kolom yang perlu disembunyikan (opsional)
     // protected $hidden = ['created_at', 'updated_at'];
 
