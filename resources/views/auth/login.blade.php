@@ -7,7 +7,6 @@ body {
 }
 
 .anime-bg {
-    background-image: url('./public/assets/fire-force.jpg');
     background-size: cover;
     background-position: center;
 }
@@ -40,13 +39,14 @@ body {
     <div class="w-full max-w-4xl flex overflow-hidden rounded-xl shadow-2xl bg-gray-800 glow-effect">
         <!-- Bagian Anime Illustration - Sembunyikan di mobile -->
         <div class="hidden md:block w-1/2 relative anime-bg"
-            style="background-image: url('{{ asset('assets/images/LoginAndRegist.jpg') }}'); background-size: cover; background-position: center;">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-            <div class="absolute bottom-0 left-0 p-8 text-white z-10">
-                <h2 class="text-2xl font-bold mb-2">My Anime List</h2>
-                <p class="text-sm opacity-80">Bergabunglah dan mulai koleksi animemu</p>
-            </div>
-        </div>
+     style="background-image: url('{{ asset('storage/system/sjw.png') }}'); background-size: cover; background-position: center;">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+    <div class="absolute bottom-0 left-0 p-8 text-white z-10">
+        <h2 class="text-2xl font-bold mb-2">My Anime List</h2>
+        <p class="text-sm opacity-80">Bergabunglah dan mulai koleksi animemu</p>
+    </div>
+</div>
+
 
         <!-- Bagian Form Login -->
         <div class="w-full md:w-1/2 p-8 bg-gray-900">
@@ -64,30 +64,30 @@ body {
                 <p class="text-gray-400 mt-2">Masuk ke akun MAL Anda</p>
             </div>
 
-            <?php if (!empty($_SESSION['error_message'])): ?>
+          {{-- Error Message --}}
+            @if (session('error'))
             <div class="mb-4 p-3 bg-red-900/50 border-l-4 border-red-500 text-red-200 flex items-center rounded-r">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd"
                         d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
                         clip-rule="evenodd" />
                 </svg>
-                <span><?= htmlspecialchars($_SESSION['error_message']) ?></span>
+                <span>{{ session('error') }}</span>
             </div>
-            <?php unset($_SESSION['error_message']); ?>
-            <?php endif; ?>
+            @endif
 
-            <?php if (!empty($_SESSION['success_message'])): ?>
-            <div
-                class="mb-4 p-3 bg-green-900/50 border-l-4 border-green-500 text-green-200 flex items-center rounded-r">
+            {{-- Success Message --}}
+            @if (session('success'))
+            <div class="mb-4 p-3 bg-green-900/50 border-l-4 border-green-500 text-green-200 flex items-center rounded-r">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd"
                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                         clip-rule="evenodd" />
                 </svg>
-                <span><?= htmlspecialchars($_SESSION['success_message']) ?></span>
+                <span>{{ session('success') }}</span>
             </div>
-            <?php unset($_SESSION['success_message']); ?>
-            <?php endif; ?>
+            @endif
+
 
             <form action="{{ route('login.submit') }}" method="POST" class="space-y-6">
                 @csrf

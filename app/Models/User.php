@@ -2,18 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
-    use  HasFactory, Notifiable;
+    use HasFactory, Notifiable;
 
-    /**
-     * Kolom yang boleh diisi secara massal.
-     */
     protected $fillable = [
         'username',
         'email',
@@ -21,12 +18,13 @@ class User extends Authenticatable
         'role',
     ];
 
-    /**
-     * Kolom yang disembunyikan saat model dikonversi ke array atau JSON.
-     */
     protected $hidden = [
         'password',
         'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
     ];
 
     /**
@@ -38,9 +36,34 @@ class User extends Authenticatable
     }
 
     /**
-     * Kolom yang di-cast ke tipe tertentu.
+     * Static method untuk registrasi user.
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public static function register($username, $email, $password, $role)
+    {
+        try {
+            self::create([
+                'username' => $username,
+                'email' => $email,
+                'password' => $password, // otomatis dienkripsi oleh mutator
+                'role' => $role,
+            ]);
+            return true;
+        } catch (\Exception $e) {
+            return 'Registrasi gagal: ' . $e->getMessage();
+        }
+    }
+
+    /**
+     * Static method untuk login user.
+     */
+    public static function login($username, $password)
+{
+    $user = self::where('username', $username)->first();
+
+    if ($user && Hash::check($password, $user->password)) {
+        return $user;
+    }
+
+    return false;
+}
 }

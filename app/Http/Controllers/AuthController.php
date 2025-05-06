@@ -3,18 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User; // Sesuaikan jika nama model kamu masih UserModel
+use App\Models\User;
 use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
-    protected $userModel;
-
-    public function __construct()
-    {
-        $this->userModel = new User(); // Ganti dengan UserModel jika belum rename
-    }
-
     public function registerForm()
     {
         return view('auth.register');
@@ -24,13 +17,13 @@ class AuthController extends Controller
     {
         if ($request->isMethod('post')) {
             $validated = $request->validate([
-                'username' => 'required|string|max:255',
-                'email' => 'required|email|max:255',
+                'username' => 'required|string|max:255|unique:users',
+                'email' => 'required|email|max:255|unique:users',
                 'password' => 'required|min:6',
                 'role' => 'required'
             ]);
 
-            $result = $this->userModel->register(
+            $result = User::register(
                 $validated['username'],
                 $validated['email'],
                 $validated['password'],
@@ -41,7 +34,7 @@ class AuthController extends Controller
                 return back()->withInput()->with('error', $result);
             }
 
-            return redirect()->route('login.form')->with('success', 'Registrasi berhasil! Silakan login.');
+            return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');
         }
 
         return view('auth.register');
@@ -57,7 +50,8 @@ class AuthController extends Controller
         if ($request->isMethod('post')) {
             $credentials = $request->only('username', 'password');
 
-            $user = $this->userModel->login($credentials['username'], $credentials['password']);
+            $user = User::login($credentials['username'], $credentials['password']);
+            // dd($user);
 
             if ($user) {
                 session(['user' => $user]);
