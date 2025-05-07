@@ -1,4 +1,4 @@
-@include('templates.header')
+@include('components.header')
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -65,7 +65,8 @@ body {
 <!-- Alert Message -->
 
 <body class="min-h-screen bg-gradient-to-br from-gray-900 to-black text-gray-100">
-    <?php include 'app/views/templates/navbar.php'; ?>
+    @include('components.navbar')
+
     <div class="container mx-auto px-4 py-6">
         <h1 class="text-3xl font-bold text-center text-white mb-8">
             <?php
@@ -158,4 +159,4 @@ body {
         <?php endif; ?>
     </div>
 </body>
-<?php include 'app/views/templates/footer.php'; ?>
+@include('components.footer')

@@ -5,7 +5,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnimeController;
 
-// require_once 'config/route.php';
 
 // Guest routes
 Route::middleware(['guest'])->group(function () {
@@ -27,7 +26,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Public routes
+Route::get('/anime/search', [AnimeController::class, 'search'])->name('anime.search');
 Route::get('/anime/show/{id}', [AnimeController::class, 'show'])->name('anime.show');  
 Route::get('/', [AnimeController::class, 'beranda'])->name('home');
 Route::get('/anime/viewAllBy/{label}', [AnimeController::class, 'viewAllByLabel'])->name('anime.viewAllByLabel');
-Route::get('/anime/search', [AnimeController::class, 'search'])->name('anime.search');

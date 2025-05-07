@@ -14,6 +14,6 @@ class AdminMiddleware
             return $next($request); // jika admin, lanjut
         }
 
-        return redirect('/'); // jika bukan admin, arahkan ke halaman utama
+        abort(403);
     }
 }

@@ -26,15 +26,11 @@
 <body class="bg-anime-dark text-gray-200 min-h-screen flex items-center justify-center p-4">
     <div class="max-w-md w-full bg-gray-900 rounded-lg shadow-xl overflow-hidden border border-anime-purple/30">
         <div class="p-6">
-            <!-- Simple anime character silhouette -->
-            <!-- <div class="flex justify-center mb-6">
-                <img src="http://localhost/anime-list-uas/public/assets/fire-force.jpg" alt="Anime Character"
-                    class="w-32 h-32 rounded-full bg-gray-800 border-2 border-anime-purple p-1">
-            </div> -->
+           
 
             <!-- Fire Force Banner -->
             <div class="flex justify-center">
-                <img src="http://localhost/anime-list-uas/public/assets/fire-force.jpg" alt="Fire Force Banner"
+                <img src="{{ asset('storage/' . 'system/kobong.gif') }}" alt="Fire Force Banner"
                     class="w-full max-h-48 object-cover rounded-t-lg border-b-2 border-anime-purple">
             </div>
 
