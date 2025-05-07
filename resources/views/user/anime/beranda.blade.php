@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Detail Anime - MyAnimeList')
+@section('title', 'Home - MyAnimeList')
 
 
 @push('styles')

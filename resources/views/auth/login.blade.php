@@ -39,7 +39,7 @@ body {
     <div class="w-full max-w-4xl flex overflow-hidden rounded-xl shadow-2xl bg-gray-800 glow-effect">
         <!-- Bagian Anime Illustration - Sembunyikan di mobile -->
         <div class="hidden md:block w-1/2 relative anime-bg"
-     style="background-image: url('{{ asset('storage/system/sjw.png') }}'); background-size: cover; background-position: center;">
+     style="background-image: url('{{ asset('assets/system/run.gif') }}'); background-size: cover; background-position: center;">
     <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
     <div class="absolute bottom-0 left-0 p-8 text-white z-10">
         <h2 class="text-2xl font-bold mb-2">My Anime List</h2>

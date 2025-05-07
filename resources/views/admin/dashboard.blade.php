@@ -214,12 +214,12 @@
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     
     <!-- Sidebar -->
-    <?php include __DIR__ . '/../templates/sidebarAdmin.php';?>
+    @include('components/sidebarAdmin');
 
     <!-- Main Content Wrapper -->
     <div class="main-wrapper" id="mainWrapper" style="margin-left: 260px;">
         <!-- Top Navbar -->
-        <?php include __DIR__ . '/../templates/navbarAdmin.php';?>
+        @include('components/navbarAdmin');
 
         <!-- Main Content -->
         <main class="p-6">
