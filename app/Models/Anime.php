@@ -174,23 +174,29 @@ class Anime extends Model
         return $charactersData;
     }
 
-    // Ambil Tema dari Beberapa Anime Populer
-    public static function getPopularAnimeThemes($limit = 5)
-    {
-        $topAnime = self::getTopAnime($limit);
-        $themesData = [];
+  // Ambil Tema Anime Populer + Gambar
+public static function getPopularAnimeThemes($limit = 5)
+{
+    $topAnime = self::getTopAnime($limit);
+    $themesData = [];
 
-        foreach ($topAnime as $anime) {
-            $animeId = $anime['mal_id'];
+    foreach ($topAnime as $anime) {
+        $animeId = $anime['mal_id'] ?? null;
+
+        if ($animeId) {
+            // Ambil themes (OP & ED)
+            $themes = self::getAnimeThemes($animeId);
+
             $themesData[] = [
-                'anime_title' => $anime['title'],
-                'anime_id' => $animeId,
-                'themes' => self::getAnimeThemes($animeId)
+                'title' => $anime['title'] ?? 'Untitled',
+                'image' => $anime['images']['jpg']['image_url'] ?? null,
+                'themes' => $themes
             ];
         }
-
-        return $themesData;
     }
+
+    return $themesData;
+}
 
     // Ambil Berita dari Beberapa Anime Populer
     public static function getPopularAnimeNews($limit = 5)
