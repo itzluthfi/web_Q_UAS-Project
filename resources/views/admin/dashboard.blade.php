@@ -214,12 +214,12 @@
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     
     <!-- Sidebar -->
-    @include('components/sidebarAdmin');
+    @include('components/sidebarAdmin')
 
     <!-- Main Content Wrapper -->
     <div class="main-wrapper" id="mainWrapper" style="margin-left: 260px;">
         <!-- Top Navbar -->
-        @include('components/navbarAdmin');
+        @include('components/navbarAdmin')
 
         <!-- Main Content -->
         <main class="p-6">

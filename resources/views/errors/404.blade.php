@@ -28,7 +28,7 @@
 
         <!-- Fire Force Banner -->
         <div class="flex justify-center">
-            <img src="{{ asset('storage/' . 'system/run.gif') }}" alt="Fire Force Banner"
+            <img src="{{ asset('assets/' . 'system/kobong.gif') }}" alt="Fire Force Banner"
                 class="w-full max-h-48 object-cover rounded-t-lg border-b-2 border-anime-purple">
         </div>
 
