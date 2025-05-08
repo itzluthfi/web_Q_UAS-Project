@@ -25,14 +25,14 @@
                 <h5 class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Menu Utama</h5>
             </div>
             
-            <a href="#" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white">
+            <a href="{{ route('home') }}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                 </svg>
                 <span class="sidebar-text">Halaman Utama</span>
             </a>
             
-            <a href="#" class="sidebar-link active flex items-center px-4 py-3 text-white">
+            <a href="{{ route('admin.dashboard') }}" class="sidebar-link active flex items-center px-4 py-3 text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
                     <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
@@ -40,7 +40,7 @@
                 <span class="sidebar-text">Dashboard</span>
             </a>
             
-            <a href="#" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white">
+            <a href="{{ route('admin.profile') }}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
                 </svg>
@@ -51,7 +51,7 @@
                 <h5 class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Manajemen</h5>
             </div>
             
-            <a href="#" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white">
+            <a href="{{ route('admin.users') }}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
                 </svg>

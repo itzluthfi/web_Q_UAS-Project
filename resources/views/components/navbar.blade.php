@@ -3,97 +3,131 @@
 
 <style>
     body {
-    font-family: 'Poppins', sans-serif;
-    background-color: #0f1116;
-}
-
-.glow-effect {
-    box-shadow: 0 0 15px rgba(101, 31, 255, 0.4);
-}
-
-.btn-glow:hover {
-    box-shadow: 0 0 20px rgba(101, 31, 255, 0.6);
-}
-
-.input-dark {
-    background-color: rgba(30, 32, 44, 0.8);
-    border-color: #2e3346;
-    color: #e2e8f0;
-}
-
-.input-dark::placeholder {
-    color: #64748b;
-}
-
-.input-dark:focus {
-    border-color: #651fff;
-    box-shadow: 0 0 0 2px rgba(101, 31, 255, 0.2);
-}
-
-.nav-link {
-    position: relative;
-    transition: all 0.3s ease;
-}
-
-.nav-link::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: -2px;
-    left: 0;
-    background-color: #a855f7;
-    transition: width 0.3s ease;
-}
-
-.nav-link:hover::after,
-.nav-link.active::after {
-    width: 100%;
-}
-
-.nav-link:hover {
-    color: #a855f7;
-}
-
-.nav-link.active {
-    color: #a855f7;
-    font-weight: 500;
-}
-
-/* Custom scrollbar for webkit browsers */
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: #1f2937;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #4c1d95;
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #6d28d9;
-}
-
-/* Mobile menu animation */
-.mobile-menu {
-    transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.mobile-menu.hidden {
-    transform: translateY(-10px);
-    opacity: 0;
-}
-
-/* Tambahan untuk memastikan hamburger menu tersembunyi di desktop */
-@media (min-width: 768px) {
-    .mobile-menu-button {
-        display: none !important;
+        font-family: 'Poppins', sans-serif;
+        background-color: #0f1116;
     }
-}
+
+    .glow-effect {
+        box-shadow: 0 0 15px rgba(101, 31, 255, 0.4);
+    }
+
+    .btn-glow:hover {
+        box-shadow: 0 0 20px rgba(101, 31, 255, 0.6);
+    }
+
+    .input-dark {
+        background-color: rgba(30, 32, 44, 0.8);
+        border-color: #2e3346;
+        color: #e2e8f0;
+    }
+
+    .input-dark::placeholder {
+        color: #64748b;
+    }
+
+    .input-dark:focus {
+        border-color: #651fff;
+        box-shadow: 0 0 0 2px rgba(101, 31, 255, 0.2);
+    }
+
+    .nav-link {
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -2px;
+        left: 0;
+        background-color: #a855f7;
+        transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after {
+        width: 100%;
+    }
+
+    .nav-link:hover {
+        color: #a855f7;
+    }
+
+    .nav-link.active {
+        color: #a855f7;
+        font-weight: 500;
+    }
+
+    /* Custom scrollbar for webkit browsers */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #1f2937;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #4c1d95;
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #6d28d9;
+    }
+
+    /* Mobile menu animation */
+    .mobile-menu {
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .mobile-menu.hidden {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+
+    /* Genre dropdown styling */
+    .genre-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 260px;
+        background-color: #1f2937;
+        border: 1px solid #374151;
+        border-radius: 0.5rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+        z-index: 50;
+        padding: 0.75rem;
+    }
+
+    .genre-dropdown-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #374151;
+    }
+
+    .genre-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+
+    .genre-item {
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.25rem;
+        font-size: 0.875rem;
+        transition: all 0.2s;
+    }
+
+    .genre-item:hover {
+        background-color: #374151;
+        color: #a855f7;
+    }
 </style>
 
 <nav class="bg-gray-900 border-b border-gray-800 sticky top-0 z-50">
@@ -122,7 +156,9 @@
                         </svg>
                         Beranda
                     </a>
-                    <a href="#" class="nav-link px-3 py-2 text-sm font-medium text-gray-300 hover:text-white">
+                   <!-- Genre Dropdown -->
+                   <div class="relative" id="genre-container">
+                    <button id="genre-button" class="nav-link px-3 py-2 text-sm font-medium text-gray-300 hover:text-white flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20"
                             fill="currentColor">
                             <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
@@ -130,8 +166,41 @@
                                 d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
                                 clip-rule="evenodd" />
                         </svg>
-                        Genre ▾
-                    </a>
+                        Genre
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <!-- Genre Dropdown Menu -->
+                    <div id="genre-dropdown" class="genre-dropdown hidden">
+                        <div class="genre-dropdown-header">
+                            <h3 class="text-white font-medium">Pilih Genre</h3>
+                            <button id="close-genre-dropdown" class="text-gray-400 hover:text-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="genre-grid">
+                            <a href="#" class="genre-item text-gray-300 hover:text-white">Action</a>
+                            <a href="#" class="genre-item text-gray-300 hover:text-white">Adventure</a>
+                            <a href="#" class="genre-item text-gray-300 hover:text-white">Comedy</a>
+                            <a href="#" class="genre-item text-gray-300 hover:text-white">Drama</a>
+                            <a href="#" class="genre-item text-gray-300 hover:text-white">Fantasy</a>
+                            <a href="#" class="genre-item text-gray-300 hover:text-white">Horror</a>
+                            <a href="#" class="genre-item text-gray-300 hover:text-white">Mecha</a>
+                            <a href="#" class="genre-item text-gray-300 hover:text-white">Music</a>
+                            <a href="#" class="genre-item text-gray-300 hover:text-white">Mystery</a>
+                            <a href="#" class="genre-item text-gray-300 hover:text-white">Psychological</a>
+                            <a href="#" class="genre-item text-gray-300 hover:text-white">Romance</a>
+                            <a href="#" class="genre-item text-gray-300 hover:text-white">Sci-Fi</a>
+                            <a href="#" class="genre-item text-gray-300 hover:text-white">Slice of Life</a>
+                            <a href="#" class="genre-item text-gray-300 hover:text-white">Sports</a>
+                            <a href="#" class="genre-item text-gray-300 hover:text-white">Supernatural</a>
+                            <a href="#" class="genre-item text-gray-300 hover:text-white">Thriller</a>
+                        </div>
+                    </div>
+                </div>
                     
                     @auth
                     <!-- Menu tambahan untuk user yang sudah login -->
@@ -267,8 +336,38 @@
     <div class="hidden md:hidden mobile-menu" id="mobile-menu">
         <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <a href="#" class="bg-gray-800 text-white block px-3 py-2 rounded-md text-base font-medium">Beranda</a>
-            <a href="#"
-                class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Eksplor</a>
+             <!-- Mobile Genre Dropdown -->
+         <div class="relative" id="mobile-genre-container">
+            <button id="mobile-genre-button" class="text-gray-300 hover:bg-gray-700 hover:text-white w-full text-left flex items-center justify-between px-3 py-2 rounded-md text-base font-medium">
+                <span>Genre</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <div id="mobile-genre-dropdown" class="hidden px-3 py-2">
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-white font-medium">Pilih Genre</h3>
+                    <button id="close-mobile-genre" class="text-gray-400 hover:text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded-md text-sm">Action</a>
+                    <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded-md text-sm">Adventure</a>
+                    <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded-md text-sm">Comedy</a>
+                    <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded-md text-sm">Drama</a>
+                    <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded-md text-sm">Fantasy</a>
+                    <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded-md text-sm">Horror</a>
+                    <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded-md text-sm">Romance</a>
+                    <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded-md text-sm">Sci-Fi</a>
+                </div>
+                <a href="#" class="block text-purple-400 hover:text-purple-300 mt-2 text-sm">Lihat Semua Genre →</a>
+            </div>
+        </div>
+
+            
             @auth
             <!-- Menu tambahan untuk user yang sudah login (mobile) -->
             <a href="#"
@@ -278,7 +377,7 @@
                 class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Community</a>
             @endauth
         </div>
-
+        
         <!-- Mobile Search -->
         <form action="{{ url('/anime/search') }}" method="GET" class="px-2 pt-2 pb-3 md:hidden">
             <div class="relative">
@@ -355,6 +454,58 @@ if (mobileMenuButton && mobileMenu) {
         closeIcon.classList.toggle('hidden');
     });
 }
+
+// Toggle genre dropdown
+const genreButton = document.getElementById('genre-button');
+const genreDropdown = document.getElementById('genre-dropdown');
+const closeGenreDropdown = document.getElementById('close-genre-dropdown');
+
+if (genreButton && genreDropdown) {
+    genreButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        genreDropdown.classList.toggle('hidden');
+    });
+    
+    // Close dropdown with X button
+    if (closeGenreDropdown) {
+        closeGenreDropdown.addEventListener('click', () => {
+            genreDropdown.classList.add('hidden');
+        });
+    }
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (event) => {
+        if (!genreButton.contains(event.target) && !genreDropdown.contains(event.target)) {
+            genreDropdown.classList.add('hidden');
+        }
+    });
+}
+
+// Toggle mobile genre dropdown
+const mobileGenreButton = document.getElementById('mobile-genre-button');
+const mobileGenreDropdown = document.getElementById('mobile-genre-dropdown');
+const closeMobileGenre = document.getElementById('close-mobile-genre');
+
+if (mobileGenreButton && mobileGenreDropdown) {
+    mobileGenreButton.addEventListener('click', () => {
+        mobileGenreDropdown.classList.toggle('hidden');
+    });
+    
+    // Close dropdown with X button
+    if (closeMobileGenre) {
+        closeMobileGenre.addEventListener('click', () => {
+            mobileGenreDropdown.classList.add('hidden');
+        });
+    }
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (event) => {
+        if (!mobileGenreButton.contains(event.target) && !mobileGenreDropdown.contains(event.target) && !mobileGenreDropdown.contains(event.target.parentNode)) {
+            mobileGenreDropdown.classList.add('hidden');
+        }
+    });
+}
+
 // Toggle user dropdown
 const userMenuButton = document.getElementById('user-menu-button');
 const userDropdown = document.getElementById('user-dropdown');

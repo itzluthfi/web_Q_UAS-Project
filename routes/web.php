@@ -18,10 +18,12 @@ Route::middleware(['guest'])->group(function () {
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/users', [AdminController::class, 'index'])->name('admin.users');
+    Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
 });
 
 // Authenticated users
 Route::middleware(['auth'])->group(function () {
+    
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 

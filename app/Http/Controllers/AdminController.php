@@ -14,6 +14,12 @@ class AdminController extends Controller
         return view('admin.users.index', compact('users'));
     }
 
+    public function profile()
+    {
+        $users = User::all();
+        return view('admin.profile', compact('users'));
+    }
+
     // Tampilkan dashboard admin
     public function dashboard()
     {
