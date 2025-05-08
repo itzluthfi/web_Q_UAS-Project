@@ -10,64 +10,6 @@
     <!-- Vite integration for CSS and JS -->
     @vite(['resources/css/app.css', 'resources/js/app.js']) 
 
-    <!-- Styles for layout -->
-    {{-- <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #0f1116;
-        }
-
-        .glow-effect {
-            box-shadow: 0 0 15px rgba(101, 31, 255, 0.4);
-        }
-
-        .btn-glow:hover {
-            box-shadow: 0 0 20px rgba(101, 31, 255, 0.6);
-        }
-
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 25px rgba(101, 31, 255, 0.5);
-        }
-
-        .input-dark {
-            background-color: rgba(30, 32, 44, 0.8);
-            border-color: #2e3346;
-            color: #e2e8f0;
-        }
-
-        .input-dark::placeholder {
-            color: #64748b;
-        }
-
-        .input-dark:focus {
-            border-color: #651fff;
-            box-shadow: 0 0 0 2px rgba(101, 31, 255, 0.2);
-        }
-
-        /* Custom scrollbar for webkit browsers */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #1f2937;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #4c1d95;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #6d28d9;
-        }
-    </style> --}}
-
     <!-- Push styles from individual views -->
     @stack('styles')
 </head>
