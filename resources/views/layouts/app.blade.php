@@ -13,7 +13,7 @@
     <!-- Push styles from individual views -->
     @stack('styles')
 </head>
-<body class="flex flex-col min-h-screen bg-gray-50 text-gray-800">
+<body class="flex flex-col min-h-screen bg-gradient-to-br from-anime-dark-900 to-black text-gray-100">
     
     <!-- Navbar component -->
     @include('components.navbar')

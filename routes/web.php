@@ -32,3 +32,4 @@ Route::get('/anime/search', [AnimeController::class, 'search'])->name('anime.sea
 Route::get('/anime/show/{id}', [AnimeController::class, 'show'])->name('anime.show');  
 Route::get('/', [AnimeController::class, 'beranda'])->name('home');
 Route::get('/anime/viewAllBy/{label}', [AnimeController::class, 'viewAllByLabel'])->name('anime.viewAllByLabel');
+Route::get('/berandaTemp', [AnimeController::class, 'berandaTemp'])->name('berandaTemp');

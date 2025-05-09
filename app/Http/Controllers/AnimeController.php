@@ -38,6 +38,22 @@ class AnimeController extends Controller
             'categories'
         ));
     }
+    public function berandaTemp()
+    {
+        $animeTop = $this->animeModel->getTopAnime(10);
+        $animeUpcomings = $this->animeModel->getUpcomingAnime(5);
+        $animePopular = $this->animeModel->getPopularAnime();
+        $animeCurrentSeasonal = $this->animeModel->getCurrentSeasonAnime();
+        $categories = $this->animeModel->getAllGenres();
+
+        return view('user.anime.berandaTemp', compact(
+            'animeTop', 
+            'animePopular', 
+            'animeCurrentSeasonal', 
+            'animeUpcomings',
+            'categories'
+        ));
+    }
 
     public function viewAllByLabel($label)
     {

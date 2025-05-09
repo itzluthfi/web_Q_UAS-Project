@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Home - MyAnimeList')
+@section('title', 'Home - AnimeVerse')
 
 
 @push('styles')
@@ -65,6 +65,28 @@ body {
 <body class="min-h-screen bg-gradient-to-br from-gray-900 to-black text-gray-100">
     {{-- <x-navbar></x-navbar> --}}
     <div class="container mx-auto px-4 py-6">
+        <!-- Dismissible Ad Banner -->
+    <div id="ad-banner" class="relative bg-gradient-to-r from-anime-purple-900/30 to-anime-dark-800/30 py-3 border-b border-anime-purple-900/30">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <span class="bg-yellow-500 text-black text-xs font-bold px-2 py-0.5 rounded mr-3">AD</span>
+                    <p class="text-sm text-gray-300">
+                        <span class="font-semibold text-white">Premium Membership Sale!</span> 
+                        Get 30% off annual subscriptions - Watch ad-free anime today!
+                    </p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="#" class="text-xs md:text-sm bg-white text-anime-dark-900 px-3 py-1 rounded hover:bg-gray-200 transition-colors">
+                        Learn More
+                    </a>
+                    <button onclick="document.getElementById('ad-banner').style.display='none'" class="text-gray-400 hover:text-white">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
         <!-- Alert Message -->
         <?php if (!empty($_SESSION['error_message'])): ?>

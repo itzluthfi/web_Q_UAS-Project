@@ -128,6 +128,19 @@
         background-color: #374151;
         color: #a855f7;
     }
+     /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(to right, #a78bfa, #6d28d9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Shimmer effect for loading */
+        .shimmer {
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
 </style>
 
 <nav class="bg-gray-900 border-b border-gray-800 sticky top-0 z-50">
@@ -136,7 +149,7 @@
             <!-- Logo and Desktop Navigation -->
             <div class="flex items-center">
                 <!-- Logo -->
-                <div class="flex-shrink-0 flex items-center">
+                <div class="flex-shrink-0 flex items-center ">
                     <div class="h-10 w-10 bg-purple-700 rounded-full flex items-center justify-center mr-2 glow-effect">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor">
@@ -144,7 +157,8 @@
                                 d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
                         </svg>
                     </div>
-                    <span class="text-white font-bold text-xl">MyAnimeList</span>
+                                            <span class="text-2xl font-bold gradient-text">Anime<span class="text-white">Verse</span></span>
+
                 </div>
                 <!-- Desktop Navigation Links -->
                 <div class="hidden md:ml-6 md:flex md:items-center md:space-x-4">
