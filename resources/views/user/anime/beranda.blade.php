@@ -4,6 +4,43 @@
 
 
 @push('styles')
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    sans: ['Poppins', 'sans-serif'],
+                },
+                colors: {
+                    'anime-purple': {
+                        400: '#a78bfa',
+                        500: '#8b5cf6',
+                        600: '#7c3aed',
+                        700: '#6d28d9',
+                        800: '#5b21b6',
+                        900: '#4c1d95',
+                    },
+                    'anime-dark': {
+                        700: '#374151',
+                        800: '#1f2937',
+                        900: '#111827',
+                        950: '#0a0c10',
+                    },
+                },
+                animation: {
+                    'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    'float': 'float 3s ease-in-out infinite',
+                },
+                keyframes: {
+                    float: {
+                        '0%, 100%': { transform: 'translateY(0)' },
+                        '50%': { transform: 'translateY(-10px)' },
+                    }
+                },
+            }
+        }
+    }
+</script>
 <style>
 body {
     font-family: 'Poppins', sans-serif;
@@ -59,6 +96,35 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: #6d28d9;
 }
+
+   /* Floating animation for featured badges */
+        .float-badge {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(to right, #a78bfa, #6d28d9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Shimmer effect for loading */
+        .shimmer {
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
 </style>
 @endpush
 @section('content')

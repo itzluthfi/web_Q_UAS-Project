@@ -3,6 +3,7 @@
 
 namespace App\Models;
 
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Http;
 
@@ -55,9 +56,9 @@ class Anime extends Model
     }
 
     // Ambil Semua Genre
-    public static function getAllGenres()
+    public static function getAllGenres($limit = 10)
     {
-        $response = Http::get("https://api.jikan.moe/v4/genres/anime");
+        $response = Http::get("https://api.jikan.moe/v4/genres/anime&limit=$limit");
         return $response->json('data', []);
     }
 

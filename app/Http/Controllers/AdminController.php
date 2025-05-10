@@ -19,6 +19,11 @@ class AdminController extends Controller
         $users = User::all();
         return view('admin.profile', compact('users'));
     }
+    public function setting()
+    {
+        $users = User::all();
+        return view('admin.setting', compact('users'));
+    }
 
     // Tampilkan dashboard admin
     public function dashboard()
