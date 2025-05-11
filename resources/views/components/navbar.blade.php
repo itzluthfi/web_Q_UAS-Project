@@ -296,7 +296,7 @@
                                 role="menuitem">Dashboard</a>
                             <a href="{{ route('admin.profile') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
                                 role="menuitem">Profil Saya</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+                            <a href="{{ route('admin.setting') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
                                 role="menuitem">Pengaturan</a>
                             <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
                                 role="menuitem">Anime Favorit</a>
@@ -425,7 +425,7 @@
                 <a href="#"
                     class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Profil
                     Saya</a>
-                <a href="#"
+                <a href="{{ route('admin.setting') }}"
                     class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Pengaturan</a>
                 <a href="#"
                     class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Anime

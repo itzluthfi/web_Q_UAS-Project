@@ -1,4 +1,4 @@
-@extends('layouts.dashboardAdmin')
+@extends('layouts.dashboard')
 @section('title', 'Users - MyAnimeList Admin')
 
     @push('styles')
@@ -761,7 +761,6 @@
     @endsection
 
     @push('scripts')
-
     <!-- JavaScript for Modal and Sidebar Functionality -->
     <script>
     // Toggle user dropdown
@@ -907,4 +906,4 @@
     });
     </script>
             
-            @endpush
+    @endpush
