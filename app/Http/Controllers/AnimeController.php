@@ -28,15 +28,18 @@ class AnimeController extends Controller
         $animeUpcomings = $this->animeModel->getUpcomingAnime(5);
         $animePopular = $this->animeModel->getPopularAnime();
         $animeCurrentSeasonal = $this->animeModel->getCurrentSeasonAnime();
+        $animeTopRated = $this->animeModel->getTopRatedAnime(10);
         $genres = $this->animeModel->getAllGenres(10);
-        dd($genres);
+        // dd($genres);
 
         return view('user.anime.beranda', compact(
             'animeTop', 
             'animePopular', 
             'animeCurrentSeasonal', 
             'animeUpcomings',
+            'animeTopRated',
             'genres'
+
         ));
     }
     public function berandaTemp()

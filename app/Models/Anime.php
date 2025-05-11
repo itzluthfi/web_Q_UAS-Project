@@ -19,16 +19,6 @@ class Anime extends Model
     }
 
 
-      public function getTopRatedAnime($limit = 10)
-    {
-        $response = Http::get("{$this->baseUrl}/top/anime", [
-            'filter' => 'bypopularity',
-            'limit' => $limit
-        ]);
-
-        return $response->json()['data'] ?? [];
-    }
-
     // Ambil Anime Populer (Trending)
     public static function getPopularAnime($limit = 10)
     {
@@ -83,6 +73,18 @@ public function getAnimeByStudio($studioId, $limit = 10)
        return $response->json('data', []);
 
     }
+
+    public static function getTopRatedAnime($limit = 10)
+{
+    $response = Http::get("https://api.jikan.moe/v4/anime", [
+        'order_by' => 'score',
+        'sort' => 'desc',
+        'limit' => $limit
+    ]);
+
+    return $response->json('data', []);
+}
+
 
     // Ambil Anime Secara Acak
     public static function getRandomAnimes($count = 5)
