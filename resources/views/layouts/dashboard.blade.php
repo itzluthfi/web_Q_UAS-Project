@@ -29,6 +29,7 @@
     <main class="p-6">
         @yield('content')
     </main>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- Footer -->
     @include('components.footerAdmin')
