@@ -18,6 +18,17 @@ class Anime extends Model
         return $response->json('data', []);
     }
 
+
+      public function getTopRatedAnime($limit = 10)
+    {
+        $response = Http::get("{$this->baseUrl}/top/anime", [
+            'filter' => 'bypopularity',
+            'limit' => $limit
+        ]);
+
+        return $response->json()['data'] ?? [];
+    }
+
     // Ambil Anime Populer (Trending)
     public static function getPopularAnime($limit = 10)
     {
@@ -40,6 +51,16 @@ class Anime extends Model
     }
 
     // === Season, Genre, Random, Search ===
+    
+public function getAnimeByStudio($studioId, $limit = 10)
+    {
+        $url = "https://api.jikan.moe/v4/producers/{$studioId}/anime";
+        $response = Http::get($url, [
+            'limit' => $limit,
+        ]);
+
+        return $response->json()['data'] ?? [];
+    }
 
     // Ambil Anime yang Tayang di Musim Saat Ini
     public static function getCurrentSeasonAnime($limit = 12)
@@ -58,8 +79,9 @@ class Anime extends Model
     // Ambil Semua Genre
     public static function getAllGenres($limit = 10)
     {
-        $response = Http::get("https://api.jikan.moe/v4/genres/anime&limit=$limit");
-        return $response->json('data', []);
+       $response = Http::get("https://api.jikan.moe/v4/genres/anime?limit=$limit");
+       return $response->json('data', []);
+
     }
 
     // Ambil Anime Secara Acak

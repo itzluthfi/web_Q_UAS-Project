@@ -28,7 +28,8 @@ class AnimeController extends Controller
         $animeUpcomings = $this->animeModel->getUpcomingAnime(5);
         $animePopular = $this->animeModel->getPopularAnime();
         $animeCurrentSeasonal = $this->animeModel->getCurrentSeasonAnime();
-        $genres = $this->animeModel->getAllGenres(12);
+        $genres = $this->animeModel->getAllGenres(10);
+        dd($genres);
 
         return view('user.anime.beranda', compact(
             'animeTop', 
@@ -47,6 +48,11 @@ class AnimeController extends Controller
         // $categories = $this->animeModel->getAllGenres();
 
         return view('user.anime.berandaTemp' );
+    }
+
+    public function showByStudio($studioId){
+        $animeList = $this->animeModel->getAnimeByStudio($studioId, 10);
+        dd($animeList);
     }
 
     public function viewAllByLabel($label)

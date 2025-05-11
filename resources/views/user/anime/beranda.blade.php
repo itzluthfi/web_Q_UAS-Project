@@ -129,31 +129,8 @@ body {
 @endpush
 @section('content')
 <body class="min-h-screen bg-gradient-to-br from-gray-900 to-black text-gray-100">
-    {{-- <x-navbar></x-navbar> --}}
     <div class="container mx-auto px-4 py-6">
-        <!-- Dismissible Ad Banner -->
-    <div id="ad-banner" class="relative bg-gradient-to-r from-anime-purple-900/30 to-anime-dark-800/30 py-3 border-b border-anime-purple-900/30">
-        <div class="container mx-auto px-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <span class="bg-yellow-500 text-black text-xs font-bold px-2 py-0.5 rounded mr-3">AD</span>
-                    <p class="text-sm text-gray-300">
-                        <span class="font-semibold text-white">Premium Membership Sale!</span> 
-                        Get 30% off annual subscriptions - Watch ad-free anime today!
-                    </p>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <a href="#" class="text-xs md:text-sm bg-white text-anime-dark-900 px-3 py-1 rounded hover:bg-gray-200 transition-colors">
-                        Learn More
-                    </a>
-                    <button onclick="document.getElementById('ad-banner').style.display='none'" class="text-gray-400 hover:text-white">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
+      
         <!-- Alert Message -->
         <?php if (!empty($_SESSION['error_message'])): ?>
         <div
@@ -261,10 +238,10 @@ body {
             </div>
         </div>
 
-        <!-- Categories Section -->
+        <!-- Anime Studios Section (Replacing Categories) -->
         <div class="mb-12">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-purple-400">Browse Categories</h2>
+                <h2 class="text-2xl font-bold text-purple-400">Top Anime Studios</h2>
                 <a href="#" class="text-purple-400 hover:text-purple-300 transition-colors flex items-center">
                     View All
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20"
@@ -278,28 +255,28 @@ body {
 
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 <?php 
-                $categories = [
-                    ['name' => 'Action', 'icon' => 'M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z M21 12a9 9 0 11-18 0 9 9 0 0118 0z'],
-                    ['name' => 'Comedy', 'icon' => 'M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5'],
-                    ['name' => 'Romance', 'icon' => 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z'],
-                    ['name' => 'Sci-Fi', 'icon' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'],
-                    ['name' => 'Fantasy', 'icon' => 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z'],
-                    ['name' => 'Slice of Life', 'icon' => 'M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z']
+                $studios = [
+                    ['name' => 'Studio Ghibli', 'icon' => 'M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z', 'count' => 24],
+                    ['name' => 'MAPPA', 'icon' => 'M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z', 'count' => 42],
+                    ['name' => 'Kyoto Animation', 'icon' => 'M13 10V3L4 14h7v7l9-11h-7z', 'count' => 38],
+                    ['name' => 'Ufotable', 'icon' => 'M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z', 'count' => 29],
+                    ['name' => 'Wit Studio', 'icon' => 'M10 3.5a1.5 1.5 0 013 0V4a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-.5a1.5 1.5 0 000 3h.5a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-.5a1.5 1.5 0 00-3 0v.5a1 1 0 01-1 1H6a1 1 0 01-1-1v-3a1 1 0 00-1-1h-.5a1.5 1.5 0 010-3H4a1 1 0 001-1V6a1 1 0 011-1h3a1 1 0 001-1v-.5z', 'count' => 31],
+                    ['name' => 'Bones', 'icon' => 'M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z', 'count' => 45]
                 ];
                 
-                foreach ($categories as $category): ?>
-                <a href="#"
+                foreach ($studios as $studio): ?>
+                <a href="{{ route('anime.showByStudio') }}"
                     class="bg-gray-800/80 hover:bg-gray-700/80 border border-gray-700 rounded-lg p-4 text-center transition-all card-hover">
                     <div
                         class="bg-purple-700/20 rounded-full p-3 mx-auto w-16 h-16 flex items-center justify-center mb-3">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-400" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="<?= $category['icon'] ?>" />
+                                d="<?= $studio['icon'] ?>" />
                         </svg>
                     </div>
-                    <h3 class="font-medium text-white"><?= $category['name'] ?></h3>
-                    <p class="text-xs text-gray-400 mt-1"><?= rand(400, 1200) ?> titles</p>
+                    <h3 class="font-medium text-white"><?= $studio['name'] ?></h3>
+                    <p class="text-xs text-gray-400 mt-1"><?= $studio['count'] ?> titles</p>
                 </a>
                 <?php endforeach; ?>
             </div>
@@ -444,6 +421,168 @@ body {
                         <a href="<?= route('anime.show', ['id' => $anime['mal_id']]) ?>"
                             class="inline-block mt-4 bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-600 transition-colors btn-glow">
                             Details
+                        </a>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+
+        <!-- Top Rated Anime Section (New Section) -->
+        <div class="mb-12">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-purple-400">Top Rated Anime</h2>
+                <a href="#" class="text-purple-400 hover:text-purple-300 transition-colors flex items-center">
+                    View All
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+                @foreach ($animePopular as $anime)
+    <div class="bg-gray-800/80 border border-gray-700 rounded-lg p-4 flex items-center gap-4 card-hover">
+        <div class="flex-shrink-0 relative">
+            <img src="{{ $anime['images']['jpg']['image_url'] }}" alt="{{ $anime['title'] }}" class="w-20 h-28 object-cover rounded">
+            <div class="absolute -top-2 -left-2 bg-purple-700 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">
+                {{ $anime['rank'] ?? '-' }}
+            </div>
+        </div>
+        <div class="flex-grow">
+            <h3 class="font-semibold text-white text-lg">{{ $anime['title'] }}</h3>
+            <div class="flex items-center gap-2 mt-1">
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                    <span class="text-yellow-400 font-bold ml-1">{{ $anime['score'] ?? '-' }}</span>
+                </div>
+                <span class="text-gray-400 text-sm">{{ $anime['year'] ?? 'N/A' }}</span>
+            </div>
+            <a href="{{ $anime['url'] }}" target="_blank" class="text-purple-400 hover:text-purple-300 text-sm mt-2 inline-block">View Details</a>
+        </div>
+    </div>
+@endforeach
+
+            </div>
+        </div>
+
+        <!-- Upcoming Releases Calendar (New Section) -->
+        <div class="mb-12">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-purple-400">Upcoming Releases</h2>
+                <a href="#" class="text-purple-400 hover:text-purple-300 transition-colors flex items-center">
+                    Full Calendar
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </a>
+            </div>
+
+            <div class="bg-gray-800/80 border border-gray-700 rounded-lg p-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <?php 
+                    $upcomingDates = [
+                        ['date' => 'July 15, 2023', 'day' => 'Saturday', 'releases' => [
+                            ['title' => 'My Hero Academia Season 7', 'time' => '11:00 AM', 'type' => 'TV'],
+                            ['title' => 'Demon Slayer: Hashira Training Arc', 'time' => '1:30 PM', 'type' => 'TV'],
+                        ]],
+                        ['date' => 'July 20, 2023', 'day' => 'Thursday', 'releases' => [
+                            ['title' => 'Jujutsu Kaisen Season 2', 'time' => '10:00 AM', 'type' => 'TV'],
+                            ['title' => 'One Piece Episode 1071', 'time' => '9:00 PM', 'type' => 'TV'],
+                            ['title' => 'Dragon Ball: Daima', 'time' => '7:30 PM', 'type' => 'TV'],
+                        ]],
+                        ['date' => 'July 25, 2023', 'day' => 'Tuesday', 'releases' => [
+                            ['title' => 'Spy x Family Season 2', 'time' => '5:00 PM', 'type' => 'TV'],
+                            ['title' => 'Chainsaw Man Movie', 'time' => '8:00 PM', 'type' => 'Movie'],
+                        ]],
+                    ];
+                    
+                    foreach ($upcomingDates as $dateInfo): ?>
+                    <div class="border border-gray-700 rounded-lg p-4">
+                        <div class="mb-4 border-b border-gray-700 pb-2">
+                            <h3 class="text-lg font-semibold text-white"><?= $dateInfo['date'] ?></h3>
+                            <p class="text-gray-400 text-sm"><?= $dateInfo['day'] ?></p>
+                        </div>
+                        <div class="space-y-3">
+                            <?php foreach ($dateInfo['releases'] as $release): ?>
+                            <div class="flex items-start gap-3">
+                                <div class="bg-purple-900/30 text-purple-400 px-2 py-1 rounded text-xs font-medium w-14 text-center">
+                                    <?= $release['type'] ?>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-medium"><?= $release['title'] ?></h4>
+                                    <p class="text-gray-400 text-xs"><?= $release['time'] ?></p>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+
+        <!-- Anime News Section (New Section) -->
+        <div class="mb-12">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-purple-400">Latest Anime News</h2>
+                <a href="#" class="text-purple-400 hover:text-purple-300 transition-colors flex items-center">
+                    All News
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <?php 
+                $newsItems = [
+                    [
+                        'title' => 'Attack on Titan Final Season Part 3 Announces Release Date',
+                        'date' => 'June 28, 2023',
+                        'image' => 'https://via.placeholder.com/400x225?text=AOT+News',
+                        'excerpt' => 'The highly anticipated conclusion to the epic saga has finally received an official release date...'
+                    ],
+                    [
+                        'title' => 'Studio Ghibli Announces New Film Project',
+                        'date' => 'June 25, 2023',
+                        'image' => 'https://via.placeholder.com/400x225?text=Ghibli+News',
+                        'excerpt' => 'Legendary animation studio announces their next feature film project with returning director...'
+                    ],
+                    [
+                        'title' => 'One Piece Manga Enters Final Saga',
+                        'date' => 'June 20, 2023',
+                        'image' => 'https://via.placeholder.com/400x225?text=One+Piece+News',
+                        'excerpt' => 'After 25 years of serialization, Eiichiro Oda confirms One Piece is entering its final saga...'
+                    ],
+                ];
+                
+                foreach ($newsItems as $news): ?>
+                <div class="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-lg card-hover">
+                    <div class="relative overflow-hidden h-48">
+                        <img src="<?= $news['image'] ?>" alt="<?= htmlspecialchars($news['title']) ?>" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-4">
+                        <p class="text-gray-400 text-sm mb-2"><?= $news['date'] ?></p>
+                        <h3 class="text-xl font-semibold mb-2 text-white"><?= htmlspecialchars($news['title']) ?></h3>
+                        <p class="text-gray-300 text-sm mb-4"><?= $news['excerpt'] ?></p>
+                        <a href="#" class="text-purple-400 hover:text-purple-300 font-medium flex items-center">
+                            Read More
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
                         </a>
                     </div>
                 </div>
