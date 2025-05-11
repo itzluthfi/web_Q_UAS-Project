@@ -294,7 +294,7 @@
                             <a href="{{ route('admin.dashboard') }}"
                                 class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
                                 role="menuitem">Dashboard</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+                            <a href="{{ route('admin.profile') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
                                 role="menuitem">Profil Saya</a>
                             <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
                                 role="menuitem">Pengaturan</a>
