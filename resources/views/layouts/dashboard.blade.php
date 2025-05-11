@@ -23,7 +23,7 @@
 <!-- Main Content Wrapper -->
 <div class="main-wrapper" id="mainWrapper" style="margin-left: 260px;">
     <!-- Top Navbar -->
-    @include('components.navbarAdmin')
+    @include('components.navbarDashboard')
 
     <!-- Main Content -->
     <main class="p-6">

@@ -1,5 +1,5 @@
 
-@extends('layouts.dashboardAdmin')
+@extends('layouts.dashboard')
 
 @section('title', 'Dashboard - MyAnimeList Admin')
     @push('styles')
