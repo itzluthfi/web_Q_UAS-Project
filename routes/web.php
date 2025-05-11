@@ -20,6 +20,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/users', [AdminController::class, 'index'])->name('admin.users');
     Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
     Route::get('/admin/setting', [AdminController::class, 'setting'])->name('admin.setting');
+    Route::get('/admin/comment', [AdminController::class, 'comment'])->name('admin.comment');
 });
 
 // Authenticated users

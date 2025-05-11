@@ -58,4 +58,10 @@ class AdminController extends Controller
 
         return redirect()->route('admin.users')->with('success', 'User berhasil dihapus.');
     }
+
+    public function comment()
+    {
+        // $comments = Comment::all();
+        return view('admin.comment');
+    }
 }

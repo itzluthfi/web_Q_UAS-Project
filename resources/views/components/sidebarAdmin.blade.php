@@ -65,7 +65,7 @@
                 <span class="sidebar-text">Anime</span>
             </a>
             
-            <a href="#" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white">
+            <a href="{{ route('admin.comment') }}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 2C6.477 2 2 5.954 2 10.5c0 2.114.898 4.067 2.392 5.522C4.23 17.152 3.272 19.272 3.05 19.786a.75.75 0 00.949.949c.514-.222 2.634-1.18 3.764-1.342A10.548 10.548 0 0012 19c5.523 0 10-3.954 10-8.5S17.523 2 12 2z" />
                 </svg>
