@@ -4,17 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'App Title')</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Vite integration for CSS and JS -->
     @vite(['resources/css/app.css', 'resources/js/app.js']) 
 
     <!-- Push styles from individual views -->
     @stack('styles')
+    <script>
+    // Fungsi untuk menyembunyikan loading
+    function hideLoader() {
+        const loader = document.getElementById('loading-overlay');
+        if (loader) {
+            loader.classList.add('opacity-0');
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 500);
+        }
+    }
+
+    // Jika DOM sudah siap
+    document.addEventListener('DOMContentLoaded', () => {
+        hideLoader();
+    });
+
+    // Cadangan jika ada manipulasi JS tambahan
+    window.addEventListener('load', () => {
+        hideLoader();
+    });
+</script>
 </head>
 <body class="flex flex-col min-h-screen bg-gradient-to-br from-anime-dark-900 to-black text-gray-100">
-    
+    @include('components.loading')
     <!-- Navbar component -->
     @include('components.navbar')
 
@@ -22,10 +43,10 @@
         <!-- Content of each page will go here -->
         @yield('content')
     </main>
-
+    
     <!-- Footer component -->
     @include('components.footer')
-
+    
     <!-- Push scripts from individual views -->
     @stack('scripts')
 </body>

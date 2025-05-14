@@ -224,24 +224,38 @@ public static function getPopularAnimeThemes($limit = 5)
 }
 
     // Ambil Berita dari Beberapa Anime Populer
-    public static function getPopularAnimeNews($limit = 5)
+    public static function getPopularAnimeNews($limit = 3)
     {
         $topAnime = self::getTopAnime($limit);
         $newsData = [];
 
         foreach ($topAnime as $anime) {
             $animeId = $anime['mal_id'];
-            $news = self::getAnimeNews($animeId);
+            $animeTitle = $anime['title'];
+            $newsItems = self::getAnimeNews($animeId);
 
-            if (!empty($news)) {
+            foreach ($newsItems as $item) {
                 $newsData[] = [
-                    'anime_title' => $anime['title'],
-                    'anime_id' => $animeId,
-                    'news' => $news
+                    'title' => $item['title'],
+                    'date' => $item['date'],
+                    'excerpt' => $item['excerpt'],
+                    'url' => $item['url'],
+                    'images' => $item['images'], // sudah sesuai format Jikan
+                    'anime' => [
+                        'id' => $animeId,
+                        'title' => $animeTitle
+                    ]
                 ];
             }
         }
 
-        return $newsData;
+        // Urutkan berdasarkan tanggal terbaru (optional)
+        usort($newsData, function ($a, $b) {
+            return strtotime($b['date']) - strtotime($a['date']);
+        });
+
+        // Batasi total jumlah berita yang di-return
+        return array_slice($newsData, 0, $limit);
     }
+
 }

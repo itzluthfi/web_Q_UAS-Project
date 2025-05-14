@@ -4,43 +4,6 @@
 
 
 @push('styles')
-<script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                fontFamily: {
-                    sans: ['Poppins', 'sans-serif'],
-                },
-                colors: {
-                    'anime-purple': {
-                        400: '#a78bfa',
-                        500: '#8b5cf6',
-                        600: '#7c3aed',
-                        700: '#6d28d9',
-                        800: '#5b21b6',
-                        900: '#4c1d95',
-                    },
-                    'anime-dark': {
-                        700: '#374151',
-                        800: '#1f2937',
-                        900: '#111827',
-                        950: '#0a0c10',
-                    },
-                },
-                animation: {
-                    'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    'float': 'float 3s ease-in-out infinite',
-                },
-                keyframes: {
-                    float: {
-                        '0%, 100%': { transform: 'translateY(0)' },
-                        '50%': { transform: 'translateY(-10px)' },
-                    }
-                },
-            }
-        }
-    }
-</script>
 <style>
 body {
     font-family: 'Poppins', sans-serif;
@@ -97,34 +60,7 @@ body {
     background: #6d28d9;
 }
 
-   /* Floating animation for featured badges */
-        .float-badge {
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-
-        /* Gradient text */
-        .gradient-text {
-            background: linear-gradient(to right, #a78bfa, #6d28d9);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Shimmer effect for loading */
-        .shimmer {
-            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 100%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
+   
 </style>
 @endpush
 @section('content')
@@ -471,75 +407,14 @@ body {
             </div>
         </div>
 
-        
 
-        <!-- Upcoming Releases Calendar (New Section) -->
-        <div class="mb-12">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-purple-400">Upcoming Releases</h2>
-                <a href="#" class="text-purple-400 hover:text-purple-300 transition-colors flex items-center">
-                    Full Calendar
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20"
-                        fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                            clip-rule="evenodd" />
-                    </svg>
-                </a>
-            </div>
-
-            <div class="bg-gray-800/80 border border-gray-700 rounded-lg p-6">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <?php 
-                    $upcomingDates = [
-                        ['date' => 'July 15, 2023', 'day' => 'Saturday', 'releases' => [
-                            ['title' => 'My Hero Academia Season 7', 'time' => '11:00 AM', 'type' => 'TV'],
-                            ['title' => 'Demon Slayer: Hashira Training Arc', 'time' => '1:30 PM', 'type' => 'TV'],
-                        ]],
-                        ['date' => 'July 20, 2023', 'day' => 'Thursday', 'releases' => [
-                            ['title' => 'Jujutsu Kaisen Season 2', 'time' => '10:00 AM', 'type' => 'TV'],
-                            ['title' => 'One Piece Episode 1071', 'time' => '9:00 PM', 'type' => 'TV'],
-                            ['title' => 'Dragon Ball: Daima', 'time' => '7:30 PM', 'type' => 'TV'],
-                        ]],
-                        ['date' => 'July 25, 2023', 'day' => 'Tuesday', 'releases' => [
-                            ['title' => 'Spy x Family Season 2', 'time' => '5:00 PM', 'type' => 'TV'],
-                            ['title' => 'Chainsaw Man Movie', 'time' => '8:00 PM', 'type' => 'Movie'],
-                        ]],
-                    ];
-                    
-                    foreach ($upcomingDates as $dateInfo): ?>
-                    <div class="border border-gray-700 rounded-lg p-4">
-                        <div class="mb-4 border-b border-gray-700 pb-2">
-                            <h3 class="text-lg font-semibold text-white"><?= $dateInfo['date'] ?></h3>
-                            <p class="text-gray-400 text-sm"><?= $dateInfo['day'] ?></p>
-                        </div>
-                        <div class="space-y-3">
-                            <?php foreach ($dateInfo['releases'] as $release): ?>
-                            <div class="flex items-start gap-3">
-                                <div class="bg-purple-900/30 text-purple-400 px-2 py-1 rounded text-xs font-medium w-14 text-center">
-                                    <?= $release['type'] ?>
-                                </div>
-                                <div>
-                                    <h4 class="text-white font-medium"><?= $release['title'] ?></h4>
-                                    <p class="text-gray-400 text-xs"><?= $release['time'] ?></p>
-                                </div>
-                            </div>
-                            <?php endforeach; ?>
-                        </div>
-                    </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-        </div>
-
-        <!-- Anime News Section (New Section) -->
+       <!-- Anime News Section (New Section) -->
         <div class="mb-12">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-bold text-purple-400">Latest Anime News</h2>
                 <a href="#" class="text-purple-400 hover:text-purple-300 transition-colors flex items-center">
                     All News
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20"
-                        fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd"
                             d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                             clip-rule="evenodd" />
@@ -548,48 +423,51 @@ body {
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <?php 
-                $newsItems = [
-                    [
-                        'title' => 'Attack on Titan Final Season Part 3 Announces Release Date',
-                        'date' => 'June 28, 2023',
-                        'image' => 'https://via.placeholder.com/400x225?text=AOT+News',
-                        'excerpt' => 'The highly anticipated conclusion to the epic saga has finally received an official release date...'
-                    ],
-                    [
-                        'title' => 'Studio Ghibli Announces New Film Project',
-                        'date' => 'June 25, 2023',
-                        'image' => 'https://via.placeholder.com/400x225?text=Ghibli+News',
-                        'excerpt' => 'Legendary animation studio announces their next feature film project with returning director...'
-                    ],
-                    [
-                        'title' => 'One Piece Manga Enters Final Saga',
-                        'date' => 'June 20, 2023',
-                        'image' => 'https://via.placeholder.com/400x225?text=One+Piece+News',
-                        'excerpt' => 'After 25 years of serialization, Eiichiro Oda confirms One Piece is entering its final saga...'
-                    ],
-                ];
-                
-                foreach ($newsItems as $news): ?>
-                <div class="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-lg card-hover">
-                    <div class="relative overflow-hidden h-48">
-                        <img src="<?= $news['image'] ?>" alt="<?= htmlspecialchars($news['title']) ?>" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
-                    </div>
-                    <div class="p-4">
-                        <p class="text-gray-400 text-sm mb-2"><?= $news['date'] ?></p>
-                        <h3 class="text-xl font-semibold mb-2 text-white"><?= htmlspecialchars($news['title']) ?></h3>
-                        <p class="text-gray-300 text-sm mb-4"><?= $news['excerpt'] ?></p>
-                        <a href="#" class="text-purple-400 hover:text-purple-300 font-medium flex items-center">
-                            Read More
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                @foreach ($lastestNews as $news)
+                    <div class="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-lg card-hover">
+                        
+                        <div class="relative overflow-hidden h-48">
+                            <img src="{{ $news['images']['jpg']['image_url'] ?? 'https://via.placeholder.com/400x225?text=Anime+News' }}"
+                                alt="{{ $news['title'] }}"
+                                class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                                <div
+                            class="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 m-2 rounded-r-lg text-xs font-bold flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                                    clip-rule="evenodd" />
                             </svg>
-                        </a>
+                            NEWS
+                        </div>
+                        </div>
+                        
+                        <div class="p-4">
+                            <p class="text-gray-400 text-sm mb-2">
+                                {{ \Carbon\Carbon::parse($news['date'])->format('F j, Y') }}
+                            </p>
+                            <h3 class="text-xl font-semibold mb-2 text-white">
+                                {{ $news['title'] }}
+                            </h3>
+                            <p class="text-gray-300 text-sm mb-4">
+                                {{ Str::limit($news['excerpt'], 120) }}
+                            </p>
+                            <a href="{{ $news['url'] }}" target="_blank"
+                                class="text-purple-400 hover:text-purple-300 font-medium flex items-center">
+                                Read More
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <?php endforeach; ?>
+                @endforeach
             </div>
         </div>
+
 
         <!-- Newsletter Section -->
         <div

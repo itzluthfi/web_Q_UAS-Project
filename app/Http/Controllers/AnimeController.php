@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Http;
 
 
 use Illuminate\Http\Request;
 use App\Models\Anime; // Ganti jika AnimeModel kamu pakai nama lain
 use App\Models\Comment;
+use Illuminate\Support\Facades\Cache;
 
 class AnimeController extends Controller
 {
@@ -23,24 +23,44 @@ class AnimeController extends Controller
     }
 
     public function beranda()
-    {
-        $animeTop = $this->animeModel->getTopAnime(10);
-        $animeUpcomings = $this->animeModel->getUpcomingAnime(5);
-        $animePopular = $this->animeModel->getPopularAnime();
-        $animeCurrentSeasonal = $this->animeModel->getCurrentSeasonAnime();
-        $animeTopRated = $this->animeModel->getTopRatedAnime(10);
-        $genres = $this->animeModel->getAllGenres(10);
-        // dd($genres);
+{
+    $animeTop = Cache::remember('top_anime', 60, function () {
+        return $this->animeModel->getTopAnime(10);
+    });
 
-        return view('user.anime.beranda', compact(
-            'animeTop', 
-            'animePopular', 
-            'animeCurrentSeasonal', 
-            'animeUpcomings',
-            'animeTopRated',
-            'genres'
+    $animeUpcomings = Cache::remember('upcoming_anime', 60, function () {
+        return $this->animeModel->getUpcomingAnime(5);
+    });
 
-        ));
+    $animePopular = Cache::remember('popular_anime', 60, function () {
+        return $this->animeModel->getPopularAnime();
+    });
+
+    $animeCurrentSeasonal = Cache::remember('current_season_anime', 60, function () {
+        return $this->animeModel->getCurrentSeasonAnime();
+    });
+
+    $animeTopRated = Cache::remember('top_rated_anime', 60, function () {
+        return $this->animeModel->getTopRatedAnime(10);
+    });
+
+    $lastestNews = Cache::remember('latest_news', 60, function () {
+        return $this->animeModel->getPopularAnimeNews(3);
+    });
+
+    $genres = Cache::remember('all_genres', 60, function () {
+        return $this->animeModel->getAllGenres(10);
+    });
+
+    return view('user.anime.beranda', compact(
+        'animeTop', 
+        'animePopular', 
+        'animeCurrentSeasonal', 
+        'animeUpcomings',
+        'animeTopRated',
+        'lastestNews',
+        'genres'
+    ));
     }
     public function berandaTemp()
     {
