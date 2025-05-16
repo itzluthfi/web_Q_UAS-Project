@@ -128,6 +128,23 @@
         background-color: #374151;
         color: #a855f7;
     }
+
+    /* Logo animation */
+    .logo-pulse {
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
      /* Gradient text */
         .gradient-text {
             background: linear-gradient(to right, #a78bfa, #6d28d9);
@@ -151,14 +168,11 @@
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center ">
                     <div class="h-10 w-10 bg-purple-700 rounded-full flex items-center justify-center mr-2 glow-effect">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
-                        </svg>
+                        <div class="h-10 w-10 rounded-full overflow-hidden mr-2 glow-effect logo-pulse">
+                        <img src="{{ asset('assets/system/kobong.gif') }}" alt="AnimeVerse Logo" class="h-full w-full object-cover">
+                        </div>
                     </div>
-                                            <span class="text-2xl font-bold gradient-text">Anime<span class="text-white">Verse</span></span>
-
+                    <span class="text-2xl font-bold gradient-text">Anime<span class="text-white">Verse</span></span>
                 </div>
                 <!-- Desktop Navigation Links -->
                 <div class="hidden md:ml-6 md:flex md:items-center md:space-x-4">
@@ -277,7 +291,7 @@
                                 id="user-menu-button">
                                 <span class="sr-only">Open user menu</span>
                                 <div class="h-8 w-8 rounded-full bg-purple-600 flex items-center justify-center">
-                                    <span class="font-bold text-white">{{ substr(auth()->user()->name, 0, 1) }}</span>
+                                    <span class="font-bold text-white">{{ substr(auth()->user()->username, 0, 1) }}</span>
                                 </div>
                                 <!-- Panah dropdown -->
                                 <svg class="w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
