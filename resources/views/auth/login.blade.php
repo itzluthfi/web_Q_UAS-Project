@@ -1,5 +1,7 @@
-<x-header></x-header>
+@extends('layouts.app')
 
+@section('title', 'Login - Animeverse')
+@push('styles')
 <style>
 body {
     font-family: 'Poppins', sans-serif;
@@ -34,8 +36,9 @@ body {
     box-shadow: 0 0 20px rgba(101, 31, 255, 0.6);
 }
 </style>
-
-<body class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-gray-900 to-black">
+@endpush
+@section('content')
+<div class="flex items-center justify-center p-4">
     <div class="w-full max-w-4xl flex overflow-hidden rounded-xl shadow-2xl bg-gray-800 glow-effect">
         <!-- Bagian Anime Illustration - Sembunyikan di mobile -->
         <div class="hidden md:block w-1/2 relative anime-bg"
@@ -211,7 +214,9 @@ body {
             </div> -->
         </div>
     </div>
+@endsection
 
+@push('scripts')
     <script>
     function togglePassword() {
         const passwordInput = document.getElementById('password');
@@ -229,3 +234,4 @@ body {
         }
     }
     </script>
+    @endpush
