@@ -9,10 +9,6 @@ class Comment extends Model
 {
     use HasFactory;
 
-    // Tentukan nama tabel jika berbeda dari nama model (opsional)
-    // protected $table = 'comments';
-
-    // Tentukan kolom yang dapat diisi (mass assignable)
     protected $fillable = [
         'anime_id', 
         'content', 
@@ -20,44 +16,43 @@ class Comment extends Model
         'parent_id'
     ];
 
+    /**
+     * Relationship with Anime.
+     */
+    public function anime()
+    {
+        return $this->belongsTo(Anime::class);
+    }
 
-    // Menentukan hubungan dengan model Anime
-    // public function anime()
-    // {
-    //     return $this->belongsTo(Anime::class);
-    // }
-
-
-    // Tentukan kolom yang perlu disembunyikan (opsional)
-    // protected $hidden = ['created_at', 'updated_at'];
-
-    // Menentukan hubungan dengan model User
+    /**
+     * Relationship with User.
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Menentukan hubungan dengan model Anime
-    // public function anime()
-    // {
-    //     return $this->belongsTo(Anime::class);
-    // }
-
-    // Menentukan hubungan dengan komentar balasan (self-referencing)
+    /**
+     * Replies relationship (recursive).
+     */
     public function replies()
     {
-        return $this->hasMany(Comment::class, 'parent_id');
+        return $this->hasMany(Comment::class, 'parent_id')->with('user', 'replies');
     }
 
-    // Scope untuk mendapatkan komentar berdasarkan anime_id
+    /**
+     * Scope for Comments by Anime ID.
+     */
     public function scopeByAnime($query, $animeId)
     {
-        return $query->where('anime_id', $animeId);
+        return $query->where('anime_id', $animeId)->whereNull('parent_id');
     }
 
-    // Scope untuk mendapatkan komentar berdasarkan user_id
-    public function scopeByUser($query, $userId)
+    /**
+     * Accessor to Check if a Comment has Replies.
+     */
+    public function getHasRepliesAttribute()
     {
-        return $query->where('user_id', $userId);
+        return $this->replies()->exists();
     }
 }

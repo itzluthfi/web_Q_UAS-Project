@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnimeController;
+use App\Http\Controllers\CommentController;
 
 
 // Guest routes
@@ -36,3 +37,5 @@ Route::get('/', [AnimeController::class, 'beranda'])->name('home');
 Route::get('/anime/viewAllBy/{label}', [AnimeController::class, 'viewAllByLabel'])->name('anime.viewAllByLabel');
 Route::get('/berandaTemp', [AnimeController::class, 'berandaTemp'])->name('berandaTemp');
 Route::get('/anime/showByStudio', [AnimeController::class, 'showByStudio'])->name('anime.showByStudio');
+Route::post('/comments/store', [CommentController::class, 'store'])->name('comments.store');
+Route::post('/comments/{comment}/reply', [CommentController::class, 'reply'])->name('comments.reply');
