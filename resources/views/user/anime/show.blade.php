@@ -285,7 +285,7 @@
      <!-- Daftar Komentar -->
      <div id="comments-section" class="space-y-4">
         @forelse ($comments as $comment)
-            <div class="p-4 bg-gray-700/50 border border-gray-600 rounded-lg shadow-md comment-item"
+            <div class="p-4 bg-gray-700/50 border border-gray-600 rounded-lg shadow-md comment-item comment-item"
                  id="comment-{{ $comment->id }}">
                 <div class="flex items-center mb-2">
                     <div class="w-8 h-8 rounded-full bg-purple-700 flex items-center justify-center mr-3">
@@ -339,12 +339,13 @@
                         </div>
                     </form>
                 </div>
+                
 
                 <!-- Container Balasan -->
                 <div id="replies-{{ $comment->id }}" class="replies-container mt-4 pl-6 border-l border-gray-600 hidden">
                     @if(isset($comment->replies) && count($comment->replies) > 0)
                         @foreach($comment->replies as $reply)
-                            <div class="p-3 bg-gray-700/30 border border-gray-600 rounded-lg shadow-sm mt-2">
+                            <div class="p-3 bg-gray-700/30 border border-gray-600 rounded-lg shadow-sm mt-2" id="comment-reply-{{ $reply->id }}">
                                 <div class="flex items-center mb-1">
                                     <div class="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center mr-2">
                                         <span class="font-bold text-white text-xs">
@@ -390,6 +391,12 @@
         </div>
     </div>
 @endsection
+@if (session('new_comment_id'))
+    <script>
+        localStorage.setItem('newCommentId', '{{ session('new_comment_id') }}');
+    </script>
+@endif
+
 
 @push('styles')
     <style>
@@ -502,75 +509,116 @@ document.addEventListener('DOMContentLoaded', function () {
     const parentIdInput = document.getElementById('parent_id');
     const commentInput = document.getElementById('comment-input');
 
-    let isSubmitting = false;
-
+    
     // Tombol "Balas" diklik
     replyToggles.forEach(toggle => {
         toggle.addEventListener('click', function () {
             const commentId = this.dataset.commentId;
-
+            
             if (parentIdInput) {
                 parentIdInput.value = commentId;
                 localStorage.setItem('lastReplyCommentId', commentId);
             }
-
+            
             commentInput.placeholder = 'Tulis komentar kamu...';
-
+            
             const replyForm = document.getElementById('form-komentar');
             if (replyForm) {
                 const formOffset = replyForm.getBoundingClientRect().top + window.scrollY;
                 const centerOffset = window.innerHeight / 2 - replyForm.offsetHeight / 2;
-
+                
                 window.scrollTo({
                     top: formOffset - centerOffset,
                     behavior: 'smooth'
                 });
-
+                
                 setTimeout(() => commentInput.focus(), 500);
             }
         });
     });
-
-   if (commentForm) {
-    commentForm.addEventListener('submit', function (e) {
-        if (commentInput.value.trim() === '') {
-            e.preventDefault();
-            alert('Komentar tidak boleh kosong.');
-            return;
-        }
-
-        if (isSubmitting) {
-            e.preventDefault();
-            return; // Cegah submit ganda
-        }
-
-        isSubmitting = true;
-
-        // Optional: ubah tombol agar tidak bisa ditekan ulang
-        const submitButton = commentForm.querySelector('button[type="submit"]');
-        if (submitButton) {
-            submitButton.disabled = true;
-            submitButton.innerHTML = 'Mengirim...';
+    
+    let isSubmitting = false;
+    if (commentForm) {
+        commentForm.addEventListener('submit', function (e) {
+            if (commentInput.value.trim() === '') {
+                e.preventDefault();
+                alert('Komentar tidak boleh kosong.');
+                return;
+            }
+            
+            if (isSubmitting) {
+                e.preventDefault();
+                return; // Cegah submit ganda
+            }
+            
+            isSubmitting = true;
+            
+            // Optional: ubah tombol agar tidak bisa ditekan ulang
+            const submitButton = commentForm.querySelector('button[type="submit"]');
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.innerHTML = 'Mengirim...';
         }
     });
+    }
+
+   const lastCommentId = localStorage.getItem('newCommentId');
+if (lastCommentId) {
+    // Coba cari elemen komentar biasa dulu
+    let targetElement = document.getElementById(`comment-${lastCommentId}`);
+    console.log(" Target element :", targetElement);
+
+    // Kalau tidak ada, cari sebagai balasan (reply)
+    if (!targetElement) {
+        targetElement = document.getElementById(`comment-reply-${lastCommentId}`);
+        console.log(" Target element reply:", targetElement);
+
+        if (targetElement) {
+            // Dapatkan parent replies container dan tampilkan jika tersembunyi
+            const parentRepliesContainer = targetElement.closest('.replies-container');
+            console.log(" Parent replies container:", parentRepliesContainer);
+            if (parentRepliesContainer && parentRepliesContainer.classList.contains('hidden')) {
+                parentRepliesContainer.classList.remove('hidden');
+
+                // Scroll harus dilakukan *setelah* container dimunculkan
+                setTimeout(() => {
+                    const offset = targetElement.getBoundingClientRect().top + window.scrollY;
+                    const centerOffset = window.innerHeight / 2 - targetElement.offsetHeight / 2;
+
+                    window.scrollTo({
+                        top: offset - centerOffset,
+                        behavior: 'smooth'
+                    });
+                }, 100); // Delay kecil agar DOM sempat render
+            } else {
+                // Container sudah terlihat, langsung scroll
+                const offset = targetElement.getBoundingClientRect().top + window.scrollY;
+                const centerOffset = window.innerHeight / 2 - targetElement.offsetHeight / 2;
+
+                window.scrollTo({
+                    top: offset - centerOffset,
+                    behavior: 'smooth'
+                });
+            }
+        }
+    } else {
+        // Jika komentar biasa
+        const offset = targetElement.getBoundingClientRect().top + window.scrollY;
+        const centerOffset = window.innerHeight / 2 - targetElement.offsetHeight / 2;
+
+        window.scrollTo({
+            top: offset - centerOffset,
+            behavior: 'smooth'
+        });
+    }
+
+    // Bersihkan localStorage
+    localStorage.removeItem('newCommentId');
 }
 
-    // Scroll ke komentar baru setelah reload
-    const lastCommentId = localStorage.getItem('lastCommentId');
-    if (lastCommentId) {
-        const commentElement = document.getElementById(`comment-${lastCommentId}`);
-        if (commentElement) {
-            const offset = commentElement.getBoundingClientRect().top + window.scrollY;
-            const centerOffset = window.innerHeight / 2 - commentElement.offsetHeight / 2;
 
-            window.scrollTo({
-                top: offset - centerOffset,
-                behavior: 'smooth'
-            });
 
-            localStorage.removeItem('lastCommentId');
-        }
-    }
+
 
     // Tombol "Batal Balas"
     cancelReplies.forEach(button => {
@@ -695,5 +743,6 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 });
 </script>
+
 @endpush
 

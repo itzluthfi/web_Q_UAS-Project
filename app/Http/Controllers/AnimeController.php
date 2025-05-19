@@ -116,7 +116,10 @@ class AnimeController extends Controller
             $relatedAnimes = Anime::getAnimeByGenre($firstGenreId, 4);
         }
 
-        $comments = Comment::with('user')->where('anime_id', $id)->get();
+        $comments = Comment::with('user')
+        ->where('anime_id', $id)
+        ->whereNull('parent_id')
+        ->get();
         // dd($comments);
     
         // Kirim ke view

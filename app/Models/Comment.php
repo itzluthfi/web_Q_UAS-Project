@@ -49,7 +49,7 @@ class Comment extends Model
     }
 
     /**
-     * Accessor to Check if a Comment has Replies.
+     * Accessor to Check if a Comment has Replies.  
      */
     public function getHasRepliesAttribute()
     {

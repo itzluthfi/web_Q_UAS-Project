@@ -32,35 +32,19 @@ public function store(Request $request)
     }
 
     // Jika user ID ditemukan, simpan komentar
-    Comment::create([
+    $comment = Comment::create([
         'anime_id' => $request->anime_id,
         'content' => $request->content,
         'user_id' => $userId,
         'parent_id' => $request->parent_id, // Menyimpan parent_id jika ada
     ]);
 
-    return back()->with('success', 'Komentar berhasil ditambahkan.');
+    return redirect()->back()
+    ->with('success', 'Komentar berhasil ditambahkan.')
+    ->with('new_comment_id', $comment->id); // Kirim ID ke session;
 }
 
 
 
-    /**
-     * Reply to a comment.
-     */
-   public function reply(Request $request, Comment $comment)
-{
-    $request->validate([
-        'content' => 'required|string|max:500',
-    ]);
-
-    Comment::create([
-        'anime_id' => $comment->anime_id,
-        'content' => $request->content,
-        'user_id' => Auth::id(),
-        'parent_id' => $comment->id,
-    ]);
-
-    return back()->with('success', 'Balasan berhasil ditambahkan.');
-}
 
 }
