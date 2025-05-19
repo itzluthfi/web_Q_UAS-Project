@@ -78,6 +78,8 @@ class AnimeController extends Controller
         dd($animeList);
     }
 
+   
+
     public function viewAllByLabel($label)
     {
         $method = 'get' . ucfirst($label) . 'Anime';

@@ -41,10 +41,16 @@
                             <!-- Dropdown Menu -->
                             <div class="dropdown-menu" id="user-dropdown">
                                 <div class="py-1">
-                                    <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Profil Saya</a>
+                                    <a href="{{ route('admin.profile') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Profil Saya</a>
                                     <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Pengaturan</a>
                                     <div class="border-t border-gray-700 my-1"></div>
-                                    <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Keluar</a>
+                                    <form action="{{ route('logout') }}" method="POST" class="inline">
+                                        @csrf
+                                        <button type="submit"
+                                            class="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700">
+                                            Logout
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

@@ -64,8 +64,15 @@ class AuthController extends Controller
         $user = Auth::user();
 
         if ($user->role === 'admin') {
+            Session::put('user_id', $user->id);
+            Session::put('username', $user->username);
+            Session::put('role', $user->role);
             return redirect()->route('admin.dashboard');
         } else {
+            Session::put('user_id', $user->id);
+            Session::put('username', $user->username);
+            Session::put('role', $user->role);
+            // dd(session()->all());
             return redirect()->route('home');
         }
     }

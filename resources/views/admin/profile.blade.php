@@ -1,17 +1,6 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyAnimeList - Profile</title>
-    <!-- Tailwind CSS via CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Alpine.js for interactivity -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+@extends('layouts.dashboard')
+@section('title', 'Profile Admin - MyAnimeList Admin')
+@push('styles')
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -237,7 +226,207 @@
                 margin-left: 0 !important;
             }
         }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0f1116;
+        }
+        .glow-effect {
+            box-shadow: 0 0 15px rgba(101, 31, 255, 0.4);
+        }
+        .btn-glow:hover {
+            box-shadow: 0 0 20px rgba(101, 31, 255, 0.6);
+        }
+        .input-dark {
+            background-color: rgba(30, 32, 44, 0.8);
+            border-color: #2e3346;
+            color: #e2e8f0;
+        }
+        .input-dark::placeholder {
+            color: #64748b;
+        }
+        .input-dark:focus {
+            border-color: #651fff;
+            box-shadow: 0 0 0 2px rgba(101, 31, 255, 0.2);
+        }
+        .sidebar-link {
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        .sidebar-link:hover {
+            background-color: rgba(79, 70, 229, 0.1);
+            border-left-color: #a855f7;
+        }
+        .sidebar-link.active {
+            background-color: rgba(79, 70, 229, 0.2);
+            border-left-color: #a855f7;
+        }
+        /* Custom scrollbar for webkit browsers */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4c1d95;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6d28d9;
+        }
+        /* Table styling */
+        .admin-table {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        .admin-table th {
+            background-color: #1f2937;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+        .admin-table tr {
+            transition: all 0.2s ease;
+        }
+        .admin-table tbody tr:hover {
+            background-color: rgba(79, 70, 229, 0.1);
+        }
+        /* Modal animation */
+        .modal {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .modal.hidden {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+        }
+        /* Badge styling */
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.125rem 0.5rem;
+            border-radius: 9999px;
+            font-weight: 500;
+        }
+        .badge-admin {
+            background-color: rgba(139, 92, 246, 0.2);
+            color: #a78bfa;
+        }
+        .badge-user {
+            background-color: rgba(45, 212, 191, 0.2);
+            color: #5eead4;
+        }
+        /* Sidebar fixed */
+        .sidebar {
+            width: 260px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            z-index: 40;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+        /* Main content area */
+        .main-wrapper {
+            transition: margin-left 0.3s ease;
+        }
+        /* Dropdown menu */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #1f2937;
+            border-radius: 0.375rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            z-index: 50;
+            min-width: 10rem;
+            margin-top: 0.5rem;
+        }
+        .dropdown-menu.show {
+            display: block;
+        }
+        /* Card styling */
+        .dashboard-card {
+            background-color: #1f2937;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+        .dashboard-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            .main-wrapper {
+                margin-left: 0 !important;
+            }
+        }
+        /* Overlay for mobile sidebar */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 30;
+        }
+        .sidebar-overlay.show {
+            display: block;
+        }
+        /* Improved animation for cards */
+        .anime-card-image {
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.3s ease;
+        }
+        .anime-card:hover .anime-card-image {
+            transform: scale(1.05);
+        }
+        /* Notification badge */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            height: 18px;
+            width: 18px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* Collapsed sidebar styles */
+        .sidebar.collapsed {
+            width: 70px;
+        }
+        .sidebar.collapsed .sidebar-text {
+            display: none;
+        }
+        .sidebar.collapsed .sidebar-logo-text {
+            display: none;
+        }
+        .sidebar.collapsed .sidebar-group-label {
+            display: none;
+        }
+        .main-wrapper.sidebar-collapsed {
+            margin-left: 70px;
+        }
     </style>
+    @endpush
 </head>
 <body class="min-h-screen bg-gradient-to-br from-gray-900 to-black text-gray-100" x-data="{ 
     sidebarOpen: window.innerWidth >= 768,
@@ -245,207 +434,11 @@
     photoModalOpen: false,
     activeTab: 'overview'
 }">
-    <!-- Sidebar Overlay -->
-    <div 
-        class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden transition-opacity duration-300" 
-        x-show="sidebarOpen" 
-        x-transition:enter="transition ease-out duration-300" 
-        x-transition:enter-start="opacity-0" 
-        x-transition:enter-end="opacity-100" 
-        x-transition:leave="transition ease-in duration-300" 
-        x-transition:leave-start="opacity-100" 
-        x-transition:leave-end="opacity-0"
-        @click="sidebarOpen = false">
-    </div>
-    
-    <!-- Sidebar -->
-    <aside 
-        class="sidebar bg-gray-900 border-r border-gray-800 transform transition-transform duration-300 ease-in-out" 
-        :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}">
-        <div class="p-4 flex items-center justify-between border-b border-gray-800">
-            <a href="/" class="flex items-center">
-                <div class="h-10 w-10 bg-purple-700 rounded-md flex items-center justify-center text-white font-bold">
-                    A
-                </div>
-                <span class="ml-2 text-xl font-semibold text-white">AnimeProfile</span>
-            </a>
-            <button @click="sidebarOpen = false" class="text-gray-400 hover:text-white lg:hidden">
-                <i class="fas fa-times text-xl"></i>
-            </button>
-        </div>
-
-        <div class="py-4">
-            <div class="px-4 mb-2">
-                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Menu</p>
-            </div>
-
-            <nav class="space-y-1">
-                <a href="/" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white">
-                    <i class="fas fa-home w-5 h-5 text-center"></i>
-                    <span class="ml-3">Dashboard</span>
-                </a>
-
-                <a href="/profile" class="sidebar-link active flex items-center px-4 py-3 text-gray-300 hover:text-white">
-                    <i class="fas fa-user w-5 h-5 text-center"></i>
-                    <span class="ml-3">Profile</span>
-                </a>
-
-                <a href="/anime" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white">
-                    <i class="fas fa-film w-5 h-5 text-center"></i>
-                    <span class="ml-3">Anime List</span>
-                </a>
-
-                <a href="/manga" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white">
-                    <i class="fas fa-book w-5 h-5 text-center"></i>
-                    <span class="ml-3">Manga List</span>
-                </a>
-
-                <a href="/favorites" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white">
-                    <i class="fas fa-heart w-5 h-5 text-center"></i>
-                    <span class="ml-3">Favorites</span>
-                </a>
-
-                <a href="/schedule" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white">
-                    <i class="fas fa-calendar w-5 h-5 text-center"></i>
-                    <span class="ml-3">Schedule</span>
-                </a>
-
-                <a href="/messages" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white">
-                    <i class="fas fa-comment w-5 h-5 text-center"></i>
-                    <span class="ml-3">Messages</span>
-                </a>
-            </nav>
-
-            <div class="px-4 mt-6 mb-2">
-                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Settings</p>
-            </div>
-
-            <nav class="space-y-1">
-                <a href="/settings" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white">
-                    <i class="fas fa-cog w-5 h-5 text-center"></i>
-                    <span class="ml-3">Settings</span>
-                </a>
-
-                <a href="/logout" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white">
-                    <i class="fas fa-sign-out-alt w-5 h-5 text-center"></i>
-                    <span class="ml-3">Logout</span>
-                </a>
-            </nav>
-        </div>
-    </aside>
+   
 
     <!-- Main Content Wrapper -->
-    <div class="main-wrapper transition-all duration-300" :class="{'ml-0': !sidebarOpen, 'ml-0 lg:ml-64': sidebarOpen}">
-        <!-- Top Navbar -->
-        <header class="bg-gray-900 border-b border-gray-800 py-4 px-4 sm:px-6">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <button @click="sidebarOpen = !sidebarOpen" class="text-gray-400 hover:text-white mr-4">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-
-                    <div class="relative hidden md:block">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <i class="fas fa-search text-gray-400"></i>
-                        </div>
-                        <input type="search" class="pl-10 pr-3 py-2 w-64 bg-gray-800 border border-gray-700 rounded-md text-gray-300 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500" placeholder="Search...">
-                    </div>
-                </div>
-
-                <div class="flex items-center space-x-4">
-                    <div class="relative" x-data="{ notificationOpen: false }">
-                        <button @click="notificationOpen = !notificationOpen" class="text-gray-400 hover:text-white relative">
-                            <i class="fas fa-bell text-xl"></i>
-                            <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
-                        </button>
-                        
-                        <div 
-                            x-show="notificationOpen" 
-                            @click.away="notificationOpen = false"
-                            x-transition:enter="transition ease-out duration-200"
-                            x-transition:enter-start="opacity-0 scale-95"
-                            x-transition:enter-end="opacity-100 scale-100"
-                            x-transition:leave="transition ease-in duration-150"
-                            x-transition:leave-start="opacity-100 scale-100"
-                            x-transition:leave-end="opacity-0 scale-95"
-                            class="absolute right-0 mt-2 w-80 bg-gray-800 rounded-md shadow-lg py-1 z-50">
-                            <div class="px-4 py-2 border-b border-gray-700">
-                                <h3 class="text-sm font-medium text-white">Notifications</h3>
-                            </div>
-                            <div class="max-h-60 overflow-y-auto">
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-700">
-                                    <div class="flex items-start">
-                                        <div class="flex-shrink-0">
-                                            <div class="h-8 w-8 rounded-full bg-purple-600 flex items-center justify-center">
-                                                <i class="fas fa-comment text-white"></i>
-                                            </div>
-                                        </div>
-                                        <div class="ml-3">
-                                            <p class="text-sm font-medium text-white">New message from Sasuke</p>
-                                            <p class="text-xs text-gray-400">5 minutes ago</p>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-700">
-                                    <div class="flex items-start">
-                                        <div class="flex-shrink-0">
-                                            <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center">
-                                                <i class="fas fa-heart text-white"></i>
-                                            </div>
-                                        </div>
-                                        <div class="ml-3">
-                                            <p class="text-sm font-medium text-white">Hinata liked your review</p>
-                                            <p class="text-xs text-gray-400">1 hour ago</p>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-700">
-                                    <div class="flex items-start">
-                                        <div class="flex-shrink-0">
-                                            <div class="h-8 w-8 rounded-full bg-green-600 flex items-center justify-center">
-                                                <i class="fas fa-bell text-white"></i>
-                                            </div>
-                                        </div>
-                                        <div class="ml-3">
-                                            <p class="text-sm font-medium text-white">New episode of One Piece is out!</p>
-                                            <p class="text-xs text-gray-400">3 hours ago</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="px-4 py-2 border-t border-gray-700">
-                                <a href="#" class="text-xs text-purple-400 hover:text-purple-300">View all notifications</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="relative" x-data="{ userMenuOpen: false }">
-                        <button @click="userMenuOpen = !userMenuOpen" class="flex items-center text-gray-400 hover:text-white">
-                            <div class="h-8 w-8 rounded-full bg-purple-600 flex items-center justify-center">
-                                <span class="font-bold text-white">N</span>
-                            </div>
-                        </button>
-
-                        <div 
-                            x-show="userMenuOpen" 
-                            @click.away="userMenuOpen = false"
-                            x-transition:enter="transition ease-out duration-200"
-                            x-transition:enter-start="opacity-0 scale-95"
-                            x-transition:enter-end="opacity-100 scale-100"
-                            x-transition:leave="transition ease-in duration-150"
-                            x-transition:leave-start="opacity-100 scale-100"
-                            x-transition:leave-end="opacity-0 scale-95"
-                            class="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg py-1 z-50">
-                            <a href="/profile" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Your Profile</a>
-                            <a href="/settings" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Settings</a>
-                            <div class="border-t border-gray-700 my-1"></div>
-                            <a href="/logout" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Sign out</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
-
+    
+        @section('content')
         <!-- Main Content -->
         <main class="p-4 sm:p-6 animate-fade-in">
             <!-- Profile Header with Background -->
@@ -824,9 +817,10 @@
                 </div>
             </div>
         </main>
+        @endsection
         
         <!-- Footer -->
-        <footer class="bg-gray-900 border-t border-gray-800 py-4 px-6">
+        {{-- <footer class="bg-gray-900 border-t border-gray-800 py-4 px-6">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="text-gray-400 text-sm mb-4 md:mb-0">
                     &copy; 2023, Made with 
@@ -840,7 +834,7 @@
                 </div>
             </div>
         </footer>
-    </div>
+    </div> --}}
     
     <!-- Edit Profile Modal -->
     <div 
@@ -978,5 +972,150 @@
             </div>
         </div>
     </div>
-</body>
-</html>
+
+    @push('scripts')
+    <!-- JavaScript for Modal and Sidebar Functionality -->
+    <script>
+        // Toggle user dropdown
+        const userMenu = document.getElementById('user-menu');
+        const userDropdown = document.getElementById('user-dropdown');
+        
+        if (userMenu && userDropdown) {
+            userMenu.addEventListener('click', function(e) {
+                e.stopPropagation();
+                userDropdown.classList.toggle('show');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function() {
+                userDropdown.classList.remove('show');
+            });
+        }
+        
+        // Sidebar toggle functionality
+        const toggleSidebarBtn = document.getElementById('toggleSidebarBtn');
+        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const mainWrapper = document.getElementById('mainWrapper');
+        
+        // Function to toggle sidebar in desktop mode
+        function toggleDesktopSidebar() {
+            if (window.innerWidth >= 768) {
+                sidebar.classList.toggle('collapsed');
+                mainWrapper.classList.toggle('sidebar-collapsed');
+                
+                if (sidebar.classList.contains('collapsed')) {
+                    mainWrapper.style.marginLeft = '70px';
+                } else {
+                    mainWrapper.style.marginLeft = '260px';
+                }
+            }
+        }
+        
+        // Function to open sidebar in mobile mode
+        function openMobileSidebar() {
+            if (window.innerWidth < 768) {
+                sidebar.classList.add('show');
+                sidebarOverlay.classList.add('show');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling when sidebar is open
+            }
+        }
+        
+        // Function to close sidebar in mobile mode
+        function closeMobileSidebar() {
+            if (window.innerWidth < 768) {
+                sidebar.classList.remove('show');
+                sidebarOverlay.classList.remove('show');
+                document.body.style.overflow = ''; // Re-enable scrolling
+            }
+        }
+        
+        // Toggle sidebar on button click
+        if (toggleSidebarBtn) {
+            toggleSidebarBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (window.innerWidth >= 768) {
+                    // Desktop mode
+                    toggleDesktopSidebar();
+                } else {
+                    // Mobile mode
+                    if (sidebar.classList.contains('show')) {
+                        closeMobileSidebar();
+                    } else {
+                        openMobileSidebar();
+                    }
+                }
+            });
+        }
+        
+        // Close sidebar when clicking the close button
+        if (closeSidebarBtn) {
+            closeSidebarBtn.addEventListener('click', closeMobileSidebar);
+        }
+        
+        // Close sidebar when clicking the overlay
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', closeMobileSidebar);
+        }
+        
+        // Edit Modal Functions
+        const editModal = document.getElementById('editModal');
+        
+        function openEditModal(userId) {
+            // In a real application, you would fetch user data based on userId
+            // For this example, we'll just show the modal with placeholder data
+            document.getElementById('edit-username').value = 'username_' + userId;
+            document.getElementById('edit-email').value = 'user' + userId + '@example.com';
+            
+            editModal.classList.remove('hidden');
+        }
+        
+        function closeEditModal() {
+            editModal.classList.add('hidden');
+        }
+        
+        // Handle window resize for sidebar
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 768) {
+                // Reset mobile sidebar state
+                sidebar.classList.remove('show');
+                sidebarOverlay.classList.remove('show');
+                document.body.style.overflow = '';
+                
+                // Maintain desktop sidebar state
+                if (sidebar.classList.contains('collapsed')) {
+                    mainWrapper.style.marginLeft = '70px';
+                } else {
+                    mainWrapper.style.marginLeft = '260px';
+                }
+            } else {
+                // Reset to mobile view
+                mainWrapper.style.marginLeft = '0';
+            }
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            if (editModal && !editModal.classList.contains('hidden')) {
+                const modalContent = editModal.querySelector('.inline-block');
+                if (modalContent && !modalContent.contains(e.target) && e.target !== modalContent) {
+                    closeEditModal();
+                }
+            }
+        });
+        
+        // Initialize anime card images with random gradients
+        document.addEventListener('DOMContentLoaded', function() {
+            const animeCardImages = document.querySelectorAll('.anime-card-image');
+            const colors = ['purple', 'blue', 'indigo', 'pink'];
+            
+            animeCardImages.forEach((image, index) => {
+                const color = colors[index % colors.length];
+                image.style.backgroundImage = `linear-gradient(45deg, var(--tw-gradient-stops))`;
+                image.classList.add(`from-${color}-900/30`, `to-${color}-600/10`);
+            });
+        });
+    </script>
+    @endpush
+	
