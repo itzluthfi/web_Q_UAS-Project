@@ -21,6 +21,7 @@ public function store(Request $request)
     $request->validate([
         'anime_id' => 'required|integer',
         'content' => 'required|string|max:500',
+        'parent_id' => 'nullable|integer|exists:comments,id', // Validasi parent_id
     ]);
 
     $userId = Auth::id();
@@ -35,10 +36,12 @@ public function store(Request $request)
         'anime_id' => $request->anime_id,
         'content' => $request->content,
         'user_id' => $userId,
+        'parent_id' => $request->parent_id, // Menyimpan parent_id jika ada
     ]);
 
     return back()->with('success', 'Komentar berhasil ditambahkan.');
 }
+
 
 
     /**

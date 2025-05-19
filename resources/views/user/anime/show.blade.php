@@ -253,7 +253,7 @@
 
             <!-- Komentar Section -->
 <div class="border-t border-gray-700 mt-4 px-6 py-8">
-    <h2 class="text-2xl font-semibold mb-6 text-purple-300 flex items-center">
+    <h2 class="text-2xl font-semibold mb-6 text-purple-300 flex items-center header-komentar">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
@@ -262,9 +262,10 @@
     </h2>
 
     <!-- Form Komentar -->
-        <form id="form-komentar" method="POST" action="#" class="mb-8">
+        <form id="form-komentar" method="POST" action="{{ route('comments.store') }}" class="mb-8">
             @csrf
             <input type="hidden" name="parent_id" id="parent_id" value=""> <!-- Untuk menyimpan ID komentar jika ada balasan -->
+            <input type="hidden" name="anime_id" value="{{ $anime['mal_id'] }}">
             <textarea id="comment-input"
                     name="content"
                     rows="3"
@@ -301,7 +302,7 @@
                     <button type="button"
                             class="reply-toggle text-purple-400 hover:text-white"
                             data-comment-id="{{ $comment->id }}"
-                            onclick="handleReplyClick({{ $comment->id }})">
+                            >
                         Balas
                     </button>
 
@@ -473,11 +474,13 @@
 @endpush
 
 @push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // =========================
+    // Navbar Scroll Effect
+    // =========================
     const navbar = document.querySelector('.navbar-fixed');
 
-    // Fungsi untuk menangani scroll navbar
     function handleScroll() {
         if (window.scrollY > 10) {
             navbar?.classList.add('bg-gray-900/95', 'shadow-md');
@@ -487,143 +490,183 @@
     }
 
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Jalankan saat halaman dimuat
+    handleScroll();
 
-    // --- Balasan Komentar ---
+    // =========================
+    // Komentar & Balasan
+    // =========================
     const replyToggles = document.querySelectorAll('.reply-toggle');
     const cancelReplies = document.querySelectorAll('.cancel-reply');
     const toggleRepliesButtons = document.querySelectorAll('.toggle-replies');
+    const commentForm = document.getElementById('form-komentar');
+    const parentIdInput = document.getElementById('parent_id');
+    const commentInput = document.getElementById('comment-input');
 
-    // Toggle form balasan
+    let isSubmitting = false;
+
+    // Tombol "Balas" diklik
     replyToggles.forEach(toggle => {
         toggle.addEventListener('click', function () {
             const commentId = this.dataset.commentId;
-            const replyForm = document.getElementById(`reply-form-${commentId}`);
 
-            if (!replyForm) {
-                console.error(`Form #reply-form-${commentId} tidak ditemukan`);
-                return;
+            if (parentIdInput) {
+                parentIdInput.value = commentId;
+                localStorage.setItem('lastReplyCommentId', commentId);
             }
 
-            // Tutup semua form balasan lain
-            document.querySelectorAll('.reply-form').forEach(form => {
-                if (form.id !== `reply-form-${commentId}`) {
-                    form.classList.add('hidden');
-                }
+            commentInput.placeholder = 'Tulis komentar kamu...';
+
+            const replyForm = document.getElementById('form-komentar');
+            if (replyForm) {
+                const formOffset = replyForm.getBoundingClientRect().top + window.scrollY;
+                const centerOffset = window.innerHeight / 2 - replyForm.offsetHeight / 2;
+
+                window.scrollTo({
+                    top: formOffset - centerOffset,
+                    behavior: 'smooth'
+                });
+
+                setTimeout(() => commentInput.focus(), 500);
+            }
+        });
+    });
+
+   if (commentForm) {
+    commentForm.addEventListener('submit', function (e) {
+        if (commentInput.value.trim() === '') {
+            e.preventDefault();
+            alert('Komentar tidak boleh kosong.');
+            return;
+        }
+
+        if (isSubmitting) {
+            e.preventDefault();
+            return; // Cegah submit ganda
+        }
+
+        isSubmitting = true;
+
+        // Optional: ubah tombol agar tidak bisa ditekan ulang
+        const submitButton = commentForm.querySelector('button[type="submit"]');
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.innerHTML = 'Mengirim...';
+        }
+    });
+}
+
+    // Scroll ke komentar baru setelah reload
+    const lastCommentId = localStorage.getItem('lastCommentId');
+    if (lastCommentId) {
+        const commentElement = document.getElementById(`comment-${lastCommentId}`);
+        if (commentElement) {
+            const offset = commentElement.getBoundingClientRect().top + window.scrollY;
+            const centerOffset = window.innerHeight / 2 - commentElement.offsetHeight / 2;
+
+            window.scrollTo({
+                top: offset - centerOffset,
+                behavior: 'smooth'
             });
 
-            // Toggle form yang sesuai
-            replyForm.classList.toggle('hidden');
+            localStorage.removeItem('lastCommentId');
+        }
+    }
 
-            // Ganti teks tombol
-            this.textContent = this.textContent.includes('Balas') ? 'Sembunyikan' : 'Balas';
-        });
-    });
-
-    // Tutup form balasan dengan tombol batal
+    // Tombol "Batal Balas"
     cancelReplies.forEach(button => {
         button.addEventListener('click', function () {
-            const commentId = this.dataset.commentId;
-            const replyForm = document.getElementById(`reply-form-${commentId}`);
-
-            if (replyForm) {
-                replyForm.classList.add('hidden');
+            if (parentIdInput) {
+                parentIdInput.value = '';
             }
+            commentInput.placeholder = 'Tulis komentar kamu...';
         });
     });
 
-    // Toggle tampilan balasan dari komentar
+    // Toggle tampilkan/sembunyikan balasan
     toggleRepliesButtons.forEach(toggle => {
         toggle.addEventListener('click', function () {
             const commentId = this.dataset.commentId;
             const repliesContainer = document.getElementById(`replies-${commentId}`);
-            
+
             if (!repliesContainer) {
                 console.error(`#replies-${commentId} tidak ditemukan`);
                 return;
             }
 
             repliesContainer.classList.toggle('show');
-
             const countSpan = this.querySelector('.replies-count');
             const count = countSpan ? countSpan.textContent : '0';
 
-            // Update ikon dan teks tombol
-            if (repliesContainer.classList.contains('show')) {
-                this.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 mr-1">
-                        <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" />
-                    </svg>
-                    <span class="replies-count">${count}</span> Sembunyikan Balasan`;
-            } else {
-                this.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 mr-1">
-                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                    </svg>
-                    <span class="replies-count">${count}</span> Balasan`;
-            }
+            this.innerHTML = repliesContainer.classList.contains('show') ?
+                `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"/></svg><span class="replies-count">${count}</span> Sembunyikan Balasan`
+                :
+                `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg><span class="replies-count">${count}</span> Balasan`;
         });
     });
 
-    // --- Sidebar Toggle ---
+    // Custom fungsi balas + placeholder username
+    window.handleReplyClick = function (commentId) {
+        if (!commentInput) return;
+
+        const username = document.querySelector(`[data-comment-id="${commentId}"]`)?.closest('.comment-item')?.querySelector('.font-semibold')?.textContent || '';
+        commentInput.placeholder = username ? `Balas kepada @${username}` : 'Tulis komentar kamu...';
+
+        commentInput.focus();
+        commentInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        if (parentIdInput) {
+            parentIdInput.value = commentId;
+        }
+    };
+
+    // =========================
+    // Sidebar (Responsive)
+    // =========================
     const toggleSidebarBtn = document.getElementById('toggleSidebarBtn');
     const sidebar = document.getElementById('sidebar');
     const mainWrapper = document.getElementById('mainWrapper');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
 
-    // Toggle sidebar desktop
     function toggleDesktopSidebar() {
         if (window.innerWidth >= 768) {
             sidebar?.classList.toggle('collapsed');
             mainWrapper?.classList.toggle('sidebar-collapsed');
-            if (sidebar?.classList.contains('collapsed')) {
-                mainWrapper.style.marginLeft = '70px';
-            } else {
-                mainWrapper.style.marginLeft = '260px';
-            }
+            mainWrapper.style.marginLeft = sidebar?.classList.contains('collapsed') ? '70px' : '260px';
         }
     }
 
-    // Buka sidebar mode mobile
     function openMobileSidebar() {
         if (window.innerWidth < 768 && sidebar && mainWrapper) {
             sidebar.classList.add('show');
             sidebarOverlay?.classList.add('show');
-            document.body.style.overflow = 'hidden'; // Hindari scroll saat sidebar muncul
+            document.body.style.overflow = 'hidden';
         }
     }
 
-    // Tutup sidebar mobile
     function closeMobileSidebar() {
-        if (sidebar && mainWrapper) {
-            sidebar.classList.remove('show');
-            sidebarOverlay?.classList.remove('show');
-            document.body.style.overflow = '';
-        }
+        sidebar?.classList.remove('show');
+        sidebarOverlay?.classList.remove('show');
+        document.body.style.overflow = '';
     }
 
-    // Event listener tombol toggle
     if (toggleSidebarBtn) {
         toggleSidebarBtn.addEventListener('click', function (e) {
             e.stopPropagation();
             if (window.innerWidth >= 768) {
                 toggleDesktopSidebar();
             } else {
-                if (sidebar?.classList.contains('show')) {
-                    closeMobileSidebar();
-                } else {
-                    openMobileSidebar();
-                }
+                sidebar?.classList.contains('show') ? closeMobileSidebar() : openMobileSidebar();
             }
         });
     }
 
-    // Tutup sidebar jika klik di luar
     if (sidebarOverlay) {
         sidebarOverlay.addEventListener('click', closeMobileSidebar);
     }
 
-    // --- Dropdown User Menu ---
+    // =========================
+    // Dropdown User Menu
+    // =========================
     const userMenu = document.getElementById('user-menu');
     const userDropdown = document.getElementById('user-dropdown');
 
@@ -633,83 +676,24 @@
             userDropdown.classList.toggle('show');
         });
 
-        // Close dropdown saat klik di luar
         document.addEventListener('click', function () {
             userDropdown.classList.remove('show');
         });
     }
 
-    // --- Modal Edit ---
-    const editModal = document.getElementById('editModal');
-
-    window.openEditModal = function (userId) {
-        if (!editModal) {
-            console.error("Modal edit tidak ditemukan");
-            return;
-        }
-        document.getElementById('edit-username').value = 'username_' + userId;
-        document.getElementById('edit-email').value = 'user' + userId + '@example.com';
-        editModal.classList.remove('hidden');
-    };
-
-    window.closeEditModal = function () {
-        if (editModal) {
-            editModal.classList.add('hidden');
-        }
-    };
-
-    // Tutup modal saat klik di luar area konten
-    window.addEventListener('click', function (e) {
-        if (editModal && !editModal.classList.contains('hidden')) {
-            const modalContent = editModal.querySelector('.inline-block');
-            if (modalContent && !modalContent.contains(e.target)) {
-                closeEditModal();
-            }
-        }
-    });
-
-    // --- Fungsi Watch Button ---
+    // =========================
+    // Tombol "Watch Now" & "Watch Trailer"
+    // =========================
     window.watchNow = function (title) {
         alert(`Menonton ${title} sekarang`);
-        // Tambahkan logika redirect atau video player di sini
+        // Tambahkan logika redirect atau pemutar video di sini
     };
 
     window.watchTrailer = function (title) {
         alert(`Menonton trailer dari ${title}`);
-        // Implementasi trailer logic
+        // Tambahkan logika trailer di sini
     };
-
-    function handleReplyClick(commentId) {
-    const commentInput = document.getElementById('comment-input');
-    if (!commentInput) {
-        console.error("Textarea komentar tidak ditemukan");
-        return;
-    }
-
-    // Ambil username dari komentar
-    const usernameEl = document.querySelector(`[data-comment-id="${commentId}"]`)?.closest('.comment-item')?.querySelector('.font-semibold')?.textContent || '';
-    
-    // Jika username ditemukan, ganti placeholder
-    if (usernameEl) {
-        commentInput.placeholder = `Balas kepada @${usernameEl}`;
-    } else {
-        commentInput.placeholder = 'Tulis komentar kamu...';
-    }
-
-    // Fokus ke textarea
-    commentInput.focus();
-
-    // Scroll ke textarea
-    commentInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-    // Simpan parent_id jika perlu
-    const parentIdInput = document.getElementById('parent_id');
-    if (parentIdInput) {
-        parentIdInput.value = commentId;
-    }
-}
-
 });
-
-    </script>
+</script>
 @endpush
+

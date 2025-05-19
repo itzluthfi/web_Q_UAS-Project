@@ -38,4 +38,3 @@ Route::get('/anime/viewAllBy/{label}', [AnimeController::class, 'viewAllByLabel'
 Route::get('/berandaTemp', [AnimeController::class, 'berandaTemp'])->name('berandaTemp');
 Route::get('/anime/showByStudio', [AnimeController::class, 'showByStudio'])->name('anime.showByStudio');
 Route::post('/comments/store', [CommentController::class, 'store'])->name('comments.store');
-Route::post('/comments/{comment}/reply', [CommentController::class, 'reply'])->name('comments.reply');
