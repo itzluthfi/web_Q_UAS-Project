@@ -11,7 +11,7 @@
                             </svg>
                         </button>
                         
-                        <h1 class="text-xl font-medium text-white ml-2">Dashboard - MyAnimeList Admin</h1>
+                        <h1 class="text-xl font-medium text-white ml-2">@yield('page-header', 'Dashboard - MyAnimeList Admin')</h1>
                     </div>
                     
                     <!-- User Profile and Notifications -->

@@ -1,5 +1,6 @@
 @extends('layouts.dashboard')
-@section('title', 'Profile Admin - MyAnimeList Admin')
+@section('title', 'Profile Admin - AnimeVerse ')
+@section('page-header', 'Profile - AnimeVerse') {{-- Ini akan masuk ke navbar --}}
 @push('styles')
     <style>
         body {
@@ -819,22 +820,7 @@
         </main>
         @endsection
         
-        <!-- Footer -->
-        {{-- <footer class="bg-gray-900 border-t border-gray-800 py-4 px-6">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="text-gray-400 text-sm mb-4 md:mb-0">
-                    &copy; 2023, Made with 
-                    <i class="fas fa-heart text-red-500 mx-1"></i>
-                    by AnimeProfile Team
-                </div>
-                <div class="flex space-x-4">
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Help</a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors">FAQ</a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a>
-                </div>
-            </div>
-        </footer>
-    </div> --}}
+    
     
     <!-- Edit Profile Modal -->
     <div 

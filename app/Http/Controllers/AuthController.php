@@ -23,22 +23,28 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-       // Validasi input
-        $validator = Validator::make($request->all(), [
-        'username' => 'required|string|max:255|unique:users,username',
-        'email' => 'required|email|unique:users,email',
-        'password' => 'required|min:6',
-        ]);
+        $validated = $request->validate([
+        'username' => 'required|string|max:255',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|min:6|confirmed',
+        'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+         ]);
        
-        if ($validator->fails()) {
+        if (!$validated) {
             return back()->with('error', 'Registrasi gagal. Mohon periksa input Anda.')
-                         ->withErrors($validator)
+                         ->withErrors($validated)
                          ->withInput();
+        }
+
+        $imagePath = null;
+        if ($request->hasFile('profile_image')) {
+            $imagePath = $request->file('profile_image')->store('profile_images', 'public');
         }
 
         // Simpan user
         User::create([
             'username' => $request->username,
+            'profile_image_url' => $imagePath,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'user', // Default role
@@ -82,6 +88,16 @@ class AuthController extends Controller
     ]);
 }
 
+
+    public function uploadProfileImage(Request $request){
+        $user = Auth::user();
+        if ($request->hasFile('profile_image')) {
+            $imagePath = $request->file('profile_image')->store('profile_images', 'public');
+            $user->profile_image_url = $imagePath;
+            $user->save();
+        }
+        return back();
+    }
 
 
     public function logout()

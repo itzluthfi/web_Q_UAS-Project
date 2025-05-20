@@ -1,7 +1,8 @@
 
 @extends('layouts.dashboard')
 
-@section('title', 'Dashboard - MyAnimeList Admin')
+@section('title', 'Dashboard - AnimeVerse')
+@section('page-header', 'Dashboard - AnimeVerse') {{-- Ini akan masuk ke navbar --}}
     @push('styles')
     <style>
         
@@ -121,7 +122,7 @@
 
         @section('content')
         <!-- Main Content -->
-        <main class="p-6">
+        
             <!-- Stats Cards -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                 <div class="dashboard-card p-4 flex items-center">
@@ -634,7 +635,6 @@
                     </div>
                 </div>
             </div>
-        </main>
         @endsection
         
        
