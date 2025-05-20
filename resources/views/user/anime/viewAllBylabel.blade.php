@@ -62,16 +62,13 @@ body {
 </style>
 @endpush
 
-
-
-
     @section('content')
     <div class="container mx-auto px-4 py-6">
-        <h1 class="text-3xl font-bold text-center text-white mb-8">
+        <h1 class="text-3xl font-bold text-center text-purple-500 mb-8">
             @if(isset($query) && $query)
                 {{ $jmlResult }} hasil ditemukan untuk pencarian: "{{ $query }}"
             @else
-                Daftar Anime {{ ucfirst($label) }}
+                Daftar Anime "{{ ucfirst($label) }}"
             @endif
         </h1>
     

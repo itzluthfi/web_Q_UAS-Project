@@ -2,7 +2,6 @@
 
 @section('title', 'Home - AnimeVerse')
 
-
 @push('styles')
 <style>
 body {
@@ -254,7 +253,7 @@ body {
                                 </div>
                                 <span class="text-gray-400 text-sm">{{ $anime['year'] ?? 'N/A' }}</span>
                             </div>
-                            <a href="{{ $anime['url'] }}" target="_blank" class="text-purple-400 hover:text-purple-300 text-sm mt-2 inline-block">View Details</a>
+                            <a href="{{ route('anime.show', ['id' => $anime['mal_id']]) }}" class="text-purple-400 hover:text-purple-300 text-sm mt-2 inline-block">View Details</a>
                         </div>
                     </div>
                 @endforeach

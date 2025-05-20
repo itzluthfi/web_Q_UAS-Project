@@ -40,9 +40,8 @@ class Anime extends Model
         return $response->json('data', []);
     }
 
-    // === Season, Genre, Random, Search ===
-    
-public function getAnimeByStudio($studioId, $limit = 10)
+    // === Season, Genre, Random, Search === 
+    public function getAnimeByStudio($studioId, $limit = 10)
     {
         $url = "https://api.jikan.moe/v4/producers/{$studioId}/anime";
         $response = Http::get($url, [
@@ -111,7 +110,6 @@ public function getAnimeByStudio($studioId, $limit = 10)
     }
 
     // === Detail Anime Berdasarkan ID ===
-
     // Ambil Detail Anime
     public static function getAnimeById($id)
     {

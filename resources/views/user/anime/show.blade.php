@@ -2,7 +2,7 @@
 
 @section('title', 'Detail Anime - AnimeVerse')
 
-@section('content')
+@push('styles')
 <style>
     .comment-transition:hover {
         transform: translateX(5px);
@@ -134,7 +134,10 @@
         height: 0.875rem;
         margin-right: 0.25rem;
     }
-    </style>
+</style>
+@endpush
+
+@section('content')
     <div class="anime-backdrop">
         <div class="max-w-4xl mx-auto bg-gray-800 shadow-xl rounded-lg overflow-hidden glow-effect">
             <!-- Title and Image -->
@@ -252,134 +255,134 @@
             </div>
 
             <!-- Komentar Section -->
-<div class="border-t border-gray-700 mt-4 px-6 py-8">
-    <h2 class="text-2xl font-semibold mb-6 text-purple-300 flex items-center header-komentar">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-        </svg>
-        Komentar
-    </h2>
-
-    <!-- Form Komentar -->
-        <form id="form-komentar" method="POST" action="{{ route('comments.store') }}" class="mb-8">
-            @csrf
-            <input type="hidden" name="parent_id" id="parent_id" value=""> <!-- Untuk menyimpan ID komentar jika ada balasan -->
-            <input type="hidden" name="anime_id" value="{{ $anime['mal_id'] }}">
-            <textarea id="comment-input"
-                    name="content"
-                    rows="3"
-                    placeholder="Tulis komentar kamu..."
-                    class="w-full input-dark rounded-lg p-4 mb-3 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"></textarea>
-            <button type="submit"
-                    class="bg-purple-700 text-white px-5 py-2 rounded-lg hover:bg-purple-600 transition flex items-center btn-glow">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
-                        clip-rule="evenodd"/>
+        <div class="border-t border-gray-700 mt-4 px-6 py-8">
+            <h2 class="text-2xl font-semibold mb-6 text-purple-300 flex items-center header-komentar">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                 </svg>
-                Kirim Komentar
-            </button>
-        </form>
+                Komentar
+            </h2>
 
-     <!-- Daftar Komentar -->
-     <div id="comments-section" class="space-y-4">
-        @forelse ($comments as $comment)
-            <div class="p-4 bg-gray-700/50 border border-gray-600 rounded-lg shadow-md comment-item comment-item"
-                 id="comment-{{ $comment->id }}">
-                <div class="flex items-center mb-2">
-                    <div class="w-8 h-8 rounded-full bg-purple-700 flex items-center justify-center mr-3">
-                        <span class="font-bold text-white">{{ substr($comment->user->username, 0, 1) }}</span>
-                    </div>
-                    <p class="font-semibold text-white">{{ $comment->user->username ?? 'Unknown' }}</p>
-                    <span class="ml-auto text-xs text-gray-400">{{ $comment->created_at->diffForHumans() }}</span>
-                </div>
-
-                <p class="text-gray-300">{{ $comment->content }}</p>
-
-                <div class="mt-2 flex space-x-4">
-                    <!-- Tombol Balas -->
-                    <button type="button"
-                            class="reply-toggle text-purple-400 hover:text-white"
-                            data-comment-id="{{ $comment->id }}"
-                            >
-                        Balas
+            <!-- Form Komentar -->
+                <form id="form-komentar" method="POST" action="{{ route('comments.store') }}" class="mb-8">
+                    @csrf
+                    <input type="hidden" name="parent_id" id="parent_id" value=""> <!-- Untuk menyimpan ID komentar jika ada balasan -->
+                    <input type="hidden" name="anime_id" value="{{ $anime['mal_id'] }}">
+                    <textarea id="comment-input"
+                            name="content"
+                            rows="3"
+                            placeholder="Tulis komentar kamu..."
+                            class="w-full input-dark rounded-lg p-4 mb-3 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"></textarea>
+                    <button type="submit"
+                            class="bg-purple-700 text-white px-5 py-2 rounded-lg hover:bg-purple-600 transition flex items-center btn-glow">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
+                                clip-rule="evenodd"/>
+                        </svg>
+                        Kirim Komentar
                     </button>
+                </form>
 
-                    <!-- Tombol Toggle Balasan -->
-                    @if(count($comment->replies ?? []) > 0)
-                        <button type="button"
-                                class="flex items-center text-blue-400 hover:text-blue-300 toggle-replies"
-                                data-comment-id="{{ $comment->id }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                 class="w-4 h-4 mr-1 reply-icon-show">
-                                <path fill-rule="evenodd"
-                                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                      clip-rule="evenodd"/>
-                            </svg>
-                            <span class="replies-count">{{ count($comment->replies ?? []) }}</span> Balasan
-                        </button>
-                    @else
-                        <span class="text-sm text-gray-500">Belum ada balasan</span>
-                    @endif
-                </div>
-
-                <!-- Form Balasan -->
-                <div id="reply-form-{{ $comment->id }}" class="reply-form mt-3 p-4 bg-gray-800 rounded-md hidden">
-                    <form method="POST" action="#">
-                        @csrf
-                        <input type="hidden" name="parent_id" value="{{ $comment->id }}">
-                        <textarea name="body" rows="2" placeholder="Tulis balasan..."
-                                  class="w-full input-dark rounded-md p-2 mb-2"></textarea>
-                        <div class="flex justify-end space-x-2">
-                            <button type="button" onclick="closeReplyForm({{ $comment->id }})"
-                                    class="px-3 py-1 text-sm bg-gray-700 hover:bg-gray-600 rounded">Batal</button>
-                            <button type="submit"
-                                    class="px-3 py-1 text-sm bg-purple-700 hover:bg-purple-600 rounded btn-glow">Kirim</button>
-                        </div>
-                    </form>
-                </div>
-                
-
-                <!-- Container Balasan -->
-                <div id="replies-{{ $comment->id }}" class="replies-container mt-4 pl-6 border-l border-gray-600 hidden">
-                    @if(isset($comment->replies) && count($comment->replies) > 0)
-                        @foreach($comment->replies as $reply)
-                            <div class="p-3 bg-gray-700/30 border border-gray-600 rounded-lg shadow-sm mt-2" id="comment-reply-{{ $reply->id }}">
-                                <div class="flex items-center mb-1">
-                                    <div class="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center mr-2">
-                                        <span class="font-bold text-white text-xs">
-                                            {{ substr($reply->user->username, 0, 1) }}
-                                        </span>
-                                    </div>
-                                    <p class="font-medium text-white text-sm">{{ $reply->user->username ?? 'Unknown' }}</p>
-                                    <span class="ml-auto text-xs text-gray-400">{{ $reply->created_at->diffForHumans() }}</span>
-                                </div>
-                                <p class="text-gray-300 text-sm">{{ $reply->content }}</p>
+            <!-- Daftar Komentar -->
+            <div id="comments-section" class="space-y-4">
+                @forelse ($comments as $comment)
+                    <div class="p-4 bg-gray-700/50 border border-gray-600 rounded-lg shadow-md comment-item comment-item"
+                        id="comment-{{ $comment->id }}">
+                        <div class="flex items-center mb-2">
+                            <div class="w-8 h-8 rounded-full bg-purple-700 flex items-center justify-center mr-3">
+                                <span class="font-bold text-white">{{ substr($comment->user->username, 0, 1) }}</span>
                             </div>
-                        @endforeach
-                    @else
-                        <p class="text-gray-400 italic text-sm mt-2">Belum ada balasan.</p>
-                    @endif
-                </div>
+                            <p class="font-semibold text-white">{{ $comment->user->username ?? 'Unknown' }}</p>
+                            <span class="ml-auto text-xs text-gray-400">{{ $comment->created_at->diffForHumans() }}</span>
+                        </div>
+
+                        <p class="text-gray-300">{{ $comment->content }}</p>
+
+                        <div class="mt-2 flex space-x-4">
+                            <!-- Tombol Balas -->
+                            <button type="button"
+                                    class="reply-toggle text-purple-400 hover:text-white"
+                                    data-comment-id="{{ $comment->id }}"
+                                    >
+                                Balas
+                            </button>
+
+                            <!-- Tombol Toggle Balasan -->
+                            @if(count($comment->replies ?? []) > 0)
+                                <button type="button"
+                                        class="flex items-center text-blue-400 hover:text-blue-300 toggle-replies"
+                                        data-comment-id="{{ $comment->id }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                        class="w-4 h-4 mr-1 reply-icon-show">
+                                        <path fill-rule="evenodd"
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                            clip-rule="evenodd"/>
+                                    </svg>
+                                    <span class="replies-count">{{ count($comment->replies ?? []) }}</span> Balasan
+                                </button>
+                            @else
+                                <span class="text-sm text-gray-500">Belum ada balasan</span>
+                            @endif
+                        </div>
+
+                        <!-- Form Balasan -->
+                        <div id="reply-form-{{ $comment->id }}" class="reply-form mt-3 p-4 bg-gray-800 rounded-md hidden">
+                            <form method="POST" action="#">
+                                @csrf
+                                <input type="hidden" name="parent_id" value="{{ $comment->id }}">
+                                <textarea name="body" rows="2" placeholder="Tulis balasan..."
+                                        class="w-full input-dark rounded-md p-2 mb-2"></textarea>
+                                <div class="flex justify-end space-x-2">
+                                    <button type="button" onclick="closeReplyForm({{ $comment->id }})"
+                                            class="px-3 py-1 text-sm bg-gray-700 hover:bg-gray-600 rounded">Batal</button>
+                                    <button type="submit"
+                                            class="px-3 py-1 text-sm bg-purple-700 hover:bg-purple-600 rounded btn-glow">Kirim</button>
+                                </div>
+                            </form>
+                        </div>
+        
+                        <!-- Container Balasan -->
+                        <div id="replies-{{ $comment->id }}" class="replies-container mt-4 pl-6 border-l border-gray-600 hidden">
+                            @if(isset($comment->replies) && count($comment->replies) > 0)
+                                @foreach($comment->replies as $reply)
+                                    <div class="p-3 bg-gray-700/30 border border-gray-600 rounded-lg shadow-sm mt-2" id="comment-reply-{{ $reply->id }}">
+                                        <div class="flex items-center mb-1">
+                                            <div class="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center mr-2">
+                                                <span class="font-bold text-white text-xs">
+                                                    {{ substr($reply->user->username, 0, 1) }}
+                                                </span>
+                                            </div>
+                                            <p class="font-medium text-white text-sm">{{ $reply->user->username ?? 'Unknown' }}</p>
+                                            <span class="ml-auto text-xs text-gray-400">{{ $reply->created_at->diffForHumans() }}</span>
+                                        </div>
+                                        <p class="text-gray-300 text-sm">{{ $reply->content }}</p>
+                                    </div>
+                                @endforeach
+                            @else
+                                <p class="text-gray-400 italic text-sm mt-2">Belum ada balasan.</p>
+                            @endif
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-gray-400 italic">Belum ada komentar.</p>
+                @endforelse
             </div>
-        @empty
-            <p class="text-gray-400 italic">Belum ada komentar.</p>
-        @endforelse
-    </div>
-</div>
+        </div>
 
 
         <!-- Related Anime Section (Optional) -->
-        <div class="max-w-4xl mx-auto mt-8 mb-12">
+        <div class="max-w-4xl mx-auto mt-8 mb-12 px-4">
             <h2 class="text-2xl font-semibold mb-6 text-purple-300">Anime Terkait</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 @forelse($relatedAnimes as $relatedAnime)
                     <div class="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:border-purple-500 transition related-anime-card">
-                        <img src="{{ $relatedAnime['images']['jpg']['small_image_url'] }}" alt="{{ $relatedAnime['title'] }}" class="w-full h-32 object-cover">
+                        <img src="{{ $relatedAnime['images']['jpg']['image_url'] }}" alt="{{ $relatedAnime['title'] }}" class="w-full h-48 object-cover">
                         <div class="p-2">
                             <p class="text-sm font-medium text-white truncate">{{ $relatedAnime['title'] }}</p>
                             <p class="text-xs text-gray-400">{{ $relatedAnime['type'] }} • {{ $relatedAnime['episodes'] ?? 'N/A' }} Eps</p>
+                            <a href="/anime/{{ $relatedAnime['mal_id'] }}" class="mt-2 inline-block text-xs text-purple-400 hover:text-purple-200">View Detail</a>
                         </div>
                     </div>
                 @empty
@@ -391,6 +394,7 @@
         </div>
     </div>
 @endsection
+
 @if (session('new_comment_id'))
     <script>
         localStorage.setItem('newCommentId', '{{ session('new_comment_id') }}');
