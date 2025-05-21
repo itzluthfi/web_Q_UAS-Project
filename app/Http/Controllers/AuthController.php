@@ -21,6 +21,13 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
+    public function profile()
+    {
+        $users = User::all();
+        return view('user.profile', compact('users'));
+    }
+
+
     public function register(Request $request)
     {
         $validated = $request->validate([

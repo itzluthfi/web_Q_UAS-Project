@@ -308,7 +308,7 @@
                             <a href="{{ route('admin.dashboard') }}"
                                 class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
                                 role="menuitem">Dashboard</a>
-                            <a href="{{ route('admin.profile') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+                            <a href="@php if (auth()->user()->role == 'admin') { echo route('admin.profile'); } else { echo route('user.profile'); } @endphp" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
                                 role="menuitem">Profil Saya</a>
                             <a href="{{ route('admin.setting') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
                                 role="menuitem">Pengaturan</a>

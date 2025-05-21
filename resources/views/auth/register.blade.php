@@ -1,6 +1,9 @@
-<x-header></x-header>
+@extends('layouts.app')
+
+@section('title', 'Register - Animeverse')
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+@push('styles')
 <style>
 body {
     font-family: 'Poppins', sans-serif;
@@ -46,10 +49,12 @@ select.input-dark {
     -moz-appearance: none;
     appearance: none;
 }
+
 </style>
+@endpush
+@section('content')
 
-<body class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-gray-900 to-black">
-
+<div class="flex items-center justify-center p-4">
     <div class="w-full max-w-4xl flex overflow-hidden rounded-xl shadow-2xl bg-gray-800 glow-effect">
         <!-- Bagian Anime Illustration - Sembunyikan di mobile -->
         <div class="hidden md:block w-1/2 relative anime-bg"
@@ -216,7 +221,9 @@ select.input-dark {
             </div>
         </div>
     </div>
+@endsection
 
+@push('scripts')
     <script>
     function togglePassword() {
         const passwordInput = document.getElementById('password');
@@ -234,3 +241,4 @@ select.input-dark {
         }
     }
     </script>
+    @endpush

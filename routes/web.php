@@ -28,6 +28,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/user/profile', [AdminController::class, 'profile'])->name('user.profile');
     // Pastikan middleware 'auth' digunakan, karena hanya user login yang boleh upload
     Route::post('/profile/upload-image', [AuthController::class, 'uploadProfileImage'])
     ->name('profile.uploadImage');

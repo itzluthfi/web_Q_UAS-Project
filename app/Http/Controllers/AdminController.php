@@ -11,6 +11,7 @@ class AdminController extends Controller
     public function index()
     {
         $users = User::all();
+        // dd($users);
         return view('admin.users.index', compact('users'));
     }
 
@@ -19,6 +20,8 @@ class AdminController extends Controller
         $users = User::all();
         return view('admin.profile', compact('users'));
     }
+
+    
     public function setting()
     {
         $users = User::all();

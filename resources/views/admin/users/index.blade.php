@@ -46,6 +46,31 @@
         border-left-color: #a855f7;
     }
 
+    /* * Collapsed sidebar styles */ 
+
+    
+/* Main content area */
+        .main-wrapper {
+            transition: margin-left 0.3s ease;
+        }
+
+ /* Collapsed sidebar styles */
+        .sidebar.collapsed {
+            width: 70px;
+        }
+        .sidebar.collapsed .sidebar-text {
+            display: none;
+        }
+        .sidebar.collapsed .sidebar-logo-text {
+            display: none;
+        }
+        .sidebar.collapsed .sidebar-group-label {
+            display: none;
+        }
+        .main-wrapper.sidebar-collapsed {
+            margin-left: 70px;
+        }
+
     /* Custom scrollbar for webkit browsers */
     ::-webkit-scrollbar {
         width: 8px;
@@ -64,27 +89,7 @@
         background: #6d28d9;
     }
 
-    /* Table styling */
-    .admin-table {
-        border-collapse: separate;
-        border-spacing: 0;
-    }
-
-    .admin-table th {
-        background-color: #1f2937;
-        font-weight: 600;
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        letter-spacing: 0.05em;
-    }
-
-    .admin-table tr {
-        transition: all 0.2s ease;
-    }
-
-    .admin-table tbody tr:hover {
-        background-color: rgba(79, 70, 229, 0.1);
-    }
+    
 
     /* Modal animation */
     .modal {
@@ -219,7 +224,8 @@
     @endpush
 
 
-            @section('content')
+        @section('content')
+        <main class="p-4 sm:p-6 animate-fade-in">
             <!-- Page Header -->
             <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
                 <div>
@@ -296,12 +302,11 @@
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs text-gray-300 uppercase tracking-wider">Peran
                                 </th>
-                                <th class="px-6 py-3 text-left text-xs text-gray-300 uppercase tracking-wider">Status
-                                </th>
+                                
                                 <th class="px-6 py-3 text-left text-xs text-gray-300 uppercase tracking-wider">Tanggal
                                     Daftar</th>
-                                <th class="px-6 py-3 text-left text-xs text-gray-300 uppercase tracking-wider">Login
-                                    Terakhir</th>
+                                {{-- <th class="px-6 py-3 text-left text-xs text-gray-300 uppercase tracking-wider">Login
+                                    Terakhir</th> --}}
                                 <th class="px-6 py-3 text-right text-xs text-gray-300 uppercase tracking-wider">Aksi
                                 </th>
                             </tr>
@@ -309,18 +314,18 @@
                         <tbody class="divide-y divide-gray-700">
                             <?php
                             // Contoh data pengguna (dalam implementasi nyata, ini akan diambil dari database)
-                            $users = [
-                                ['id' => 1, 'username' => 'admin', 'email' => 'admin@myanimelist.com', 'role' => 'admin', 'status' => 'active', 'created_at' => '2023-01-15', 'last_login' => '2023-05-01 14:30:22'],
-                                ['id' => 2, 'username' => 'naruto_uzumaki', 'email' => 'naruto@konoha.com', 'role' => 'user', 'status' => 'active', 'created_at' => '2023-02-20', 'last_login' => '2023-05-01 10:15:45'],
-                                ['id' => 3, 'username' => 'sasuke_uchiha', 'email' => 'sasuke@konoha.com', 'role' => 'user', 'status' => 'active', 'created_at' => '2023-02-21', 'last_login' => '2023-04-30 22:45:12'],
-                                ['id' => 4, 'username' => 'sakura_haruno', 'email' => 'sakura@konoha.com', 'role' => 'user', 'status' => 'inactive', 'created_at' => '2023-03-05', 'last_login' => '2023-04-25 09:20:33'],
-                                ['id' => 5, 'username' => 'kakashi_sensei', 'email' => 'kakashi@konoha.com', 'role' => 'moderator', 'status' => 'active', 'created_at' => '2023-01-10', 'last_login' => '2023-05-01 08:10:05'],
-                                ['id' => 6, 'username' => 'hinata_hyuga', 'email' => 'hinata@konoha.com', 'role' => 'user', 'status' => 'active', 'created_at' => '2023-03-15', 'last_login' => '2023-04-29 16:40:18'],
-                                ['id' => 7, 'username' => 'shikamaru_nara', 'email' => 'shikamaru@konoha.com', 'role' => 'moderator', 'status' => 'active', 'created_at' => '2023-03-20', 'last_login' => '2023-04-30 11:25:37'],
-                                ['id' => 8, 'username' => 'rock_lee', 'email' => 'lee@konoha.com', 'role' => 'user', 'status' => 'inactive', 'created_at' => '2023-04-01', 'last_login' => '2023-04-15 14:50:22'],
-                                ['id' => 9, 'username' => 'gaara_sand', 'email' => 'gaara@sand.com', 'role' => 'user', 'status' => 'active', 'created_at' => '2023-04-10', 'last_login' => '2023-04-28 20:05:41'],
-                                ['id' => 10, 'username' => 'itachi_uchiha', 'email' => 'itachi@akatsuki.com', 'role' => 'user', 'status' => 'banned', 'created_at' => '2023-04-15', 'last_login' => '2023-04-20 07:30:'],
-                            ];
+                            // $users = [
+                            //     ['id' => 1, 'username' => 'admin', 'email' => 'admin@myanimelist.com', 'role' => 'admin', 'status' => 'active', 'created_at' => '2023-01-15', 'last_login' => '2023-05-01 14:30:22'],
+                            //     ['id' => 2, 'username' => 'naruto_uzumaki', 'email' => 'naruto@konoha.com', 'role' => 'user', 'status' => 'active', 'created_at' => '2023-02-20', 'last_login' => '2023-05-01 10:15:45'],
+                            //     ['id' => 3, 'username' => 'sasuke_uchiha', 'email' => 'sasuke@konoha.com', 'role' => 'user', 'status' => 'active', 'created_at' => '2023-02-21', 'last_login' => '2023-04-30 22:45:12'],
+                            //     ['id' => 4, 'username' => 'sakura_haruno', 'email' => 'sakura@konoha.com', 'role' => 'user', 'status' => 'inactive', 'created_at' => '2023-03-05', 'last_login' => '2023-04-25 09:20:33'],
+                            //     ['id' => 5, 'username' => 'kakashi_sensei', 'email' => 'kakashi@konoha.com', 'role' => 'moderator', 'status' => 'active', 'created_at' => '2023-01-10', 'last_login' => '2023-05-01 08:10:05'],
+                            //     ['id' => 6, 'username' => 'hinata_hyuga', 'email' => 'hinata@konoha.com', 'role' => 'user', 'status' => 'active', 'created_at' => '2023-03-15', 'last_login' => '2023-04-29 16:40:18'],
+                            //     ['id' => 7, 'username' => 'shikamaru_nara', 'email' => 'shikamaru@konoha.com', 'role' => 'moderator', 'status' => 'active', 'created_at' => '2023-03-20', 'last_login' => '2023-04-30 11:25:37'],
+                            //     ['id' => 8, 'username' => 'rock_lee', 'email' => 'lee@konoha.com', 'role' => 'user', 'status' => 'inactive', 'created_at' => '2023-04-01', 'last_login' => '2023-04-15 14:50:22'],
+                            //     ['id' => 9, 'username' => 'gaara_sand', 'email' => 'gaara@sand.com', 'role' => 'user', 'status' => 'active', 'created_at' => '2023-04-10', 'last_login' => '2023-04-28 20:05:41'],
+                            //     ['id' => 10, 'username' => 'itachi_uchiha', 'email' => 'itachi@akatsuki.com', 'role' => 'user', 'status' => 'banned', 'created_at' => '2023-04-15', 'last_login' => '2023-04-20 07:30:'],
+                            // ];
                             
                             foreach ($users as $user):
                             ?>
@@ -349,28 +354,10 @@
                                         <?= ucfirst($user['role']) ?>
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <?php if ($user['status'] === 'active'): ?>
-                                    <span
-                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                        Aktif
-                                    </span>
-                                    <?php elseif ($user['status'] === 'inactive'): ?>
-                                    <span
-                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                                        Tidak Aktif
-                                    </span>
-                                    <?php else: ?>
-                                    <span
-                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                        Diblokir
-                                    </span>
-                                    <?php endif; ?>
-                                </td>
+                                
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300"><?= $user['created_at'] ?>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300"><?= $user['last_login'] ?>
-                                </td>
+                               
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <div class="flex justify-end space-x-3">
                                         <button onclick="openViewModal(<?= $user['id'] ?>)"
@@ -500,7 +487,7 @@
                                             <span class="font-bold text-white text-2xl" id="view-user-initial">N</span>
                                         </div>
                                         <div>
-                                            <h4 class="text-lg font-medium text-white" id="view-username">naruto_uzumaki
+                                            <h4 class="text-lg font-medium text-white" id="view-username"><?= $user['username'] ?></h4>
                                             </h4>
                                             <p class="text-gray-300" id="view-email">naruto@konoha.com</p>
                                             <div class="mt-2 flex items-center">
@@ -758,67 +745,170 @@
             </div>
         </div>
     </div>
+</main>
     @endsection
 
     @push('scripts')
     <!-- JavaScript for Modal and Sidebar Functionality -->
     <script>
-    // Toggle user dropdown
-    const userMenu = document.getElementById('user-menu');
-    const userDropdown = document.getElementById('user-dropdown');
 
-    if (userMenu && userDropdown) {
-        userMenu.addEventListener('click', function(e) {
-            e.stopPropagation();
-            userDropdown.classList.toggle('show');
-        });
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function() {
-            userDropdown.classList.remove('show');
-        });
-    }
-
-    // Mobile menu toggle
-    const mobileMenuButton = document.querySelector('.mobile-menu-button');
-    const sidebar = document.querySelector('.sidebar');
-
-    if (mobileMenuButton && sidebar) {
-        mobileMenuButton.addEventListener('click', function() {
-            sidebar.classList.toggle('show');
-        });
-
-        // Close sidebar when clicking outside on mobile
-        document.addEventListener('click', function(e) {
-            if (window.innerWidth < 769 &&
-                !sidebar.contains(e.target) &&
-                !mobileMenuButton.contains(e.target) &&
-                sidebar.classList.contains('show')) {
-                sidebar.classList.remove('show');
+     // Toggle user dropdown
+     const userMenu = document.getElementById('user-menu');
+        const userDropdown = document.getElementById('user-dropdown');
+        
+        if (userMenu && userDropdown) {
+            userMenu.addEventListener('click', function(e) {
+                e.stopPropagation();
+                userDropdown.classList.toggle('show');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function() {
+                userDropdown.classList.remove('show');
+            });
+        }
+        
+        // Sidebar toggle functionality
+        const toggleSidebarBtn = document.getElementById('toggleSidebarBtn');
+        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const mainWrapper = document.getElementById('mainWrapper');
+        
+        // Function to toggle sidebar in desktop mode
+        function toggleDesktopSidebar() {
+            if (window.innerWidth >= 768) {
+                sidebar.classList.toggle('collapsed');
+                mainWrapper.classList.toggle('sidebar-collapsed');
+                
+                if (sidebar.classList.contains('collapsed')) {
+                    mainWrapper.style.marginLeft = '70px';
+                } else {
+                    mainWrapper.style.marginLeft = '260px';
+                }
             }
-        });
-    }
+        }
+        
+        // Function to open sidebar in mobile mode
+        function openMobileSidebar() {
+            if (window.innerWidth < 768) {
+                sidebar.classList.add('show');
+                sidebarOverlay.classList.add('show');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling when sidebar is open
+            }
+        }
+        
+        // Function to close sidebar in mobile mode
+        function closeMobileSidebar() {
+            if (window.innerWidth < 768) {
+                sidebar.classList.remove('show');
+                sidebarOverlay.classList.remove('show');
+                document.body.style.overflow = ''; // Re-enable scrolling
+            }
+        }
+        
+        // Toggle sidebar on button click
+        if (toggleSidebarBtn) {
+            toggleSidebarBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (window.innerWidth >= 768) {
+                    // Desktop mode
+                    toggleDesktopSidebar();
+                } else {
+                    // Mobile mode
+                    if (sidebar.classList.contains('show')) {
+                        closeMobileSidebar();
+                    } else {
+                        openMobileSidebar();
+                    }
+                }
+            });
+        }
+        
+        // Close sidebar when clicking the close button
+        if (closeSidebarBtn) {
+            closeSidebarBtn.addEventListener('click', closeMobileSidebar);
+        }
+        
+        // Close sidebar when clicking the overlay
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', closeMobileSidebar);
+        }        
+  
+        // Data pengguna dari PHP
+    const users = [
+        <?php foreach ($users as $user): ?>
+        {
+            id: <?= $user['id'] ?>,
+            username: '<?= addslashes($user['username']) ?>',
+            email: '<?= addslashes($user['email']) ?>',
+            role: '<?= $user['role'] ?>',
+            status: '<?= $user['status'] ?>',
+            created_at: '<?= $user['created_at'] ?? '-' ?>',
+            last_login: '<?= $user['last_login'] ?? '-' ?>',
+            favorite_anime: <?= $user['favorite_anime'] ?? 0 ?>,
+            favorite_manga: <?= $user['favorite_manga'] ?? 0 ?>,
+            comments: <?= $user['comments'] ?? 0 ?>
+        },
+        <?php endforeach; ?>
+    ];
 
     // View Modal Functions
     const viewModal = document.getElementById('viewModal');
 
+    function ucfirst(str) {
+    if (!str) return '';
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
     function openViewModal(userId) {
-        // In a real application, you would fetch user data based on userId
-        // For this example, we'll just show the modal with placeholder data
-        document.getElementById('view-username').textContent = 'naruto_uzumaki';
-        document.getElementById('view-email').textContent = 'naruto@konoha.com';
-        document.getElementById('view-role').textContent = 'User';
-        document.getElementById('view-status').textContent = 'Aktif';
-        document.getElementById('view-id').textContent = userId;
-        document.getElementById('view-created-at').textContent = '2023-02-20';
-        document.getElementById('view-last-login').textContent = '2023-05-01 10:15:45';
-        document.getElementById('view-favorite-anime').textContent = '15';
-        document.getElementById('view-favorite-manga').textContent = '8';
-        document.getElementById('view-comments').textContent = '42';
-        document.getElementById('view-user-initial').textContent = 'N';
+    // Cari pengguna berdasarkan ID
+    const user = users.find(u => u.id === userId);
 
-        viewModal.classList.remove('hidden');
+    if (!user) {
+        console.error("Pengguna tidak ditemukan!");
+        return;
     }
+
+    // Isi data pengguna ke dalam modal
+    document.getElementById('view-username').textContent = user.username;
+    document.getElementById('view-email').textContent = user.email;
+    document.getElementById('view-id').textContent = user.id;
+    document.getElementById('view-created-at').textContent = user.created_at || '-';
+    document.getElementById('view-last-login').textContent = user.last_login || '-';
+    document.getElementById('view-favorite-anime').textContent = user.favorite_anime;
+    document.getElementById('view-favorite-manga').textContent = user.favorite_manga;
+    document.getElementById('view-comments').textContent = user.comments;
+    document.getElementById('view-user-initial').textContent = user.username.charAt(0).toUpperCase();
+
+    // Role badge
+    const roleBadge = document.getElementById('view-role');
+    roleBadge.textContent = ucfirst(user.role);
+    roleBadge.className = 'badge'; // Reset class
+    if (user.role === 'admin') {
+        roleBadge.classList.add('badge-admin');
+    } else if (user.role === 'moderator') {
+        roleBadge.classList.add('badge-moderator');
+    } else {
+        roleBadge.classList.add('badge-user');
+    }
+
+    // Status badge
+    const statusBadge = document.getElementById('view-status');
+    if (user.status === 'active') {
+        statusBadge.textContent = 'Aktif';
+        statusBadge.className = 'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800';
+    } else if (user.status === 'inactive') {
+        statusBadge.textContent = 'Tidak Aktif';
+        statusBadge.className = 'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800';
+    } else if (user.status === 'banned') {
+        statusBadge.textContent = 'Diblokir';
+        statusBadge.className = 'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800';
+    }
+
+    // Tampilkan modal
+    viewModal.classList.remove('hidden');
+}
 
     function closeViewModal() {
         viewModal.classList.add('hidden');
@@ -904,6 +994,11 @@
             sidebar.classList.remove('show');
         }
     });
+
+    // MODALLLL
+
+    
+    
     </script>
             
     @endpush
