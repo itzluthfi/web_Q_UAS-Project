@@ -225,20 +225,22 @@
                         </div>
                     </div>
 
-                    <!-- Watch buttons -->
                     <div class="watch-buttons">
-                        <a href="#" class="watch-button watch-now" onclick="watchNow('{{ $anime['title'] ?? 'Untitled' }}')">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
-                            </svg>
-                            Tonton Sekarang
-                        </a>
-                        <a href="#" class="watch-button watch-trailer" onclick="watchTrailer('{{ $anime['title'] ?? 'Untitled' }}')">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
-                            </svg>
-                            Tonton Trailer
-                        </a>
+                            <a href="{{ $anime['url'] ?? '#' }}" target="_blank" class="watch-button watch-now">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                                </svg>
+                                Tonton Sekarang
+                            </a>
+
+                            @if (!empty($anime['trailer']['embed_url']))
+                            <a href="javascript:void(0);" onclick="watchTrailer('{{ $anime['trailer']['embed_url'] }}')" class="watch-button watch-trailer">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
+                                </svg>
+                                Tonton Trailer
+                            </a>
+                            @endif
                     </div>
                 </div>
             </div>
@@ -382,7 +384,7 @@
                         <div class="p-2">
                             <p class="text-sm font-medium text-white truncate">{{ $relatedAnime['title'] }}</p>
                             <p class="text-xs text-gray-400">{{ $relatedAnime['type'] }} • {{ $relatedAnime['episodes'] ?? 'N/A' }} Eps</p>
-                            <a href="/anime/{{ $relatedAnime['mal_id'] }}" class="mt-2 inline-block text-xs text-purple-400 hover:text-purple-200">View Detail</a>
+                            <a href="{{ route('anime.show', ['id' => $relatedAnime['mal_id']]) }}" class="mt-2 inline-block text-xs text-purple-400 hover:text-purple-200">View Detail</a>
                         </div>
                     </div>
                 @empty
@@ -485,6 +487,67 @@
 @endpush
 
 @push('scripts')
+<script>
+function watchTrailer(embedUrl) {
+    const modalHtml = `
+        <div id="trailer-modal" style="
+            position: fixed;
+            inset: 0;
+            background-color: rgba(107, 33, 168, 0.3); 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeInScale 0.3s ease-out forwards;
+        ">
+            <div style="
+                position: relative;
+                background: rgba(107, 33, 168, 0.78);
+                padding: 1rem;
+                border-radius: 1rem;
+                max-width: 640px;
+                width: 90%;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+                transform: scale(0.9);
+                opacity: 0;
+                animation: fadeInScale 0.3s ease-out forwards;
+            ">
+                <button onclick="closeTrailer()" style="
+                    position: absolute;
+                    top: 0.5rem;
+                    right: 0.5rem;
+                    background: #ef4444;
+                    color: white;
+                    border: none;
+                    border-radius: 9999px;
+                    width: 2rem;
+                    height: 2rem;
+                    font-size: 1.25rem;
+                    cursor: pointer;
+                ">×</button>
+                <iframe width="100%" height="360" src="${embedUrl}" frameborder="0" allowfullscreen style="
+                    border-radius: 0.5rem;
+                    width: 100%;
+                "></iframe>
+            </div>
+        </div>
+        <style>
+            @keyframes fadeInScale {
+                0% { opacity: 0; transform: scale(0.9); }
+                100% { opacity: 1; transform: scale(1); }
+            }
+        </style>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+}
+
+function closeTrailer() {
+    const modal = document.getElementById('trailer-modal');
+    if (modal) modal.remove();
+}
+</script>
+
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     // =========================
@@ -733,18 +796,7 @@ if (lastCommentId) {
         });
     }
 
-    // =========================
-    // Tombol "Watch Now" & "Watch Trailer"
-    // =========================
-    window.watchNow = function (title) {
-        alert(`Menonton ${title} sekarang`);
-        // Tambahkan logika redirect atau pemutar video di sini
-    };
-
-    window.watchTrailer = function (title) {
-        alert(`Menonton trailer dari ${title}`);
-        // Tambahkan logika trailer di sini
-    };
+   
 });
 </script>
 

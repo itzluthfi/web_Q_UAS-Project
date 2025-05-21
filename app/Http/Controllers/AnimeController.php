@@ -94,6 +94,10 @@ class AnimeController extends Controller
     }
 
 
+    public function beritaShow() {
+        return view('user.anime.berita');
+    }
+
     public function show($id)
     {
         // Ambil detail anime dari API
