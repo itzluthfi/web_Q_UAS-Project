@@ -210,22 +210,29 @@
                             </button>
                         </div>
                         <div class="genre-grid">
-                            <a href="#" class="genre-item text-gray-300 hover:text-white">Action</a>
-                            <a href="#" class="genre-item text-gray-300 hover:text-white">Adventure</a>
-                            <a href="#" class="genre-item text-gray-300 hover:text-white">Comedy</a>
-                            <a href="#" class="genre-item text-gray-300 hover:text-white">Drama</a>
-                            <a href="#" class="genre-item text-gray-300 hover:text-white">Fantasy</a>
-                            <a href="#" class="genre-item text-gray-300 hover:text-white">Horror</a>
-                            <a href="#" class="genre-item text-gray-300 hover:text-white">Mecha</a>
-                            <a href="#" class="genre-item text-gray-300 hover:text-white">Music</a>
-                            <a href="#" class="genre-item text-gray-300 hover:text-white">Mystery</a>
-                            <a href="#" class="genre-item text-gray-300 hover:text-white">Psychological</a>
-                            <a href="#" class="genre-item text-gray-300 hover:text-white">Romance</a>
-                            <a href="#" class="genre-item text-gray-300 hover:text-white">Sci-Fi</a>
-                            <a href="#" class="genre-item text-gray-300 hover:text-white">Slice of Life</a>
-                            <a href="#" class="genre-item text-gray-300 hover:text-white">Sports</a>
-                            <a href="#" class="genre-item text-gray-300 hover:text-white">Supernatural</a>
-                            <a href="#" class="genre-item text-gray-300 hover:text-white">Thriller</a>
+                           @php
+                            $genres = [
+                                1 => 'Action',
+                                2 => 'Adventure',
+                                4 => 'Comedy',
+                                8 => 'Drama',
+                                10 => 'Fantasy',
+                                14 => 'Horror',
+                                18 => 'Mecha',
+                                19 => 'Music',
+                                7 => 'Mystery',
+                                40 => 'Psychological',
+                                22 => 'Romance',
+                                24 => 'Sci-Fi',
+                                36 => 'Slice of Life',
+                                30 => 'Sports',
+                                37 => 'Supernatural',
+                                58 => 'Gore',
+                                ];
+                            @endphp
+                            @foreach ($genres as $id => $name)
+                                <a href="{{ route('anime.showByGenre', $id) }}" class="genre-item text-gray-300 hover:text-white">{{ $name }}</a>
+                            @endforeach
                         </div>
                     </div>
                 </div>

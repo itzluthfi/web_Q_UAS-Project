@@ -110,6 +110,23 @@ class Anime extends Model
     }
 
     // === Detail Anime Berdasarkan ID ===
+    //gen genre by id
+    public function getGenreNameById($genreId)
+{
+    $response = Http::get("https://api.jikan.moe/v4/genres/anime");
+
+    if ($response->successful()) {
+        $genres = $response->json('data');
+
+        foreach ($genres as $genre) {
+            if ($genre['mal_id'] == $genreId) {
+                return $genre['name'];
+            }
+        }
+    }
+
+    return 'Unknown Genre';
+}
     // Ambil Detail Anime
     public static function getAnimeById($id)
     {

@@ -94,8 +94,11 @@ class AnimeController extends Controller
     }
 
 
-    public function beritaShow() {
-        return view('user.anime.berita');
+    public function showByGenre($genreId)
+    {
+        $animeList = $this->animeModel->getAnimeByGenre($genreId, 10);
+        $label = $this->animeModel->getGenreNameById($genreId);
+        return view('user.anime.viewAllByLabel', compact('animeList','label'));
     }
 
     public function show($id)
@@ -128,18 +131,6 @@ class AnimeController extends Controller
     
         // Kirim ke view
         return view('user.anime.show', compact('anime', 'relatedAnimes','comments'));
-    }
-
-
-    public function recommendations($id)
-    {
-        $recommendations = $this->animeModel->getRecommendations($id);
-
-        if (!$recommendations) {
-            return abort(404, 'Rekomendasi anime tidak ditemukan.');
-        }
-
-        return view('user.anime.recommendations', compact('recommendations'));
     }
 
     public function search(Request $request)

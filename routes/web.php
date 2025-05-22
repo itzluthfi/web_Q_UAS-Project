@@ -35,11 +35,12 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Public routes
+Route::get('/', [AnimeController::class, 'beranda'])->name('home');
 Route::get('/anime/search', [AnimeController::class, 'search'])->name('anime.search');
 Route::get('/anime/show/{id}', [AnimeController::class, 'show'])->name('anime.show');  
-Route::get('/', [AnimeController::class, 'beranda'])->name('home');
 Route::get('/anime/viewAllBy/{label}', [AnimeController::class, 'viewAllByLabel'])->name('anime.viewAllByLabel');
 Route::get('/anime/berandaTemp', [AnimeController::class, 'berandaTemp'])->name('berandaTemp');
 Route::get('/anime/showByStudio', [AnimeController::class, 'showByStudio'])->name('anime.showByStudio');
 Route::post('/anime/comments/store', [CommentController::class, 'store'])->name('comments.store');
 Route::get('/anime/berita/{id}', [AnimeController::class, 'beritaShow'])->name('anime.berita.show');
+Route::get('/anime/showByGenre/{id}', [AnimeController::class, 'showByGenre'])->name('anime.showByGenre');
