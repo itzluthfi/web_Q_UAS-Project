@@ -147,4 +147,32 @@ class AnimeController extends Controller
 
         return view('user.anime.viewAllByLabel', compact('animeList', 'jmlResult', 'query'));
     }
+
+    
+
+    public function testView(Request $request)
+    {
+        try {
+            // Cek cache terlebih dahulu
+            $cachedGenres = Cache::get('all_genres');
+
+            if ($cachedGenres) {
+                // Gunakan data dari cache jika tersedia
+                $genres = $cachedGenres;
+            } else {
+                // Ambil data dari model
+                $genres = $this->animeModel->getAllGenresUnlimited();
+
+                // Simpan ke cache selama 1 jam (3600 detik)
+                Cache::put('all_genres', $genres, 3600);
+            }
+
+            // dd($genres);
+            return view('user.anime.viewAllGenre', compact('genres'));
+
+        } catch (\Exception $e) {
+            // Tangani kesalahan API
+            return back()->withErrors(['error_message' => 'Gagal memuat genre. Silakan coba lagi nanti.']);
+        }
+    }
 } 

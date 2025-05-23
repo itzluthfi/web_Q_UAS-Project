@@ -96,15 +96,21 @@ class AuthController extends Controller
 }
 
 
-    public function uploadProfileImage(Request $request){
-        $user = Auth::user();
-        if ($request->hasFile('profile_image')) {
-            $imagePath = $request->file('profile_image')->store('profile_images', 'public');
-            $user->profile_image_url = $imagePath;
-            $user->save();
-        }
-        return back();
+public function uploadProfileImage(Request $request){
+    $user = Auth::user();
+
+    if (!$user instanceof User) {
+        return back()->withErrors('User tidak ditemukan atau bukan model Eloquent');
     }
+
+    if ($request->hasFile('profile_image')) {
+        $imagePath = $request->file('profile_image')->store('profile_images', 'public');
+        $user->profile_image_url = $imagePath;
+        $user->save(); // Ini akan berhasil
+    }
+
+    return back();
+}
 
 
     public function logout()

@@ -73,6 +73,31 @@ class Anime extends Model
 
     }
 
+    public static function getAllGenresUnlimited()
+    {
+        $currentPage = 1;
+        $genres = [];
+
+        do {
+            // Mengambil data dari API dengan page parameter
+            $response = Http::get("https://api.jikan.moe/v4/genres/anime", [
+                'page' => $currentPage,
+            ]);
+
+            // dd($response->json());
+            // Gabungkan hasil genre dari tiap halaman
+            $data = $response->json();
+            $genres = array_merge($genres, $data['data']);
+
+            // Pindah ke halaman berikutnya
+            $currentPage++;
+
+            // Berhenti jika sudah mencapai halaman terakhir
+        } while (!empty($data['data']));
+
+        return $genres;
+    }
+
     public static function getTopRatedAnime($limit = 10)
 {
     $response = Http::get("https://api.jikan.moe/v4/anime", [

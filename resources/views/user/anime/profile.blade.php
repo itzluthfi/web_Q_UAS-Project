@@ -918,65 +918,278 @@
     </div>
     
     <!-- Change Photo Modal -->
-    <div 
-        x-show="photoModalOpen" 
-        class="fixed inset-0 z-50 overflow-y-auto" 
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0"
-        style="display: none;">
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-            <div 
-                class="fixed inset-0 transition-opacity modal-backdrop" 
-                aria-hidden="true"
-                @click="photoModalOpen = false">
-            </div>
+   <!-- Edit Profile Modal -->
+<!-- Modal Edit Profile -->
+<div id="profileModal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Overlay -->
+        <div class="fixed inset-0 bg-black bg-opacity-75" @click="profileModalOpen = false"></div>
 
-            <div 
-                class="inline-block align-bottom bg-gray-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full modal-content"
-                x-transition:enter="transition ease-out duration-300"
-                x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                x-transition:leave="transition ease-in duration-200"
-                x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-                <div class="bg-gray-900 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="sm:flex sm:items-start">
-                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                            <h3 class="text-lg leading-6 font-medium text-white mb-4">
-                                Change Profile Photo
-                            </h3>
-                            <div class="mt-2">
-                                <div class="flex justify-center mb-6">
-                                    <div class="h-32 w-32 rounded-full overflow-hidden profile-image">
-                                        <img src="https://via.placeholder.com/400x400" alt="Profile Picture" class="h-full w-full object-cover">
-                                    </div>
-                                </div>
-                                
-                                <div class="flex items-center justify-center">
-                                    <label class="w-full flex flex-col items-center px-4 py-6 bg-gray-800 text-gray-300 rounded-lg shadow-lg tracking-wide border border-gray-700 cursor-pointer hover:bg-gray-700 transition-colors">
-                                        <i class="fas fa-cloud-upload-alt text-2xl"></i>
-                                        <span class="mt-2 text-sm">Select a file</span>
-                                        <input type='file' class="hidden" />
-                                    </label>
-                                </div>
+        <!-- Modal Content -->
+        <div class="inline-block align-bottom bg-gray-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div class="bg-gray-900 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start">
+                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                        <h3 class="text-lg leading-6 font-medium text-white mb-4">Edit Profile</h3>
+                        <form id="editProfileForm" action="{{ route('profile.update') }}" method="POST">
+                            @csrf
+                            <div class="mb-4">
+                                <label for="fullname" class="block text-sm font-medium text-gray-300 mb-1">Full Name</label>
+                                <input type="text" name="name" id="fullname" value="{{ Auth::user()->name ?? 'Naruto Uzumaki' }}" class="input-dark w-full">
                             </div>
-                        </div>
+
+                            <div class="mb-4">
+                                <label for="username" class="block text-sm font-medium text-gray-300 mb-1">Username</label>
+                                <input type="text" name="username" id="username" value="{{ Auth::user()->username ?? 'naruto_uzumaki' }}" class="input-dark w-full">
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Email</label>
+                                <input type="email" name="email" id="email" value="{{ Auth::user()->email ?? 'naruto@konoha.com' }}" class="input-dark w-full">
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="location" class="block text-sm font-medium text-gray-300 mb-1">Location</label>
+                                <input type="text" name="location" id="location" value="{{ old('location', Auth::user()->location ?? 'Konoha, Land of Fire') }}" class="input-dark w-full">
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="bio" class="block text-sm font-medium text-gray-300 mb-1">Bio</label>
+                                <textarea name="bio" id="bio" rows="4" class="input-dark w-full">{{ old('bio', Auth::user()->bio ?? 'Hi! I\'m Naruto Uzumaki...') }}</textarea>
+                            </div>
+
+                            <div class="flex justify-end space-x-3 mt-6">
+                                <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-purple-700 text-base font-medium text-white hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:ml-3 sm:w-auto sm:text-sm btn-glow">
+                                    Save Changes
+                                </button>
+                                <button type="button" onclick="closeProfileModal()" class="w-full inline-flex justify-center rounded-md border border-gray-700 shadow-sm px-4 py-2 bg-gray-700 text-base font-medium text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                </div>
-                <div class="bg-gray-800 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-purple-700 text-base font-medium text-white hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:ml-3 sm:w-auto sm:text-sm btn-glow">
-                        Upload Photo
-                    </button>
-                    <button @click="photoModalOpen = false" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-700 shadow-sm px-4 py-2 bg-gray-700 text-base font-medium text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                        Cancel
-                    </button>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<!-- Change Photo Modal -->
+<div id="photoModal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Overlay -->
+        <div class="fixed inset-0 bg-black bg-opacity-75" onclick="closePhotoModal()"></div>
+
+        <!-- Modal Content -->
+        <form id="uploadPhotoForm" action="{{ route('profile.uploadImage') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="inline-block align-bottom bg-gray-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-gray-900 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                            <h3 class="text-lg leading-6 font-medium text-white mb-4">Change Profile Photo</h3>
+                            <div class="flex justify-center mb-6">
+                                <div class="h-32 w-32 rounded-full overflow-hidden profile-image">
+                                    <img id="image-preview" src="{{ Auth::user()->profile_image_url ? asset('storage/' . Auth::user()->profile_image_url) : 'https://via.placeholder.com/400x400 ' }}" alt="Profile Picture" class="h-full w-full object-cover">
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-center">
+                                <label class="w-full flex flex-col items-center px-4 py-6 bg-gray-800 text-gray-300 rounded-lg shadow-lg tracking-wide border border-gray-700 cursor-pointer hover:bg-gray-700 transition-colors">
+                                    <i class="fas fa-cloud-upload-alt text-2xl"></i>
+                                    <span class="mt-2 text-sm">Select a file</span>
+                                    <input type="file" name="profile_image" id="profile_image" class="hidden" onchange="previewImage(event)">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-800 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-purple-700 text-base font-medium text-white hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:ml-3 sm:w-auto sm:text-sm btn-glow">
+                        Upload Photo
+                    </button>
+                    <button type="button" onclick="closePhotoModal()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-700 shadow-sm px-4 py-2 bg-gray-700 text-base font-medium text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Change Photo Modal --><!-- Edit Profile Modal -->
+<div 
+x-show="profileModalOpen" 
+class="fixed inset-0 z-50 overflow-y-auto" 
+x-transition:enter="transition ease-out duration-300"
+x-transition:enter-start="opacity-0"
+x-transition:enter-end="opacity-100"
+x-transition:leave="transition ease-in duration-200"
+x-transition:leave-start="opacity-100"
+x-transition:leave-end="opacity-0"
+style="display: none;">
+
+<div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+    <!-- Overlay -->
+    <div 
+        class="fixed inset-0 transition-opacity bg-black bg-opacity-75" 
+        aria-hidden="true"
+        @click="profileModalOpen = false">
+    </div>
+
+    <!-- Modal Content BAGIAN EDIT PROFILE BUKAN FOTO-->
+    <div 
+        class="inline-block align-bottom bg-gray-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full modal-content"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+        x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+        x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+        
+        <div class="bg-gray-900 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <div class="sm:flex sm:items-start">
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                    <h3 class="text-lg leading-6 font-medium text-white mb-4">
+                        Edit Profile
+                    </h3>
+                    <div class="mt-2">
+                        <form action="{{ route('profile.update') }}" method="POST">
+                            @csrf
+                            <div class="mb-4">
+                                <label for="fullname" class="block text-sm font-medium text-gray-300 mb-1">Full Name</label>
+                                <input type="text" id="fullname" name="fullname" value="{{ Auth::user()->name ?? 'Naruto Uzumaki' }}" class="input-dark w-full">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="username" class="block text-sm font-medium text-gray-300 mb-1">Username</label>
+                                <input type="text" id="username" name="username" value="{{ Auth::user()->username ?? 'naruto_uzumaki' }}" class="input-dark w-full">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Email</label>
+                                <input type="email" id="email" name="email" value="{{ Auth::user()->email ?? 'naruto@konoha.com' }}" class="input-dark w-full">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="location" class="block text-sm font-medium text-gray-300 mb-1">Location</label>
+                                <input type="text" id="location" name="location" value="{{ old('location', Auth::user()->location ?? 'Konoha, Land of Fire') }}" class="input-dark w-full">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="bio" class="block text-sm font-medium text-gray-300 mb-1">Bio</label>
+                                <textarea id="bio" name="bio" rows="4" class="input-dark w-full">{{ old('bio', Auth::user()->bio ?? 'Hi! I\'m Naruto Uzumaki...') }}</textarea>
+                            </div>
+
+                            <div class="bg-gray-800 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-purple-700 text-base font-medium text-white hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:ml-3 sm:w-auto sm:text-sm btn-glow">
+                                    Save Changes
+                                </button>
+                                <button @click="profileModalOpen = false" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-700 shadow-sm px-4 py-2 bg-gray-700 text-base font-medium text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Change Photo Modal -->
+<div 
+x-show="photoModalOpen" 
+class="fixed inset-0 z-50 overflow-y-auto" 
+x-transition:enter="transition ease-out duration-300"
+x-transition:enter-start="opacity-0"
+x-transition:enter-end="opacity-100"
+x-transition:leave="transition ease-in duration-200"
+x-transition:leave-start="opacity-100"
+x-transition:leave-end="opacity-0"
+style="display: none;">
+
+<div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+    <!-- Overlay -->
+    <div 
+        class="fixed inset-0 transition-opacity bg-black bg-opacity-75" 
+        aria-hidden="true"
+        @click="photoModalOpen = false">
+    </div>
+
+    <!-- Form Upload -->
+    <form action="{{ route('profile.uploadImage') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div 
+            class="inline-block align-bottom bg-gray-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full modal-content"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+            x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+            
+            <div class="bg-gray-900 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start">
+                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                        <h3 class="text-lg leading-6 font-medium text-white mb-4">
+                            Change Profile Photo
+                        </h3>
+                        <div class="mt-2">
+                            <div class="flex justify-center mb-6">
+                                <div class="h-32 w-32 rounded-full overflow-hidden profile-image">
+                                    <!-- Preview Image -->
+                                    <img id="image-preview" src="{{ Auth::user()->profile_image_url ? asset('storage/' . Auth::user()->profile_image_url) : 'https://via.placeholder.com/400x400 ' }}" alt="Profile Picture" class="h-full w-full object-cover">
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-center">
+                                <label class="w-full flex flex-col items-center px-4 py-6 bg-gray-800 text-gray-300 rounded-lg shadow-lg tracking-wide border border-gray-700 cursor-pointer hover:bg-gray-700 transition-colors">
+                                    <i class="fas fa-cloud-upload-alt text-2xl"></i>
+                                    <span class="mt-2 text-sm">Select a file</span>
+                                    <!-- Tambahkan `name="profile_image"` agar bisa diakses di controller -->
+                                    <input type='file' name="profile_image" class="hidden" @change="previewImage($event)" />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-purple-700 text-base font-medium text-white hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:ml-3 sm:w-auto sm:text-sm btn-glow">
+                    Upload Photo
+                </button>
+                <button @click="photoModalOpen = false" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-700 shadow-sm px-4 py-2 bg-gray-700 text-base font-medium text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+</div>
+@push('scripts')
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('profileData', () => ({
+            photoModalOpen: false,
+            profileModalOpen: false,
+
+            previewImage(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('image-preview').src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        }));
+    });
+</script>
+@endpush
 </body>
 </html>

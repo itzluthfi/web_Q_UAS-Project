@@ -929,17 +929,33 @@
     const editModal = document.getElementById('editModal');
 
     function openEditModal(userId) {
-        // In a real application, you would fetch user data based on userId
-        // For this example, we'll just show the modal with placeholder data
-        document.getElementById('edit-username').value = 'username_' + userId;
-        document.getElementById('edit-email').value = 'user' + userId + '@example.com';
+    const user = users.find(u => u.id === userId);
 
-        editModal.classList.remove('hidden');
+    if (!user) {
+        console.error("Pengguna tidak ditemukan!");
+        return;
     }
 
-    function closeEditModal() {
-        editModal.classList.add('hidden');
-    }
+    // Isi input dengan data pengguna
+    document.getElementById('edit-username').value = user.username;
+    document.getElementById('edit-email').value = user.email;
+
+    // Role dropdown
+    const roleSelect = document.getElementById('edit-role');
+    roleSelect.value = user.role;
+
+    // Status dropdown
+    const statusSelect = document.getElementById('edit-status');
+    statusSelect.value = user.status;
+
+    // Tampilkan modal
+    editModal.classList.remove('hidden');
+}
+
+function closeEditModal() {
+    editModal.classList.add('hidden');
+}
+
 
     // Delete Modal Functions
     const deleteModal = document.getElementById('deleteModal');
