@@ -199,6 +199,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
+                
                     <!-- Genre Dropdown Menu -->
                     <div id="genre-dropdown" class="genre-dropdown hidden">
                         <div class="genre-dropdown-header">
@@ -209,30 +210,40 @@
                                 </svg>
                             </button>
                         </div>
+                
                         <div class="genre-grid">
-                           @php
-                            $genres = [
-                                1 => 'Action',
-                                2 => 'Adventure',
-                                4 => 'Comedy',
-                                8 => 'Drama',
-                                10 => 'Fantasy',
-                                14 => 'Horror',
-                                18 => 'Mecha',
-                                19 => 'Music',
-                                7 => 'Mystery',
-                                40 => 'Psychological',
-                                22 => 'Romance',
-                                24 => 'Sci-Fi',
-                                36 => 'Slice of Life',
-                                30 => 'Sports',
-                                37 => 'Supernatural',
-                                58 => 'Gore',
+                            @php
+                                $genres = [
+                                    1 => 'Action',
+                                    2 => 'Adventure',
+                                    4 => 'Comedy',
+                                    8 => 'Drama',
+                                    10 => 'Fantasy',
+                                    14 => 'Horror',
+                                    18 => 'Mecha',
+                                    19 => 'Music',
+                                    7 => 'Mystery',
+                                    40 => 'Psychological',
+                                    22 => 'Romance',
+                                    24 => 'Sci-Fi',
+                                    36 => 'Slice of Life',
+                                    30 => 'Sports',
+                                    37 => 'Supernatural',
+                                    58 => 'Gore',
                                 ];
                             @endphp
+                
                             @foreach ($genres as $id => $name)
                                 <a href="{{ route('anime.showByGenre', $id) }}" class="genre-item text-gray-300 hover:text-white">{{ $name }}</a>
                             @endforeach
+                
+                            <!-- Tombol View All Genres di bagian paling bawah -->
+                            <a href="{{ route('anime.viewAllGenre') }}" class="genre-item text-purple-400 hover:text-purple-300 flex justify-between items-center">
+                                <span>View All Genres</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </a>
                         </div>
                     </div>
                 </div>

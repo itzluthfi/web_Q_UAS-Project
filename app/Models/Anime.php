@@ -73,41 +73,38 @@ class Anime extends Model
 
     }
 
-    public static function getAllGenresUnlimited()
-    {
-        $currentPage = 1;
-        $genres = [];
+//     public static function getAllGenresUnlimited()
+// {
+//     // Kirim request ke endpoint resmi
+//     $response = Http::get("https://api.jikan.moe/v4/genres/anime ");
+//     // dd($response);
 
-        do {
-            // Mengambil data dari API dengan page parameter
-            $response = Http::get("https://api.jikan.moe/v4/genres/anime", [
-                'page' => $currentPage,
-            ]);
+//     // Debugging: Tampilkan status & body response
+//     // dd([
+//     //     'status' => $response->status(),
+//     //     'body' => $response->json()
+//     // ]);
 
-            // dd($response->json());
-            // Gabungkan hasil genre dari tiap halaman
-            $data = $response->json();
-            $genres = array_merge($genres, $data['data']);
+//     // Ambil JSON
+//     $data = $response->json();
 
-            // Pindah ke halaman berikutnya
-            $currentPage++;
+//     // Validasi apakah data tersedia
+//     if (!isset($data['data']) || !is_array($data['data'])) {
+//         throw new \Exception('Gagal mengambil daftar genre dari API.');
+//     }
 
-            // Berhenti jika sudah mencapai halaman terakhir
-        } while (!empty($data['data']));
+//     // Ekstrak hanya id dan name
+//     $genres = [];
+//     foreach ($data['data'] as $genre) {
+//         $genres[] = [
+//             'id' => $genre['id'],
+//             'name' => $genre['name'],
+//             'count' => $genre['count'] ?? 0,
+//         ];
+//     }
 
-        return $genres;
-    }
-
-    public static function getTopRatedAnime($limit = 10)
-{
-    $response = Http::get("https://api.jikan.moe/v4/anime", [
-        'order_by' => 'score',
-        'sort' => 'desc',
-        'limit' => $limit
-    ]);
-
-    return $response->json('data', []);
-}
+//     return $genres;
+// }
 
 
     // Ambil Anime Secara Acak
@@ -297,5 +294,12 @@ public static function getPopularAnimeThemes($limit = 5)
         // Batasi total jumlah berita yang di-return
         return array_slice($newsData, 0, $limit);
     }
+
+    public static function getTopRatedAnime($limit = 10)
+    {
+        $response = Http::get("https://api.jikan.moe/v4/top/anime?filter=all&limit=$limit");
+        return $response->json('data', []);
+    }
+
 
 }

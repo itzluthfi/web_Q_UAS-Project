@@ -52,6 +52,10 @@ class AnimeController extends Controller
         return $this->animeModel->getAllGenres(10);
     });
 
+    // $llGenres = Cache::remember('all_genres_unlimited', 60, function () {
+    //     return $this->animeModel->getAllGenresUnlimited();
+    // });
+
     return view('user.anime.beranda', compact(
         'animeTop', 
         'animePopular', 
@@ -59,7 +63,7 @@ class AnimeController extends Controller
         'animeUpcomings',
         'animeTopRated',
         'lastestNews',
-        'genres'
+        'genres',
     ));
     }
     public function berandaTemp()
@@ -75,7 +79,7 @@ class AnimeController extends Controller
 
     public function showByStudio($studioId){
         $animeList = $this->animeModel->getAnimeByStudio($studioId, 10);
-        dd($animeList);
+        // dd($animeList);
     }
 
    
@@ -150,29 +154,11 @@ class AnimeController extends Controller
 
     
 
-    public function testView(Request $request)
+    public function viewAllGenre(Request $request)
     {
-        try {
-            // Cek cache terlebih dahulu
-            $cachedGenres = Cache::get('all_genres');
+    $genres = $this->animeModel->getAllGenres(77);
+    // dd($genres);
 
-            if ($cachedGenres) {
-                // Gunakan data dari cache jika tersedia
-                $genres = $cachedGenres;
-            } else {
-                // Ambil data dari model
-                $genres = $this->animeModel->getAllGenresUnlimited();
-
-                // Simpan ke cache selama 1 jam (3600 detik)
-                Cache::put('all_genres', $genres, 3600);
-            }
-
-            // dd($genres);
-            return view('user.anime.viewAllGenre', compact('genres'));
-
-        } catch (\Exception $e) {
-            // Tangani kesalahan API
-            return back()->withErrors(['error_message' => 'Gagal memuat genre. Silakan coba lagi nanti.']);
-        }
+    return view('user.anime.viewAllGenre', compact('genres'));
     }
 } 

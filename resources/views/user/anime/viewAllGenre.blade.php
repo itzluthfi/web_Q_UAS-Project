@@ -111,7 +111,7 @@ body {
                             {{ $genre['count'] ?? '0' }} Anime
                         </div>
                     </div>
-                    <a href="" class="view-btn">
+                    <a href="{{ route('anime.showByGenre', ['id' => $genre['mal_id']]) }}" class="view-btn">
                         Lihat Anime
                     </a>
                 </div>
