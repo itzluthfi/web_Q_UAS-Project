@@ -73,39 +73,6 @@ class Anime extends Model
 
     }
 
-//     public static function getAllGenresUnlimited()
-// {
-//     // Kirim request ke endpoint resmi
-//     $response = Http::get("https://api.jikan.moe/v4/genres/anime ");
-//     // dd($response);
-
-//     // Debugging: Tampilkan status & body response
-//     // dd([
-//     //     'status' => $response->status(),
-//     //     'body' => $response->json()
-//     // ]);
-
-//     // Ambil JSON
-//     $data = $response->json();
-
-//     // Validasi apakah data tersedia
-//     if (!isset($data['data']) || !is_array($data['data'])) {
-//         throw new \Exception('Gagal mengambil daftar genre dari API.');
-//     }
-
-//     // Ekstrak hanya id dan name
-//     $genres = [];
-//     foreach ($data['data'] as $genre) {
-//         $genres[] = [
-//             'id' => $genre['id'],
-//             'name' => $genre['name'],
-//             'count' => $genre['count'] ?? 0,
-//         ];
-//     }
-
-//     return $genres;
-// }
-
 
     // Ambil Anime Secara Acak
     public static function getRandomAnimes($count = 5)
