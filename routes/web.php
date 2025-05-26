@@ -43,5 +43,5 @@ Route::get('/anime/berandaTemp', [AnimeController::class, 'berandaTemp'])->name(
 Route::get('/anime/showByStudio', [AnimeController::class, 'showByStudio'])->name('anime.showByStudio');
 Route::post('/anime/comments/store', [CommentController::class, 'store'])->name('comments.store');
 Route::get('/anime/berita/{id}', [AnimeController::class, 'beritaShow'])->name('anime.berita.show');
-Route::get('/anime/showByGenre/{id}', [AnimeController::class, 'showByGenre'])->name('anime.showByGenre');
+Route::get('/anime/genre/{id}', [AnimeController::class, 'showByGenre'])->name('anime.showByGenre');
 Route::get('/anime/Allgenre', [AnimeController::class, 'viewAllGenre'])->name('anime.viewAllGenre');

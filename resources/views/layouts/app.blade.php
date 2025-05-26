@@ -9,6 +9,7 @@
     <!-- Vite integration for CSS and JS -->
     @vite(['resources/css/app.css', 'resources/js/app.js']) 
 
+    
     <!-- Push styles from individual views -->
     @stack('styles')
     <script>

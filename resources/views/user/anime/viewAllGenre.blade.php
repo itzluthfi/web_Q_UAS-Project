@@ -34,15 +34,50 @@ body {
     background: #6d28d9;
 }
 
+.genre-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+/* Responsive: single column on mobile */
+@media (max-width: 640px) {
+    .genre-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
+
 .genre-list-item {
     transition: all 0.3s ease;
     border-left: 3px solid transparent;
+    background-color: rgba(31, 41, 55, 0.5);
+    border: 1px solid rgba(107, 114, 128, 0.3);
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Mobile: remove margin and border radius for seamless list */
+@media (max-width: 640px) {
+    .genre-list-item {
+        border-radius: 0;
+        margin-bottom: 0;
+        border-left: 3px solid transparent;
+        border-right: none;
+        border-top: none;
+        border-bottom: 1px solid rgba(107, 114, 128, 0.3);
+    }
+    
+    .genre-list-item:last-child {
+        border-bottom: none;
+    }
 }
 
 .genre-list-item:hover {
     border-left-color: #651fff;
     background-color: rgba(101, 31, 255, 0.1);
     transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(101, 31, 255, 0.2);
 }
 
 .genre-badge {
@@ -77,6 +112,7 @@ body {
     transition: all 0.3s ease;
     text-align: center;
     display: inline-block;
+    white-space: nowrap;
 }
 
 .view-btn:hover {
@@ -84,11 +120,56 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(101, 31, 255, 0.4);
 }
+
+.genre-container {
+    background-color: rgba(31, 41, 55, 0.3);
+    border: 1px solid rgba(107, 114, 128, 0.3);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile: remove container styling for seamless list */
+@media (max-width: 640px) {
+    .genre-container {
+        background-color: rgba(31, 41, 55, 0.5);
+        border-radius: 0.5rem;
+    }
+}
+
+.genre-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+@media (min-width: 768px) {
+    .genre-content {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.genre-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+    .genre-info {
+        flex-direction: row;
+        align-items: center;
+        gap: 0.75rem;
+    }
+}
 </style>
 @endpush
 
 @section('content')
-<div class="max-w-4xl mx-auto px-4 py-6">
+<div class="max-w-6xl mx-auto px-4 py-6">
     <div class="flex items-center justify-center mb-8">
         <h1 class="page-title text-2xl md:text-3xl">Daftar Genre Anime</h1>
     </div>
@@ -102,20 +183,24 @@ body {
 
     <!-- Genre List -->
     @if(!empty($genres))
-        <div class="bg-gray-800/50 rounded-lg overflow-hidden shadow-lg border border-gray-700/50 divide-y divide-gray-700/50">
-            @foreach($genres as $genre)
-                <div class="genre-list-item p-4 flex items-center justify-between">
-                    <div class="flex items-center">
-                        <h3 class="text-lg font-medium text-white">{{ $genre['name'] }}</h3>
-                        <div class="genre-badge ml-3">
-                            {{ $genre['count'] ?? '0' }} Anime
+        <div class="genre-container">
+            <div class="genre-grid p-4">
+                @foreach($genres as $genre)
+                    <div class="genre-list-item p-4">
+                        <div class="genre-content">
+                            <div class="genre-info">
+                                <h3 class="text-lg font-medium text-white">{{ $genre['name'] }}</h3>
+                                <div class="genre-badge">
+                                    {{ $genre['count'] ?? '0' }} Anime
+                                </div>
+                            </div>
+                            <a href="{{ route('anime.showByGenre', ['id' => $genre['mal_id']]) }}" class="view-btn">
+                                Lihat Anime
+                            </a>
                         </div>
                     </div>
-                    <a href="{{ route('anime.showByGenre', ['id' => $genre['mal_id']]) }}" class="view-btn">
-                        Lihat Anime
-                    </a>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
         </div>
     @else
         <div class="bg-gray-800/50 border border-gray-700 rounded-lg p-6 text-center max-w-md mx-auto">

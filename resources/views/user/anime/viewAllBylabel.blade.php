@@ -59,6 +59,8 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: #6d28d9;
 }
+
+
 </style>
 @endpush
 
@@ -121,6 +123,10 @@ body {
                     </div>
                 @endforeach
             </div>
+
+            <!-- Pagination Controls -->
+            <x-pagination :pagination="$pagination" :base-url="url()->current()" />
+    
         @else
             <div class="bg-gray-800/50 border border-gray-700 rounded-lg p-8 text-center max-w-2xl mx-auto">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

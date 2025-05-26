@@ -43,6 +43,7 @@ class AnimeController extends Controller
     $animeTopRated = Cache::remember('top_rated_anime', 60, function () {
         return $this->animeModel->getTopRatedAnime(10);
     });
+    // dd($animeTopRated);
 
     $lastestNews = Cache::remember('latest_news', 60, function () {
         return $this->animeModel->getPopularAnimeNews(3);
@@ -86,6 +87,7 @@ class AnimeController extends Controller
 
     public function viewAllByLabel($label)
     {
+        $page = request()->query('page', 1); // default ke 1 jika tidak ada
         $method = 'get' . ucfirst($label) . 'Anime';
 
         if (!method_exists($this->animeModel, $method)) {
@@ -94,15 +96,29 @@ class AnimeController extends Controller
 
         $animeList = $this->animeModel->$method(10);
 
-        return view('user.anime.viewAllByLabel', compact('animeList', 'label'));
+        $pagination = [
+            'current_page' => $result['pagination']['current_page'] ?? 1,
+            'last_visible_page' => $result['pagination']['last_visible_page'] ?? 1,
+        ];
+
+        dd($pagination);
+
+        return view('user.anime.viewAllByLabel', compact('animeList', 'label' , 'pagination'));
     }
 
 
     public function showByGenre($genreId)
     {
-        $animeList = $this->animeModel->getAnimeByGenre($genreId, 10);
+        $page = request()->query('page', 1); // default ke 1 jika tidak ada
+        $limit = 10;
+    
+        $response = $this->animeModel->getAnimeByGenre($genreId, $limit, $page);
+        $animeList = $response['data'] ?? [];
+        $pagination = $response['pagination'] ?? [];
+    
         $label = $this->animeModel->getGenreNameById($genreId);
-        return view('user.anime.viewAllByLabel', compact('animeList','label'));
+    
+        return view('user.anime.viewAllByLabel', compact('animeList', 'pagination', 'label', 'genreId'));
     }
 
     public function show($id)
@@ -140,16 +156,21 @@ class AnimeController extends Controller
     public function search(Request $request)
     {
         $query = $request->query('q');
-
+        $page = $request->query('page', 1);
+    
         if (!$query) {
             return redirect()->route('home')->with('error', 'Masukkan kata kunci pencarian.');
         }
-
-        $result = $this->animeModel->searchAnime($query);
+    
+        $result = $this->animeModel->searchAnime($query, 10, $page); // pastikan $page dikirim
         $animeList = $result['results'];
         $jmlResult = $result['total'];
-
-        return view('user.anime.viewAllByLabel', compact('animeList', 'jmlResult', 'query'));
+        $pagination = [
+            'current_page' => $result['pagination']['current_page'] ?? 1,
+            'last_visible_page' => $result['pagination']['last_visible_page'] ?? 1,
+        ];
+    
+        return view('user.anime.viewAllByLabel', compact('animeList', 'jmlResult', 'query', 'pagination'));
     }
 
     

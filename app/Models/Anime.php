@@ -20,10 +20,13 @@ class Anime extends Model
 
 
     // Ambil Anime Populer (Trending)
-    public static function getPopularAnime($limit = 10)
+    public static function getPopularAnime($limit = 10, $page = 1)
     {
-        $response = Http::get("https://api.jikan.moe/v4/top/anime?filter=bypopularity&limit=$limit");
-        return $response->json('data', []);
+        $response = Http::get("https://api.jikan.moe/v4/top/anime?filter=bypopularity&limit=$limit", [
+            'page' => $page,
+            'pagination' => $data['pagination'] ?? [] // <--- tambahkan ini
+        ]);
+        return $response->json('data', [] );
     }
 
     // Ambil Anime yang Sedang Tayang (Airing)
@@ -52,18 +55,38 @@ class Anime extends Model
     }
 
     // Ambil Anime yang Tayang di Musim Saat Ini
-    public static function getCurrentSeasonAnime($limit = 12)
+    public static function getCurrentSeasonAnime($limit = 12, $page = 1)
     {
-        $response = Http::get("https://api.jikan.moe/v4/seasons/now?limit=$limit");
+        $response = Http::get("https://api.jikan.moe/v4/seasons/now", [
+            'limit' => $limit,
+            'page' => $page,
+            'pagination' => $data['pagination'] ?? [] // <--- tambahkan ini
+        ]);
+
+        // dd($response->json());
+
         return $response->json('data', []);
     }
 
     // Ambil Anime Berdasarkan Genre
-    public static function getAnimeByGenre($genreId, $limit = 10)
-    {
-        $response = Http::get("https://api.jikan.moe/v4/anime?genres=$genreId&limit=$limit");
-        return $response->json('data', []);
-    }
+    // public static function getAnimeByGenre($genreId, $limit = 10)
+    // {
+    //     $response = Http::get("https://api.jikan.moe/v4/anime?genres=$genreId&limit=$limit");
+    //     return $response->json('data', []);
+    // }
+
+    public static function getAnimeByGenre($genreId, $limit = 10, $page = 1)
+{
+    $response = Http::get("https://api.jikan.moe/v4/anime", [
+        'genres' => $genreId,
+        'limit' => $limit,
+        'page' => $page
+    ]);
+
+    // dd($response->json());
+
+    return $response->json();
+}
 
     // Ambil Semua Genre
     public static function getAllGenres($limit = 10)
@@ -88,13 +111,16 @@ class Anime extends Model
     }
 
     // Cari Anime Berdasarkan Judul
-    public static function searchAnime($query, $limit = 10)
+    public static function searchAnime($query, $limit = 10, $page = 1)
     {
-        $response = Http::get("https://api.jikan.moe/v4/anime?q=" . urlencode($query) . "&limit=$limit");
+        $response = Http::get("https://api.jikan.moe/v4/anime?q=" . urlencode($query) . "&limit=$limit&page=$page");
         $data = $response->json();
+
         return [
             'results' => $data['data'] ?? [],
-            'total' => $data['pagination']['items']['total'] ?? 0
+            'total' => $data['pagination']['items']['total'] ?? 0,
+            'page' => $page,
+            'pagination' => $data['pagination'] ?? [] // <--- tambahkan ini
         ];
     }
 
@@ -265,6 +291,7 @@ public static function getPopularAnimeThemes($limit = 5)
     public static function getTopRatedAnime($limit = 10)
     {
         $response = Http::get("https://api.jikan.moe/v4/top/anime?filter=all&limit=$limit");
+        // dd($response->json());
         return $response->json('data', []);
     }
 
