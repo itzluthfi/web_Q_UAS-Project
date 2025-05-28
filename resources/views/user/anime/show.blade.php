@@ -373,6 +373,7 @@
             </div>
         </div>
 
+        {{-- @dd($relatedAnimes); --}}
 
         <!-- Related Anime Section (Optional) -->
         <div class="max-w-4xl mx-auto mt-8 mb-12 px-4">
@@ -380,7 +381,13 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 @forelse($relatedAnimes as $relatedAnime)
                     <div class="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:border-purple-500 transition related-anime-card">
-                        <img src="{{ $relatedAnime['images']['jpg']['image_url'] }}" alt="{{ $relatedAnime['title'] }}" class="w-full h-48 object-cover">
+                        
+                        <img src="{{ 
+                            $relatedAnime['images']['jpg']['image_url'] ?? 
+                            $relatedAnime['images']['webp']['image_url'] ?? 
+                            'https://via.placeholder.com/400x600?text=No+Image ' 
+                        }}" 
+                        alt="{{ $anime['title'] ?? 'Anime Title' }}" class="w-full h-48 object-cover">
                         <div class="p-2">
                             <p class="text-sm font-medium text-white truncate">{{ $relatedAnime['title'] }}</p>
                             <p class="text-xs text-gray-400">{{ $relatedAnime['type'] }} • {{ $relatedAnime['episodes'] ?? 'N/A' }} Eps</p>

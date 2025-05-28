@@ -25,7 +25,7 @@ class AnimeController extends Controller
     public function beranda()
 {
     $animeTop = Cache::remember('top_anime', 60, function () {
-        return $this->animeModel->getTopAnime(10);
+        return $this->animeModel->getTopAnimeForHome(10);
     });
 
     $animeUpcomings = Cache::remember('upcoming_anime', 60, function () {
@@ -33,11 +33,11 @@ class AnimeController extends Controller
     });
 
     $animePopular = Cache::remember('popular_anime', 60, function () {
-        return $this->animeModel->getPopularAnime();
+        return $this->animeModel->getPopularAnimeForHome();
     });
 
     $animeCurrentSeasonal = Cache::remember('current_season_anime', 60, function () {
-        return $this->animeModel->getCurrentSeasonAnime();
+        return $this->animeModel->getCurrentSeasonAnimeForHome();
     });
 
     $animeTopRated = Cache::remember('top_rated_anime', 60, function () {
@@ -94,16 +94,11 @@ class AnimeController extends Controller
             return abort(404, "Label '$label' tidak valid.");
         }
 
-        $animeList = $this->animeModel->$method(10);
-
-        $pagination = [
-            'current_page' => $result['pagination']['current_page'] ?? 1,
-            'last_visible_page' => $result['pagination']['last_visible_page'] ?? 1,
-        ];
-
-        dd($pagination);
-
-        return view('user.anime.viewAllByLabel', compact('animeList', 'label' , 'pagination'));
+        $result = $this->animeModel->$method(10, $page); // ← UBAH: tambah parameter $page
+        $animeList = $result['data'] ?? [];              // ← UBAH: ambil dari $result
+        $pagination = $result['pagination'] ?? [];       // ← UBAH: ambil dari $result
+    
+        return view('user.anime.viewAllByLabel', compact('animeList', 'label', 'pagination'));
     }
 
 
@@ -126,6 +121,7 @@ class AnimeController extends Controller
         // Ambil detail anime dari API
         $anime = Anime::getAnimeById($id);
     
+        // dd($anime);
         if (!$anime) {
             return abort(404, 'Anime detail tidak ditemukan.');
         }
@@ -140,7 +136,8 @@ class AnimeController extends Controller
         $relatedAnimes = [];
     
         if ($firstGenreId) {
-            $relatedAnimes = Anime::getAnimeByGenre($firstGenreId, 4);
+            $response = Anime::getAnimeByGenre($firstGenreId, 4);
+            $relatedAnimes = $response['data'] ?? [];
         }
 
         $comments = Comment::with('user')

@@ -19,16 +19,40 @@ class Anime extends Model
     }
 
 
+    public static function getTopAnimeForHome($limit = 10)
+    {
+        $response = Http::get("https://api.jikan.moe/v4/top/anime", [
+            'limit' => $limit,
+            'page' => 1
+        ]);
+
+        return $response->json('data', []);
+    }
+
+
+
     // Ambil Anime Populer (Trending)
     public static function getPopularAnime($limit = 10, $page = 1)
     {
-        $response = Http::get("https://api.jikan.moe/v4/top/anime?filter=bypopularity&limit=$limit", [
-            'page' => $page,
-            'pagination' => $data['pagination'] ?? [] // <--- tambahkan ini
+        $response = Http::get("https://api.jikan.moe/v4/top/anime", [
+            'filter' => 'bypopularity',
+            'limit' => $limit,
+            'page' => $page
         ]);
-        return $response->json('data', [] );
+
+        return $response->json(); // ← UBAH: return full response
     }
 
+    public static function getPopularAnimeForHome($limit = 10)
+    {
+        $response = Http::get("https://api.jikan.moe/v4/top/anime", [
+            'filter' => 'bypopularity',
+            'limit' => $limit,
+            'page' => 1
+        ]);
+
+        return $response->json('data', []);
+    }
     // Ambil Anime yang Sedang Tayang (Airing)
     public static function getAiringAnime($limit = 10)
     {
@@ -59,14 +83,25 @@ class Anime extends Model
     {
         $response = Http::get("https://api.jikan.moe/v4/seasons/now", [
             'limit' => $limit,
-            'page' => $page,
-            'pagination' => $data['pagination'] ?? [] // <--- tambahkan ini
+            'page' => $page
         ]);
 
         // dd($response->json());
 
-        return $response->json('data', []);
+        return $response->json();
     }
+
+     // Method untuk mengambil data homepage (tanpa pagination info)
+     public static function getCurrentSeasonAnimeForHome($limit = 12)
+     {
+         $response = Http::get("https://api.jikan.moe/v4/seasons/now", [
+             'limit' => $limit,
+             'page' => 1
+         ]);
+ 
+         return $response->json('data', []);
+     }
+ 
 
     // Ambil Anime Berdasarkan Genre
     // public static function getAnimeByGenre($genreId, $limit = 10)
