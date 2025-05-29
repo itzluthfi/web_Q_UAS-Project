@@ -411,7 +411,7 @@ body {
         <div class="mb-12">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-bold text-purple-400">Latest Anime News</h2>
-                <a href="{{   route('anime.viewAllByLabel', ['label' => 'lastestNews']) }}" class="text-purple-400 hover:text-purple-300 transition-colors flex items-center">
+                <a href="{{   route('anime.viewAllNews', ['label' => 'PopularNews']) }}" class="text-purple-400 hover:text-purple-300 transition-colors flex items-center">
                     All News
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd"

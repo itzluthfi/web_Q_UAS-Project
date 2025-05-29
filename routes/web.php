@@ -26,18 +26,18 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 // Authenticated users
 Route::middleware(['auth'])->group(function () {
-    
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/user/profile', [AdminController::class, 'profile'])->name('user.profile');
     // Pastikan middleware 'auth' digunakan, karena hanya user login yang boleh upload
     Route::post('/profile/upload-image', [AuthController::class, 'uploadProfileImage'])
-    ->name('profile.uploadImage');
+        ->name('profile.uploadImage');
 });
 
 // Public routes
 Route::get('/', [AnimeController::class, 'beranda'])->name('home');
 Route::get('/anime/search', [AnimeController::class, 'search'])->name('anime.search');
-Route::get('/anime/show/{id}', [AnimeController::class, 'show'])->name('anime.show');  
+Route::get('/anime/show/{id}', [AnimeController::class, 'show'])->name('anime.show');
 Route::get('/anime/viewAllBy/{label}', [AnimeController::class, 'viewAllByLabel'])->name('anime.viewAllByLabel');
 Route::get('/anime/berandaTemp', [AnimeController::class, 'berandaTemp'])->name('berandaTemp');
 Route::get('/anime/showByStudio', [AnimeController::class, 'showByStudio'])->name('anime.showByStudio');
@@ -45,3 +45,4 @@ Route::post('/anime/comments/store', [CommentController::class, 'store'])->name(
 Route::get('/anime/berita/{id}', [AnimeController::class, 'beritaShow'])->name('anime.berita.show');
 Route::get('/anime/genre/{id}', [AnimeController::class, 'showByGenre'])->name('anime.showByGenre');
 Route::get('/anime/Allgenre', [AnimeController::class, 'viewAllGenre'])->name('anime.viewAllGenre');
+Route::get('/anime/Allnews', [AnimeController::class, 'viewAllNews'])->name('anime.viewAllNews');
