@@ -323,12 +323,12 @@
                         <div class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none"
                             role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1"
                             id="user-dropdown">
-                            <a href="{{ route('admin.dashboard') }}"
+                            <a href="{{ route('auth.dashboard') }}"
                                 class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
                                 role="menuitem">Dashboard</a>
-                            <a href="@php if (auth()->user()->role == 'admin') { echo route('admin.profile'); } else { echo route('user.profile'); } @endphp" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+                            <a href="@php if (auth()->user()->role == 'admin') { echo route('auth.profile'); } else { echo route('auth.profile'); } @endphp" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
                                 role="menuitem">Profil Saya</a>
-                            <a href="{{ route('admin.setting') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+                            <a href="{{ route('auth.setting') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
                                 role="menuitem">Pengaturan</a>
                             <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
                                 role="menuitem">Anime Favorit</a>
@@ -457,7 +457,7 @@
                 <a href="#"
                     class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Profil
                     Saya</a>
-                <a href="{{ route('admin.setting') }}"
+                <a href="{{ route('auth.setting') }}"
                     class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Pengaturan</a>
                 <a href="#"
                     class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Anime

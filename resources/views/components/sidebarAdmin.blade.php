@@ -36,9 +36,9 @@
         </a>
 
         <!-- Dashboard -->
-        <a href="{{ route('admin.dashboard') }}" 
+        <a href="{{ route('auth.dashboard') }}" 
            class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white 
-           @if(request()->routeIs('admin.dashboard')) active @endif">
+           @if(request()->routeIs('auth.dashboard')) active @endif">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
                 <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
@@ -47,9 +47,9 @@
         </a>
 
         <!-- Profil Saya -->
-        <a href="{{ route('admin.profile') }}" 
+        <a href="{{ route('auth.profile') }}" 
            class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white 
-           @if(request()->routeIs('admin.profile')) active @endif">
+           @if(request()->routeIs('auth.profile')) active @endif">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
             </svg>
@@ -60,10 +60,12 @@
             <h5 class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Manajemen</h5>
         </div>
 
+        <!-- Hanya Admin yang Bisa Melihat Bagian Ini -->
+        @if(auth()->check() && auth()->user()->role === 'admin')
         <!-- Pengguna -->
         <a href="{{ route('admin.users') }}" 
-           class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white 
-           @if(request()->routeIs('admin.users')) active @endif">
+        class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white 
+        @if(request()->routeIs('admin.users')) active @endif">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
             </svg>
@@ -72,8 +74,8 @@
 
         <!-- Anime -->
         <a href="#" 
-           class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white 
-           @if(request()->routeIs('admin.anime*')) active @endif">
+        class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white 
+        @if(request()->routeIs('admin.anime*')) active @endif">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
             </svg>
@@ -82,8 +84,8 @@
 
         <!-- Komentar -->
         <a href="{{ route('admin.comment') }}" 
-           class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white 
-           @if(request()->routeIs('admin.comment')) active @endif">
+        class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white 
+        @if(request()->routeIs('admin.comment')) active @endif">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2C6.477 2 2 5.954 2 10.5c0 2.114.898 4.067 2.392 5.522C4.23 17.152 3.272 19.272 3.05 19.786a.75.75 0 00.949.949c.514-.222 2.634-1.18 3.764-1.342A10.548 10.548 0 0012 19c5.523 0 10-3.954 10-8.5S17.523 2 12 2z" />
             </svg>
@@ -93,11 +95,12 @@
         <div class="px-4 py-2 mt-4 sidebar-group-label">
             <h5 class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Sistem</h5>
         </div>
+        @endif
 
         <!-- Pengaturan -->
-        <a href="{{ route('admin.setting') }}" 
+        <a href="{{ route('auth.setting') }}" 
            class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:text-white 
-           @if(request()->routeIs('admin.setting')) active @endif">
+           @if(request()->routeIs('auth.setting')) active @endif">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.533 1.533 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
             </svg>

@@ -17,21 +17,21 @@ Route::middleware(['guest'])->group(function () {
 
 // Admin-only routes
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    
     Route::get('/admin/users', [AdminController::class, 'index'])->name('admin.users');
-    Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
-    Route::get('/admin/setting', [AdminController::class, 'setting'])->name('admin.setting');
     Route::get('/admin/comment', [AdminController::class, 'comment'])->name('admin.comment');
 });
 
 // Authenticated users
 Route::middleware(['auth'])->group(function () {
+    Route::post('/auth/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/auth/profile', [AdminController::class, 'profile'])->name('auth.profile');
+    Route::get('/auth/setting', [AdminController::class, 'setting'])->name('auth.setting');
+    Route::get('/auth/dashboard', [AdminController::class, 'dashboard'])->name('auth.dashboard');
 
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('/user/profile', [AdminController::class, 'profile'])->name('user.profile');
     // Pastikan middleware 'auth' digunakan, karena hanya user login yang boleh upload
-    Route::post('/profile/upload-image', [AuthController::class, 'uploadProfileImage'])
-        ->name('profile.uploadImage');
+    Route::post('auth/profile/upload-image', [AuthController::class, 'uploadProfileImage'])
+    ->name('auth.profile.uploadImage');
 });
 
 // Public routes
@@ -46,3 +46,4 @@ Route::get('/anime/berita/{id}', [AnimeController::class, 'beritaShow'])->name('
 Route::get('/anime/genre/{id}', [AnimeController::class, 'showByGenre'])->name('anime.showByGenre');
 Route::get('/anime/Allgenre', [AnimeController::class, 'viewAllGenre'])->name('anime.viewAllGenre');
 Route::get('/anime/Allnews', [AnimeController::class, 'viewAllNews'])->name('anime.viewAllNews');
+

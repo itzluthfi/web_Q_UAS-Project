@@ -24,7 +24,7 @@ class AuthController extends Controller
     public function profile()
     {
         $users = User::all();
-        return view('user.profile', compact('users'));
+        return view('auth.profile', compact('users'));
     }
 
 
@@ -80,7 +80,7 @@ class AuthController extends Controller
             Session::put('user_id', $user->id);
             Session::put('username', $user->username);
             Session::put('role', $user->role);
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('auth.dashboard');
         } else {
             Session::put('user_id', $user->id);
             Session::put('username', $user->username);
