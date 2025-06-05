@@ -17,14 +17,14 @@ class DatabaseSeeder extends Seeder
         // Buat 2 user default
         User::create([
             'username' => 'luthfi',
-            'email' => 'luthfi@example.com', // Sesuaikan dengan email yang diinginkan
+            'email' => 'luthfishidqi2@gmail.com', // Sesuaikan dengan email yang diinginkan
             'password' => Hash::make('admin'), // Password 'admin' dienkripsi
             'role' => 'admin', // Misal set role 'admin' untuk Luthfi
         ]);
 
         User::create([
             'username' => 'brillian',
-            'email' => 'brillian@example.com', // Sesuaikan dengan email yang diinginkan
+            'email' => 'brillianalif28@gmail.com', // Sesuaikan dengan email yang diinginkan
             'password' => Hash::make('user'), // Password 'user' dienkripsi
             'role' => 'user', // Misal set role 'user' untuk Brillian
         ]);

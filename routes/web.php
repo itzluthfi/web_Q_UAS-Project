@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnimeController;
 use App\Http\Controllers\CommentController;
 use Illuminate\Container\Attributes\Auth;
+use Illuminate\Support\Facades\Mail;
 
 // Guest routes
 Route::middleware(['guest'])->group(function () {
@@ -28,7 +29,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/auth/profile', [AdminController::class, 'profile'])->name('auth.profile');
     Route::get('/auth/setting', [AdminController::class, 'setting'])->name('auth.setting');
     Route::get('/auth/dashboard', [AdminController::class, 'dashboard'])->name('auth.dashboard');
-
+    Route::get('/notifikasi-email', [AuthController::class, 'kirimNotifikasi']);
     // Pastikan middleware 'auth' digunakan, karena hanya user login yang boleh upload
     Route::post('auth/profile/upload-image', [AuthController::class, 'uploadProfileImage'])
     ->name('auth.profile.uploadImage');
@@ -47,3 +48,11 @@ Route::get('/anime/genre/{id}', [AnimeController::class, 'showByGenre'])->name('
 Route::get('/anime/Allgenre', [AnimeController::class, 'viewAllGenre'])->name('anime.viewAllGenre');
 Route::get('/anime/Allnews', [AnimeController::class, 'viewAllNews'])->name('anime.viewAllNews');
 
+// Route::get('/tes-kirim-email', function () {
+//     Mail::raw('Tes kirim email langsung dari Laravel SMTP Gmail.', function ($message) {
+//         $message->to('brillianalif28@gmail.com') // ganti jika perlu
+//                 ->subject('Test Email Manual');
+//     });
+
+//     return 'Email langsung berhasil dikirim!';
+// });

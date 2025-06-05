@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth; // <--- WAJIB!
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Notifications\UserNotification;
 
 class AuthController extends Controller
 {
@@ -21,6 +22,20 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
+
+    public function kirimNotifikasi()
+    {
+        $user = Auth::user(); // Gunakan user yang sedang login
+
+        if (!$user) {
+            return 'User tidak ditemukan.';
+        }
+
+        $pesan = "Anda telah berhasil login sebagai $user->username";
+        $user->notify(new UserNotification($pesan));
+
+        return "Notifikasi email berhasil dikirim ke $user->email";
+    }
     public function profile()
     {
         $users = User::all();
@@ -70,12 +85,15 @@ class AuthController extends Controller
         'password' => 'required|string',
     ]);
 
+
+
     $credentials = $request->only('username', 'password');
 
     if (Auth::attempt($credentials)) {
         $request->session()->regenerate();
         $user = Auth::user();
-
+        $err = $this->kirimNotifikasi();
+        // dd($err);
         if ($user->role === 'admin') {
             Session::put('user_id', $user->id);
             Session::put('username', $user->username);

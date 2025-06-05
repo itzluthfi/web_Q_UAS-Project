@@ -7,6 +7,14 @@ use Illuminate\Support\Facades\Http;
 
 class Anime extends Model
 {
+
+    private static function baseUrl($path = '')
+{
+    $base = rtrim(config('jikan.base_url'), '/');
+    $path = ltrim($path, '/');
+    return "{$base}/{$path}";
+}
+
     // ===================== //
     // === TOP & TRENDING === //
     // ===================== //
@@ -48,6 +56,8 @@ class Anime extends Model
         ]);
         return $response->json();
     }
+
+    
 
     public static function getAiringAnime($limit = 10)
     {
