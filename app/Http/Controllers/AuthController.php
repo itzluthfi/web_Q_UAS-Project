@@ -17,7 +17,7 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-     public function loginForm()
+    public function loginForm()
     {
         return view('auth.login');
     }
@@ -46,16 +46,16 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validated = $request->validate([
-        'username' => 'required|string|max:255',
-        'email' => 'required|email|unique:users',
-        'password' => 'required|min:6|confirmed',
-        'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-         ]);
-       
+            'username' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6|confirmed',
+            'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
         if (!$validated) {
             return back()->with('error', 'Registrasi gagal. Mohon periksa input Anda.')
-                         ->withErrors($validated)
-                         ->withInput();
+                ->withErrors($validated)
+                ->withInput();
         }
 
         $imagePath = null;
@@ -76,59 +76,60 @@ class AuthController extends Controller
         return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');
     }
 
-   
-
- public function login(Request $request)
-{
-    $request->validate([
-        'username' => 'required|string',
-        'password' => 'required|string',
-    ]);
 
 
+    public function login(Request $request)
+    {
+        $request->validate([
+            'username' => 'required|string',
+            'password' => 'required|string',
+        ]);
 
-    $credentials = $request->only('username', 'password');
 
-    if (Auth::attempt($credentials)) {
-        $request->session()->regenerate();
-        $user = Auth::user();
-        $err = $this->kirimNotifikasi();
-        // dd($err);
-        if ($user->role === 'admin') {
-            Session::put('user_id', $user->id);
-            Session::put('username', $user->username);
-            Session::put('role', $user->role);
-            return redirect()->route('auth.dashboard');
-        } else {
-            Session::put('user_id', $user->id);
-            Session::put('username', $user->username);
-            Session::put('role', $user->role);
-            // dd(session()->all());
-            return redirect()->route('home');
+
+        $credentials = $request->only('username', 'password');
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            $user = Auth::user();
+            $err = $this->kirimNotifikasi();
+            // dd($err);
+            if ($user->role === 'admin') {
+                Session::put('user_id', $user->id);
+                Session::put('username', $user->username);
+                Session::put('role', $user->role);
+                return redirect()->route('auth.profile');
+            } else {
+                Session::put('user_id', $user->id);
+                Session::put('username', $user->username);
+                Session::put('role', $user->role);
+                // dd(session()->all());
+                return redirect()->route('home');
+            }
         }
+
+        return back()->withErrors([
+            'username' => 'Username atau password salah.',
+        ]);
     }
 
-    return back()->withErrors([
-        'username' => 'Username atau password salah.',
-    ]);
-}
 
+    public function uploadProfileImage(Request $request)
+    {
+        $user = Auth::user();
 
-public function uploadProfileImage(Request $request){
-    $user = Auth::user();
+        if (!$user instanceof User) {
+            return back()->withErrors('User tidak ditemukan atau bukan model Eloquent');
+        }
 
-    if (!$user instanceof User) {
-        return back()->withErrors('User tidak ditemukan atau bukan model Eloquent');
+        if ($request->hasFile('profile_image')) {
+            $imagePath = $request->file('profile_image')->store('profile_images', 'public');
+            $user->profile_image_url = $imagePath;
+            $user->save(); // Ini akan berhasil
+        }
+
+        return back();
     }
-
-    if ($request->hasFile('profile_image')) {
-        $imagePath = $request->file('profile_image')->store('profile_images', 'public');
-        $user->profile_image_url = $imagePath;
-        $user->save(); // Ini akan berhasil
-    }
-
-    return back();
-}
 
 
     public function logout()

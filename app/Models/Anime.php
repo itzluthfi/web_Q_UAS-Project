@@ -8,12 +8,54 @@ use Illuminate\Support\Facades\Http;
 class Anime extends Model
 {
 
+
+    protected $fillable = [
+        'mal_id',
+        'title',
+        'title_english',
+        'synopsis',
+        'type',
+        'episodes',
+        'duration',
+        'score',
+        'rank',
+        'status',
+        'season',
+        'year',
+        'category',
+        'image_url',
+        'aired_from',
+        'aired_to',
+    ];
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'anime_category', 'anime_id', 'category_id')
+            ->withTimestamps();
+    }
+
+
+    // Relasi many-to-many ke Genre
+    public function genres()
+    {
+        return $this->belongsToMany(Genre::class, 'anime_genre', 'anime_id', 'genre_id')
+            ->withTimestamps();
+    }
+
+    // Relasi one-to-one ke AnimeDetail
+    public function details()
+    {
+        return $this->hasOne(AnimeDetail::class);
+    }
+
+
+
     private static function baseUrl($path = '')
-{
-    $base = rtrim(config('jikan.base_url'), '/');
-    $path = ltrim($path, '/');
-    return "{$base}/{$path}";
-}
+    {
+        $base = rtrim(config('jikan.base_url'), '/');
+        $path = ltrim($path, '/');
+        return "{$base}/{$path}";
+    }
 
     // ===================== //
     // === TOP & TRENDING === //
@@ -57,7 +99,7 @@ class Anime extends Model
         return $response->json();
     }
 
-    
+
 
     public static function getAiringAnime($limit = 10)
     {

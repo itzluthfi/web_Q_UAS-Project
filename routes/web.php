@@ -18,7 +18,7 @@ Route::middleware(['guest'])->group(function () {
 
 // Admin-only routes
 Route::middleware(['auth', 'admin'])->group(function () {
-    
+
     Route::get('/admin/users', [AdminController::class, 'index'])->name('admin.users');
     Route::get('/admin/comment', [AdminController::class, 'comment'])->name('admin.comment');
 });
@@ -32,7 +32,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notifikasi-email', [AuthController::class, 'kirimNotifikasi']);
     // Pastikan middleware 'auth' digunakan, karena hanya user login yang boleh upload
     Route::post('auth/profile/upload-image', [AuthController::class, 'uploadProfileImage'])
-    ->name('auth.profile.uploadImage');
+        ->name('auth.profile.uploadImage');
 });
 
 // Public routes
@@ -47,6 +47,10 @@ Route::get('/anime/berita/{id}', [AnimeController::class, 'beritaShow'])->name('
 Route::get('/anime/genre/{id}', [AnimeController::class, 'showByGenre'])->name('anime.showByGenre');
 Route::get('/anime/Allgenre', [AnimeController::class, 'viewAllGenre'])->name('anime.viewAllGenre');
 Route::get('/anime/Allnews', [AnimeController::class, 'viewAllNews'])->name('anime.viewAllNews');
+// routes/web.php
+Route::get('/admin/sync-anime', [AdminController::class, 'syncAnimePage'])->name('admin.syncAnimePage');
+Route::post('/admin/sync-anime', [AdminController::class, 'syncAnime'])->name('admin.syncAnime');
+
 
 // Route::get('/tes-kirim-email', function () {
 //     Mail::raw('Tes kirim email langsung dari Laravel SMTP Gmail.', function ($message) {
