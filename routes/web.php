@@ -19,7 +19,7 @@ Route::middleware(['guest'])->group(function () {
 // Admin-only routes
 Route::middleware(['auth', 'admin'])->group(function () {
 
-    Route::get('/admin/users', [AdminController::class, 'index'])->name('admin.users');
+    Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
     Route::get('/admin/comment', [AdminController::class, 'comment'])->name('admin.comment');
 });
 
@@ -54,8 +54,8 @@ Route::post('/admin/sync-anime', [AdminController::class, 'syncAnime'])->name('a
 
 // Route::get('/tes-kirim-email', function () {
 //     Mail::raw('Tes kirim email langsung dari Laravel SMTP Gmail.', function ($message) {
-//         $message->to('brillianalif28@gmail.com') // ganti jika perlu
-//                 ->subject('Test Email Manual');
+//         $message->to('luthfishidqi28@gmail.com') // ganti jika perlu
+//             ->subject('Test Email Manual laravel');
 //     });
 
 //     return 'Email langsung berhasil dikirim!';

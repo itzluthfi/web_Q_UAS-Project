@@ -7,6 +7,7 @@
 -   fitur genre
 -   fitur loading
 -   fitur watch trailer(embed link), tonton sekarang
+-   new: large_image_url, genres need in animes table
 
 -- ---- --- DONE -- ---- ---
 

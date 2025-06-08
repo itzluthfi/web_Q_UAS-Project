@@ -24,17 +24,14 @@ class AnimeController extends Controller
 
     public function beranda()
     {
-        $animeTop = Cache::remember('top_anime', 60, function () {
-            return $this->animeModel->getTopAnime(10)['data'] ?? [];
-        });
-
         $animeUpcomings = Cache::remember('upcoming_anime', 60, function () {
             return $this->animeModel->getUpcomingAnime(5)['data'] ?? [];
         });
 
         $animeTopRated = Cache::remember('top_rated_anime', 60, function () {
-            return $this->animeModel->getTopAnime(10)['data'] ?? [];
+            return $this->animeModel->getTopRatedAnimeDB(6) ?? [];
         });
+        // dd($animeTopRated);
 
         $lastestNews = Cache::remember('latest_news', 60, function () {
             return $this->animeModel->getPopularNewsAnime(3);
@@ -45,17 +42,16 @@ class AnimeController extends Controller
         });
 
         $animeCurrentSeasonal = Cache::remember('current_seasonal_anime', 60, function () {
-            return $this->animeModel->getCurrentSeasonAnime()['data'] ?? [];
+            return $this->animeModel->getCurrentSeasonAnime(6)['data'] ?? [];
         });
 
         $animePopular = Cache::remember('popular_anime', 60, function () {
-            return $this->animeModel->getPopularAnime()['data'] ?? [];
+            return $this->animeModel->getPopularAnime(6)['data'] ?? [];
         });
 
 
 
         return view('user.anime.beranda', compact(
-            'animeTop',
             'animePopular',
             'animeCurrentSeasonal',
             'animeUpcomings',
@@ -92,7 +88,7 @@ class AnimeController extends Controller
             return abort(404, "Label '$label' tidak valid.");
         }
 
-        $result = $this->animeModel->$method(10, $page); // ← UBAH: tambah parameter $page
+        $result = $this->animeModel->$method(12, $page); // ← UBAH: tambah parameter $page
         $animeList = $result['data'] ?? [];              // ← UBAH: ambil dari $result
         $pagination = $result['pagination'] ?? [];       // ← UBAH: ambil dari $result
 

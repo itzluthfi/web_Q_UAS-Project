@@ -92,8 +92,10 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             $user = Auth::user();
-            $err = $this->kirimNotifikasi();
-            // dd($err);
+            $cek = $this->kirimNotifikasi();
+            if (!$cek) {
+                return $cek;
+            }
             if ($user->role === 'admin') {
                 Session::put('user_id', $user->id);
                 Session::put('username', $user->username);

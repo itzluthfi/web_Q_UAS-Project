@@ -58,6 +58,42 @@ class Anime extends Model
     }
 
     // ===================== //
+    // === GET BY DATABASE === //
+    // ===================== //
+    public static function getTopRatedAnimeDB($limit = 12)
+    {
+        return self::whereNotNull('score')
+            ->orderByDesc('score')
+            ->take($limit)
+            ->get();
+    }
+
+    public static function getUpcomingAnimeDB($limit = 10)
+    {
+        return self::where('status', 'Not yet aired')
+            ->orderByDesc('score')
+            ->take($limit)
+            ->get();
+    }
+
+    public static function getCurrentSeasonAnimeDB($limit = 12)
+    {
+        return self::where('season', now()->format('F'))
+            ->where('year', now()->year)
+            ->orderByDesc('score')
+            ->take($limit)
+            ->get();
+    }
+
+    public static function getPopularAnimeDB($limit = 10)
+    {
+        return self::orderByDesc('members')
+            ->take($limit)
+            ->get();
+    }
+
+
+    // ===================== //
     // === TOP & TRENDING === //
     // ===================== //
     public static function getTopAnime($limit = 10)
@@ -93,9 +129,9 @@ class Anime extends Model
     public static function getTopRatedAnime($limit = 10)
     {
         $response = Http::get("https://api.jikan.moe/v4/top/anime", [
-            'filter' => 'all',
             'limit' => $limit
         ]);
+        // dd($response->json());
         return $response->json();
     }
 
@@ -232,78 +268,10 @@ class Anime extends Model
         return $response->json('data', []);
     }
 
-    public static function getAnimeReviews($animeId, $page = 1)
-    {
-        $response = Http::get("https://api.jikan.moe/v4/anime/$animeId/reviews", [
-            'page' => $page
-        ]);
-        return $response->json('data', []);
-    }
-
-    public static function getAnimeCharacters($animeId)
-    {
-        $response = Http::get("https://api.jikan.moe/v4/anime/$animeId/characters");
-        return $response->json('data', []);
-    }
-
-    public static function getAnimeStaff($animeId)
-    {
-        $response = Http::get("https://api.jikan.moe/v4/anime/$animeId/staff");
-        return $response->json('data', []);
-    }
-
-    public static function getAnimeThemes($animeId)
-    {
-        $response = Http::get("https://api.jikan.moe/v4/anime/$animeId/themes");
-        return $response->json('data', []);
-    }
-
-    public static function getAnimeVideos($animeId)
-    {
-        $response = Http::get("https://api.jikan.moe/v4/anime/$animeId/videos");
-        return $response->json('data', []);
-    }
-
     public static function getAnimeNews($animeId)
     {
         $response = Http::get("https://api.jikan.moe/v4/anime/$animeId/news");
         return $response->json('data', []);
-    }
-
-    // ======================== //
-    // === COMPOSITE FETCH ==== //
-    // ======================== //
-
-    public static function getPopularAnimeCharacters($limit = 5)
-    {
-        $topAnime = self::getTopAnime($limit)['data'] ?? [];
-        $result = [];
-
-        foreach ($topAnime as $anime) {
-            $result[] = [
-                'anime_title' => $anime['title'],
-                'anime_id' => $anime['mal_id'],
-                'characters' => self::getAnimeCharacters($anime['mal_id'])
-            ];
-        }
-
-        return $result;
-    }
-
-    public static function getPopularAnimeThemes($limit = 5)
-    {
-        $topAnime = self::getTopAnime($limit)['data'] ?? [];
-        $result = [];
-
-        foreach ($topAnime as $anime) {
-            $result[] = [
-                'title' => $anime['title'] ?? 'Untitled',
-                'image' => $anime['images']['jpg']['image_url'] ?? null,
-                'themes' => self::getAnimeThemes($anime['mal_id'])
-            ];
-        }
-
-        return $result;
     }
 
     public static function getPopularNewsAnime($limit = 20)

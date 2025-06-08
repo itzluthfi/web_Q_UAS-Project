@@ -202,11 +202,11 @@
                         <div class="space-y-2">
                             <label for="category" class="form-label block text-sm">Pilih Kategori Sinkronisasi:</label>
                             <select name="category" id="category" class="form-select w-full p-3 rounded-xl text-sm">
+                                <option value="all">Semua Kategori</option>
                                 <option value="top">Top Anime</option>
                                 <option value="popular">Popular Anime</option>
                                 <option value="upcoming">Upcoming Anime</option>
                                 <option value="current-season">Current Season Anime</option>
-                                <option value="all">Semua Kategori</option>
                             </select>
                         </div>
 

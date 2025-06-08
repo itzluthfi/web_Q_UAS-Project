@@ -14,8 +14,10 @@ use App\Models\AnimeSyncLog;
 
 class AdminController extends Controller
 {
+
+    // === SHOW PAGE ===
     // Tampilkan semua user
-    public function index()
+    public function users()
     {
         $users = User::all();
         // dd($users);
@@ -41,6 +43,19 @@ class AdminController extends Controller
         return view('auth.dashboard', compact('users'));
     }
 
+    public function comment()
+    {
+        // $comments = Comment::all();
+        return view('admin.comment');
+    }
+    public function syncAnimePage()
+    {
+        // $comments = Comment::all();
+        return view('admin.sinkronisasi');
+    }
+
+
+    // === ACTIONS ===
     // Update user
     public function update(Request $request, $id)
     {
@@ -67,18 +82,6 @@ class AdminController extends Controller
 
         return redirect()->route('admin.users')->with('success', 'User berhasil dihapus.');
     }
-
-    public function comment()
-    {
-        // $comments = Comment::all();
-        return view('admin.comment');
-    }
-    public function syncAnimePage()
-    {
-        // $comments = Comment::all();
-        return view('admin.sinkronisasi');
-    }
-
 
     public function syncAnime(Request $request)
     {
