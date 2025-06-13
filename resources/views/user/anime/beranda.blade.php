@@ -94,57 +94,59 @@
 
             <!-- Carousel Banner Section -->
             <div class="relative overflow-hidden mb-12 rounded-xl glow-effect">
-                <!-- Carousel Container -->
-                {{-- @dd($animeUpcomings); --}}
-                <div class="carousel-container flex transition-transform duration-500 ease-in-out">
-                    <?php foreach (array_slice($animeUpcomings, 0, 5) as $index => $anime): ?>
-                    {{-- @dd($anime); --}}
-                    <!-- Carousel Item -->
-                    <div class="carousel-item w-full flex-shrink-0 relative">
-                        <img src="<?= $anime['images']['jpg']['image_url'] ?? 'https://via.placeholder.com/800x400?text=No+Image' ?>"
-                            alt="<?= htmlspecialchars($anime['title']) ?>"
-                            class="w-full h-[400px] object-cover brightness-50">
-                        <div
-                            class="absolute inset-0 flex flex-col justify-end p-8 bg-gradient-to-t from-black/80 to-transparent">
-                            <span
-                                class="bg-red-700 text-white px-3 py-1 rounded-full text-sm font-medium inline-block mb-3 w-max">
-                                <?= 'Upcoming' ?>
-                            </span>
-                            <h2 class="text-3xl md:text-4xl font-bold text-white mb-2">
-                                <?= htmlspecialchars($anime['title']) ?></h2>
-                            <div class="flex flex-wrap gap-2 mb-3">
-                                <?php foreach (array_slice($anime['genres'] ?? [], 0, 2) as $genre): ?>
+                @if ($animeUpcomings)
+                    <!-- Carousel Container -->
+                    <div class="carousel-container flex transition-transform duration-500 ease-in-out">
+                        <?php foreach (array_slice($animeUpcomings, 0, 5) as $index => $anime): ?>
+                        {{-- @dd($anime); --}}
+                        <!-- Carousel Item -->
+                        <div class="carousel-item w-full flex-shrink-0 relative">
+                            <img src="<?= $anime['images']['jpg']['image_url'] ?? 'https://via.placeholder.com/800x400?text=No+Image' ?>"
+                                alt="<?= htmlspecialchars($anime['title']) ?>"
+                                class="w-full h-[400px] object-cover brightness-50">
+                            <div
+                                class="absolute inset-0 flex flex-col justify-end p-8 bg-gradient-to-t from-black/80 to-transparent">
                                 <span
-                                    class="bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded"><?= htmlspecialchars($genre['name']) ?></span>
-                                <?php endforeach; ?>
-                            </div>
-                            <p class="text-gray-200 mb-4 max-w-2xl">
-                                <?= htmlspecialchars(substr($anime['synopsis'] ?? 'No synopsis available', 0, 150)) ?>...
-                            </p>
-                            <div class="flex space-x-4">
-                                <a href="<?= route('anime.show', ['id' => $anime['mal_id']]) ?>"
-                                    class="bg-purple-700 hover:bg-purple-600 text-white px-6 py-2 rounded-lg transition-all btn-glow flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
-                                        fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                    Details
-                                </a>
-                                <a href="#"
-                                    class="border border-gray-400 hover:border-purple-500 text-white px-6 py-2 rounded-lg transition-all flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
-                                        fill="currentColor">
-                                        <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
-                                    </svg>
-                                    Add to List
-                                </a>
+                                    class="bg-red-700 text-white px-3 py-1 rounded-full text-sm font-medium inline-block mb-3 w-max">
+                                    <?= 'Upcoming' ?>
+                                </span>
+                                <h2 class="text-3xl md:text-4xl font-bold text-white mb-2">
+                                    <?= htmlspecialchars($anime['title']) ?></h2>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <?php foreach (array_slice($anime['genres'] ?? [], 0, 2) as $genre): ?>
+                                    <span
+                                        class="bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded"><?= htmlspecialchars($genre['name']) ?></span>
+                                    <?php endforeach; ?>
+                                </div>
+                                <p class="text-gray-200 mb-4 max-w-2xl">
+                                    <?= htmlspecialchars(substr($anime['synopsis'] ?? 'No synopsis available', 0, 150)) ?>...
+                                </p>
+                                <div class="flex space-x-4">
+                                    <a href="<?= route('anime.show', ['id' => $anime['mal_id']]) ?>"
+                                        class="bg-purple-700 hover:bg-purple-600 text-white px-6 py-2 rounded-lg transition-all btn-glow flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path fill-rule="evenodd"
+                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        Details
+                                    </a>
+                                    <a href="#"
+                                        class="border border-gray-400 hover:border-purple-500 text-white px-6 py-2 rounded-lg transition-all flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
+                                        </svg>
+                                        Add to List
+                                    </a>
+                                </div>
                             </div>
                         </div>
+                        <?php endforeach; ?>
                     </div>
-                    <?php endforeach; ?>
-                </div>
+                @endif
+
 
                 <!-- Carousel Controls -->
                 <button
@@ -201,7 +203,7 @@
                 ];
                 
                 foreach ($studios as $studio): ?>
-                    <a href="{{ route('anime.showByStudio') }}"
+                    <a href="#"
                         class="bg-gray-800/80 hover:bg-gray-700/80 border border-gray-700 rounded-lg p-4 text-center transition-all card-hover">
                         <div
                             class="bg-purple-700/20 rounded-full p-3 mx-auto w-16 h-16 flex items-center justify-center mb-3">
@@ -235,7 +237,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-{{-- @dd($animeTopRated); --}}
+                    {{-- @dd($animeTopRated); --}}
                     @foreach ($animeTopRated as $anime)
                         <div
                             class="bg-gray-800/80 border border-gray-700 rounded-lg p-4 flex items-center gap-4 card-hover">
@@ -322,7 +324,7 @@
                         <div class="p-4">
                             <h3 class="text-xl font-semibold mb-2 text-white"><?= htmlspecialchars($anime['title']) ?></h3>
                             <div class="flex flex-wrap gap-2 mb-3">
-                                @foreach($anime->genres->take(3) as $genre)
+                                @foreach ($anime->genres->take(3) as $genre)
                                     <span class="bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded">
                                         {{ htmlspecialchars($genre['name']) }}
                                     </span>
@@ -343,7 +345,7 @@
                 </div>
             </div>
 
-{{-- @dd($animePopular) --}}
+            {{-- @dd($animePopular) --}}
             <!-- POPULAR This Season Section -->
             <div class="mb-12">
                 <div class="flex justify-between items-center mb-6">
@@ -359,43 +361,47 @@
                         </svg>
                     </a>
                 </div>
-{{-- @dd($animePopular); --}}
+                {{-- @dd($animePopular); --}}
                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    @foreach($animePopular->take(4) as $anime)
+                    @foreach ($animePopular->take(4) as $anime)
                         <div class="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-lg card-hover">
                             <div class="relative overflow-hidden">
                                 <img src="{{ $anime->image_url ?? 'https://via.placeholder.com/400x600?text=No+Image' }}"
-                                     alt="{{ htmlspecialchars($anime->title) }}"
-                                     class="w-full h-56 object-cover transition-transform duration-500 hover:scale-110">
-                                <div class="absolute top-0 right-0 bg-purple-700 text-white px-2 py-1 m-2 rounded text-xs font-bold">
+                                    alt="{{ htmlspecialchars($anime->title) }}"
+                                    class="w-full h-56 object-cover transition-transform duration-500 hover:scale-110">
+                                <div
+                                    class="absolute top-0 right-0 bg-purple-700 text-white px-2 py-1 m-2 rounded text-xs font-bold">
                                     {{ number_format($anime->score ?? 0, 1) }} ★
                                 </div>
-                                <div class="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 m-2 rounded-r-lg text-xs font-bold flex items-center">
+                                <div
+                                    class="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 m-2 rounded-r-lg text-xs font-bold flex items-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20"
-                                         fill="currentColor">
+                                        fill="currentColor">
                                         <path fill-rule="evenodd"
-                                              d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                                              clip-rule="evenodd" />
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                                            clip-rule="evenodd" />
                                     </svg>
                                     POPULAR
                                 </div>
                                 @if ($anime->status === 'Currently Airing')
-                                    <div class="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 m-2 rounded-r-lg text-xs font-bold flex items-center">
+                                    <div
+                                        class="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 m-2 rounded-r-lg text-xs font-bold flex items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20"
-                                             fill="currentColor">
+                                            fill="currentColor">
                                             <path fill-rule="evenodd"
-                                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                                                  clip-rule="evenodd" />
+                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                                                clip-rule="evenodd" />
                                         </svg>
                                         NEW
                                     </div>
                                 @endif
                             </div>
                             <div class="p-4">
-                                <h3 class="text-xl font-semibold mb-2 text-white">{{ htmlspecialchars($anime->title) }}</h3>
+                                <h3 class="text-xl font-semibold mb-2 text-white">{{ htmlspecialchars($anime->title) }}
+                                </h3>
                                 <div class="flex flex-wrap gap-2 mb-3">
                                     {{-- Contoh ambil 2 genre --}}
-                                    @foreach($anime->genres->take(2) as $genre)
+                                    @foreach ($anime->genres->take(2) as $genre)
                                         <span class="bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded">
                                             {{ htmlspecialchars($genre['name']) }}
                                         </span>
@@ -408,7 +414,7 @@
                                     {{ htmlspecialchars(substr($anime->synopsis ?? 'No synopsis available', 0, 100)) }}...
                                 </p>
                                 <a href="{{ route('anime.show', ['id' => $anime->mal_id]) }}"
-                                   class="inline-block mt-4 bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-600 transition-colors btn-glow">
+                                    class="inline-block mt-4 bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-600 transition-colors btn-glow">
                                     Details
                                 </a>
                             </div>

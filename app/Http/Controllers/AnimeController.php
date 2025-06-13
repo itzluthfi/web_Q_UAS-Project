@@ -24,25 +24,25 @@ class AnimeController extends Controller
 
     public function beranda()
     {
-        $animeUpcomings = Cache::remember('upcoming_anime', 60, function () {
-            return $this->animeModel->getUpcomingAnime(5)['data'] ?? [];
-        });
+        // $animeUpcomings = Cache::remember('upcoming_anime', 60, function () {
+        //     return $this->animeModel->getUpcomingAnime(5)['data'] ?? [];
+        // });
 
         $animeTopRated = Cache::remember('top_rated_anime', 60, function () {
             return $this->animeModel->getTopRatedAnimeDB(6) ?? [];
         });
         // dd($animeTopRated);
 
-        $lastestNews = Cache::remember('latest_news', 60, function () {
-            return $this->animeModel->getPopularNewsAnime(3);
-        });
+        // $lastestNews = Cache::remember('latest_news', 60, function () {
+        //     return $this->animeModel->getPopularNewsAnime(3);
+        // });
 
-        $genres = Cache::remember('all_genres', 60, function () {
-            return $this->animeModel->getAllGenres(10)['data'] ?? [];
-        });
+        // $genres = Cache::remember('all_genres', 60, function () {
+        //     return $this->animeModel->getAllGenres(10)['data'] ?? [];
+        // });
 
         $animeCurrentSeasonal = Cache::remember('current_seasonal_anime', 60, function () {
-            return $this->animeModel->getCurrentSeasonAnimeDB(4)?? [];
+            return $this->animeModel->getCurrentSeasonAnimeDB(4) ?? [];
         });
 
 
@@ -50,7 +50,10 @@ class AnimeController extends Controller
             return $this->animeModel->getPopularAnimeDB(6) ?? [];
         });
 
-// dd($animeCurrentSeasonal);
+        // dd($animeCurrentSeasonal);
+        $animeUpcomings = [];
+        $genres = [];
+        $lastestNews = [];
 
         return view('user.anime.beranda', compact(
             'animePopular',

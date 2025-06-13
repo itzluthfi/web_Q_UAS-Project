@@ -30,7 +30,7 @@ class Anime extends Model
         'aired_to',
     ];
 
-public function comments()
+    public function comments()
     {
         return $this->hasMany(Comment::class, 'anime_id', 'mal_id')
             ->whereNull('parent_id') // Hanya ambil komentar utama
@@ -88,20 +88,20 @@ public function comments()
     public static function getCurrentSeasonAnimeDB($limit = 10)
     {
         return self::where('category', 'current-season')
-        ->orderByRaw("FIELD(season, 'Winter', 'Spring', 'Summer', 'Fall')")
-        ->orderByDesc('year')
-        ->take($limit)
-        ->get();
+            ->orderByRaw("FIELD(season, 'Winter', 'Spring', 'Summer', 'Fall')")
+            ->orderByDesc('year')
+            ->take($limit)
+            ->get();
     }
-    
+
 
     public static function getPopularAnimeDB($limit = 10)
     {
         return self::orderByDesc('popularity')
             ->take($limit)
             ->get();
-
     }
+    public static function getLastestNewsDB($limit = 10) {}
 
 
     // ===================== //
