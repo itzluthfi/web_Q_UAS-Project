@@ -10,6 +10,7 @@ use App\Models\Genre;
 use App\Models\AnimeDetail;
 use App\Models\Category;
 use App\Models\AnimeSyncLog;
+use App\Models\Comment;
 
 
 class AdminController extends Controller
@@ -45,8 +46,9 @@ class AdminController extends Controller
 
     public function comment()
     {
-        // $comments = Comment::all();
-        return view('admin.comment');
+        $comments = Comment::with(['user', 'anime'])->get();
+        // dd($comments);
+        return view('admin.comment', compact('comments'));
     }
     public function syncAnimePage()
     {
@@ -155,10 +157,12 @@ class AdminController extends Controller
                             'category'      => $category,
                             'score'         => $animeData['score'],
                             'rank'          => $animeData['rank'],
+                            'popularity'    => $animeData['popularity'],
                             'status'        => $animeData['status'],
                             'season'        => $animeData['season'] ?? null,
                             'year'          => $animeData['year'] ?? null,
                             'image_url'     => $animeData['images']['jpg']['image_url'] ?? null,
+                            'large_image_url' => $animeData['images']['jpg']['large_image_url'] ?? null,
                             'aired_from'    => $animeData['aired']['from'] ?? null,
                             'aired_to'      => $animeData['aired']['to'] ?? null,
                         ]
@@ -176,9 +180,9 @@ class AdminController extends Controller
                     // Ambil detail tambahan dari endpoint detail
                     $detailResponse = Http::timeout(20)->retry(3, 500)->get("https://api.jikan.moe/v4/anime/{$animeData['mal_id']}");
                     // dd($detailResponse);
+                
                     if ($detailResponse->ok()) {
                         $detailData = $detailResponse['data'];
-
                         AnimeDetail::updateOrCreate(
                             ['anime_id' => $animeModel->id],
                             [

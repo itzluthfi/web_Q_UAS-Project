@@ -265,6 +265,7 @@
         </div>
         
         <!-- Comments Section -->
+        {{-- @dd($comments); --}}
         <div class="dashboard-card p-6 mb-8">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-xl font-semibold text-purple-400">Kelola Komentar</h2>
@@ -296,190 +297,78 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-700">
-                        <!-- Comment Row 1 -->
-                        <tr>
+                        {{-- @dd($comments); --}}
+                        @foreach ($comments as $comment)
+                        <tr id="comment-row-{{ $comment->id }}">
+                            <!-- Username -->
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <div class="h-8 w-8 rounded-full bg-purple-600 flex items-center justify-center mr-3">
-                                        <span class="font-bold text-white">N</span>
+                                        <span class="font-bold text-white">
+                                            {{ strtoupper(substr($comment->user->username ?? 'User', 0, 1)) }}
+                                        </span>
                                     </div>
-                                    <div class="text-sm font-medium text-white">naruto_uzumaki</div>
+                                    <div class="text-sm font-medium text-white">
+                                        {{ $comment->user->username ?? 'Anonymous' }}
+                                    </div>
                                 </div>
                             </td>
+
+                            <!-- Isi Komentar -->
                             <td class="px-6 py-4">
-                                <p class="text-sm text-gray-300 comment-text">Anime ini sangat bagus! Saya sangat menyukai alur ceritanya dan karakter-karakternya sangat menarik. Tidak sabar menunggu episode selanjutnya!</p>
+                                <p class="text-sm text-gray-300 comment-text" id="comment-text-{{ $comment->id }}">
+                                    {{ $comment->content }}
+                                </p>
                             </td>
+
+                            <!-- Judul Anime -->
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="badge badge-anime">One Piece</span>
+                                <span class="badge badge-anime">
+                                    {{ $comment->anime->title ?? 'Unknown Title' }}
+                                </span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">2023-05-20 14:30</td>
+
+                            <!-- Tanggal -->
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                {{ \Carbon\Carbon::parse($comment->created_at)->format('Y-m-d H:i') }}
+                            </td>
+
+                            <!-- Aksi -->
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="/anime/one-piece#comment-1" class="text-blue-400 hover:text-blue-300 mr-3" title="Lihat Komentar">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                                        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
-                                    </svg>
+                                <a href="/anime/show/{{ $comment->anime_id }}" 
+                                class="text-blue-400 hover:text-blue-300 mr-3" 
+                                title="Lihat Komentar">
+                                    <!-- SVG Icon -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                    <path fill-rule="evenodd"
+                                        d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
                                 </a>
-                                <button onclick="openEditModal('1')" class="text-purple-400 hover:text-purple-300 mr-3" title="Edit Komentar">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                <button onclick="openEditModal('{{ $comment->id }}', event)" 
+                                    class="text-purple-400 hover:text-purple-300 mr-3" 
+                                    title="Edit Komentar">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path
+                                            d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                                     </svg>
                                 </button>
-                                <button onclick="confirmDelete('1')" class="text-red-400 hover:text-red-300" title="Hapus Komentar">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                <button onclick="confirmDelete('{{ $comment->id }}', event)" 
+                                    class="text-red-400 hover:text-red-300" 
+                                    title="Hapus Komentar">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                            clip-rule="evenodd" />
                                     </svg>
                                 </button>
                             </td>
                         </tr>
-                        
-                        <!-- Comment Row 2 -->
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="h-8 w-8 rounded-full bg-purple-600 flex items-center justify-center mr-3">
-                                        <span class="font-bold text-white">S</span>
-                                    </div>
-                                    <div class="text-sm font-medium text-white">sasuke_uchiha</div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4">
-                                <p class="text-sm text-gray-300 comment-text">Manga ini terlalu lambat perkembangannya. Sudah 3 chapter dan ceritanya masih di tempat yang sama. Saya harap penulis bisa mempercepat alur ceritanya.</p>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="badge badge-manga">Naruto</span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">2023-05-19 09:15</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="/manga/naruto#comment-2" class="text-blue-400 hover:text-blue-300 mr-3" title="Lihat Komentar">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                                        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
-                                    </svg>
-                                </a>
-                                <button onclick="openEditModal('2')" class="text-purple-400 hover:text-purple-300 mr-3" title="Edit Komentar">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                                    </svg>
-                                </button>
-                                <button onclick="confirmDelete('2')" class="text-red-400 hover:text-red-300" title="Hapus Komentar">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>
-                        
-                        <!-- Comment Row 3 -->
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="h-8 w-8 rounded-full bg-purple-600 flex items-center justify-center mr-3">
-                                        <span class="font-bold text-white">S</span>
-                                    </div>
-                                    <div class="text-sm font-medium text-white">sakura_haruno</div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4">
-                                <p class="text-sm text-gray-300 comment-text">Animasi pertarungan di episode ini luar biasa! Studio animasi benar-benar melakukan pekerjaan yang hebat. Saya menonton adegan pertarungan itu berulang kali.</p>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="badge badge-anime">Demon Slayer</span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">2023-05-18 22:45</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="/anime/demon-slayer#comment-3" class="text-blue-400 hover:text-blue-300 mr-3" title="Lihat Komentar">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                                        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
-                                    </svg>
-                                </a>
-                                <button onclick="openEditModal('3')" class="text-purple-400 hover:text-purple-300 mr-3" title="Edit Komentar">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                                    </svg>
-                                </button>
-                                <button onclick="confirmDelete('3')" class="text-red-400 hover:text-red-300" title="Hapus Komentar">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>
-                        
-                        <!-- Comment Row 4 -->
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="h-8 w-8 rounded-full bg-purple-600 flex items-center justify-center mr-3">
-                                        <span class="font-bold text-white">H</span>
-                                    </div>
-                                    <div class="text-sm font-medium text-white">hinata_hyuga</div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4">
-                                <p class="text-sm text-gray-300 comment-text">Saya pikir ending manga ini sangat mengecewakan. Setelah bertahun-tahun mengikuti cerita, saya berharap lebih dari ini. Banyak plot hole yang tidak terselesaikan.</p>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="badge badge-manga">Bleach</span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">2023-05-17 16:20</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="/manga/bleach#comment-4" class="text-blue-400 hover:text-blue-300 mr-3" title="Lihat Komentar">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                                        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
-                                    </svg>
-                                </a>
-                                <button onclick="openEditModal('4')" class="text-purple-400 hover:text-purple-300 mr-3" title="Edit Komentar">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                                    </svg>
-                                </button>
-                                <button onclick="confirmDelete('4')" class="text-red-400 hover:text-red-300" title="Hapus Komentar">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>
-                        
-                        <!-- Comment Row 5 -->
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="h-8 w-8 rounded-full bg-purple-600 flex items-center justify-center mr-3">
-                                        <span class="font-bold text-white">S</span>
-                                    </div>
-                                    <div class="text-sm font-medium text-white">shikamaru_nara</div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4">
-                                <p class="text-sm text-gray-300 comment-text">Film anime ini adalah salah satu yang terbaik yang pernah saya tonton. Cerita, animasi, musik, semuanya sempurna. Saya sangat merekomendasikannya kepada semua penggemar anime.</p>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="badge badge-anime">Your Name</span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">2023-05-16 11:05</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="/anime/your-name#comment-5" class="text-blue-400 hover:text-blue-300 mr-3" title="Lihat Komentar">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                                        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
-                                    </svg>
-                                </a>
-                                <button onclick="openEditModal('5')" class="text-purple-400 hover:text-purple-300 mr-3" title="Edit Komentar">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                                    </svg>
-                                </button>
-                                <button onclick="confirmDelete('5')" class="text-red-400 hover:text-red-300" title="Hapus Komentar">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -511,9 +400,21 @@
     </main>
     @endsection
 
+    <script type="application/json" id="comment-data">
+        {
+            @foreach ($comments as $comment)
+                "{{ $comment->id }}": {
+                    "username": "{{ addslashes($comment->user->username ?? 'Anonymous') }}",
+                    "content": "{{ addslashes($comment->anime->title ?? 'Unknown Title') }}",
+                    "comment": "{{ addslashes($comment->content) }}"
+                }@if (!$loop->last),@endif
+            @endforeach
+        }
+        </script>
+
     <!-- Edit Comment Modal -->
-    <div id="editModal" class="fixed inset-0 z-50 overflow-y-auto hidden">
-        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div id="editModal" class="fixed inset-0 z-50 overflow-y-auto hidden flex items-center justify-center">
+        <div class="w-full max-w-lg mx-4">
             <div class="fixed inset-0 transition-opacity" aria-hidden="true">
                 <div class="absolute inset-0 bg-gray-900 opacity-75"></div>
             </div>
@@ -562,44 +463,48 @@
     </div>
 
     <!-- Delete Confirmation Modal -->
-    <div id="deleteModal" class="fixed inset-0 z-50 overflow-y-auto hidden">
-        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                <div class="absolute inset-0 bg-gray-900 opacity-75"></div>
-            </div>
-
-            <!-- Modal panel -->
-            <div class="inline-block align-bottom bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <div class="bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="sm:flex sm:items-start">
-                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                            </svg>
-                        </div>
-                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                            <h3 class="text-lg leading-6 font-medium text-white" id="modal-title">
-                                Hapus Komentar
-                            </h3>
-                            <div class="mt-2">
-                                <p class="text-sm text-gray-300">
-                                    Apakah Anda yakin ingin menghapus komentar ini? Tindakan ini tidak dapat dibatalkan.
-                                </p>
-                            </div>
-                        </div>
+<div id="deleteModal" class="fixed inset-0 z-50 hidden">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity"></div>
+    
+    <!-- Modal Container - Centered -->
+    <div class="fixed inset-0 flex items-center justify-center p-4">
+        <!-- Modal Panel -->
+        <div class="relative bg-gray-800 rounded-lg shadow-xl max-w-lg w-full mx-auto">
+            <!-- Modal Content -->
+            <div class="px-6 pt-6 pb-4">
+                <div class="flex items-center justify-center mb-4">
+                    <!-- Warning Icon -->
+                    <div class="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
                     </div>
                 </div>
-                <div class="bg-gray-900 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button type="button" onclick="deleteComment()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
-                        Hapus
-                    </button>
-                    <button type="button" onclick="closeDeleteModal()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-600 shadow-sm px-4 py-2 bg-gray-800 text-base font-medium text-gray-300 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                        Batal
-                    </button>
+                
+                <!-- Modal Title and Description - Centered -->
+                <div class="text-center">
+                    <h3 class="text-lg font-medium text-white mb-2">
+                        Hapus Komentar
+                    </h3>
+                    <p class="text-sm text-gray-300">
+                        Apakah Anda yakin ingin menghapus komentar ini? Tindakan ini tidak dapat dibatalkan.
+                    </p>
                 </div>
+            </div>
+            
+            <!-- Modal Actions - Centered -->
+            <div class="bg-gray-900 px-6 py-4 flex justify-center space-x-3">
+                <button type="button" onclick="deleteComment()" class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-6 py-2 bg-red-600 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">
+                    Hapus
+                </button>
+                <button type="button" onclick="closeDeleteModal()" class="inline-flex justify-center rounded-md border border-gray-600 shadow-sm px-6 py-2 bg-gray-800 text-sm font-medium text-gray-300 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
+                    Batal
+                </button>
             </div>
         </div>
     </div>
+</div>
 
     @push('scripts')
     <!-- JavaScript for Modal and Sidebar Functionality -->
@@ -687,132 +592,318 @@
             sidebarOverlay.addEventListener('click', closeMobileSidebar);
         }
         
-        // Edit Modal Functions
-        const editModal = document.getElementById('editModal');
-        const deleteModal = document.getElementById('deleteModal');
-        let currentCommentId = null;
-        
-        // Comment data (in a real app, this would come from a database)
-        const commentData = {
-            '1': {
-                username: 'naruto_uzumaki',
-                content: 'One Piece',
-                comment: 'Anime ini sangat bagus! Saya sangat menyukai alur ceritanya dan karakter-karakternya sangat menarik. Tidak sabar menunggu episode selanjutnya!'
-            },
-            '2': {
-                username: 'sasuke_uchiha',
-                content: 'Naruto',
-                comment: 'Manga ini terlalu lambat perkembangannya. Sudah 3 chapter dan ceritanya masih di tempat yang sama. Saya harap penulis bisa mempercepat alur ceritanya.'
-            },
-            '3': {
-                username: 'sakura_haruno',
-                content: 'Demon Slayer',
-                comment: 'Animasi pertarungan di episode ini luar biasa! Studio animasi benar-benar melakukan pekerjaan yang hebat. Saya menonton adegan pertarungan itu berulang kali.'
-            },
-            '4': {
-                username: 'hinata_hyuga',
-                content: 'Bleach',
-                comment: 'Saya pikir ending manga ini sangat mengecewakan. Setelah bertahun-tahun mengikuti cerita, saya berharap lebih dari ini. Banyak plot hole yang tidak terselesaikan.'
-            },
-            '5': {
-                username: 'shikamaru_nara',
-                content: 'Your Name',
-                comment: 'Film anime ini adalah salah satu yang terbaik yang pernah saya tonton. Cerita, animasi, musik, semuanya sempurna. Saya sangat merekomendasikannya kepada semua penggemar anime.'
-            }
-        };
-        
-        function openEditModal(commentId) {
-            currentCommentId = commentId;
-            const comment = commentData[commentId];
+       // Edit Modal Functions - Fixed Version
+        document.addEventListener('DOMContentLoaded', function() {
+            const editModal = document.getElementById('editModal');
+            const deleteModal = document.getElementById('deleteModal');
+            let currentCommentId = null;
             
-            document.getElementById('edit-username').value = comment.username;
-            document.getElementById('edit-content-type').value = comment.content;
-            document.getElementById('edit-comment').value = comment.comment;
-            document.getElementById('edit-comment-id').value = commentId;
-            
-            editModal.classList.remove('hidden');
-        }
-        
-        function closeEditModal() {
-            editModal.classList.add('hidden');
-        }
-        
-        function saveComment() {
-            const commentId = document.getElementById('edit-comment-id').value;
-            const newComment = document.getElementById('edit-comment').value;
-            
-            // In a real app, you would send this to the server
-            // For this demo, we'll just update our local data
-            commentData[commentId].comment = newComment;
-            
-            // Update the UI
-            const commentElements = document.querySelectorAll('.comment-text');
-            commentElements[parseInt(commentId) - 1].textContent = newComment;
-            
-            closeEditModal();
-            
-            // Show success notification
-            alert('Komentar berhasil diperbarui!');
-        }
-        
-        function confirmDelete(commentId) {
-            currentCommentId = commentId;
-            deleteModal.classList.remove('hidden');
-        }
-        
-        function closeDeleteModal() {
-            deleteModal.classList.add('hidden');
-        }
-        
-        function deleteComment() {
-            // In a real app, you would send this to the server
-            // For this demo, we'll just hide the row
-            const commentRow = document.querySelector(`tr:nth-child(${currentCommentId})`);
-            if (commentRow) {
-                commentRow.style.display = 'none';
+            // Get comment data from script tag
+            let commentData = {};
+            try {
+                const commentDataEl = document.getElementById('comment-data');
+                if (commentDataEl) {
+                    commentData = JSON.parse(commentDataEl.textContent);
+                    console.log("Comment data loaded:", commentData);
+                }
+            } catch (error) {
+                console.error("Error parsing comment data:", error);
             }
             
-            closeDeleteModal();
-            
-            // Show success notification
-            alert('Komentar berhasil dihapus!');
-        }
-        
-        // Handle window resize for sidebar
-        window.addEventListener('resize', function() {
-            if (window.innerWidth >= 768) {
-                // Reset mobile sidebar state
-                sidebar.classList.remove('show');
-                sidebarOverlay.classList.remove('show');
-                document.body.style.overflow = '';
+            // Open Edit Modal Function
+            window.openEditModal = function(commentId, event) {
+                // Prevent event bubbling
+                if (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
                 
-                // Maintain desktop sidebar state
-                if (sidebar.classList.contains('collapsed')) {
-                    mainWrapper.style.marginLeft = '70px';
+                console.log("openEditModal dipanggil dengan ID:", commentId);
+                
+                if (!editModal) {
+                    console.error("Edit modal tidak ditemukan!");
+                    return;
+                }
+                
+                // Get comment data by ID
+                const comment = commentData[commentId];
+                
+                if (!comment) {
+                    console.error("Data komentar tidak ditemukan untuk ID:", commentId);
+                    console.log("Available comment IDs:", Object.keys(commentData));
+                    return;
+                }
+                
+                // Fill form with comment data
+                const editUsernameInput = document.getElementById('edit-username');
+                const editContentTypeInput = document.getElementById('edit-content-type');
+                const editCommentTextarea = document.getElementById('edit-comment');
+                const editCommentIdInput = document.getElementById('edit-comment-id');
+                
+                if (editUsernameInput) editUsernameInput.value = comment.username || '';
+                if (editContentTypeInput) editContentTypeInput.value = comment.content || '';
+                if (editCommentTextarea) editCommentTextarea.value = comment.comment || '';
+                if (editCommentIdInput) editCommentIdInput.value = commentId;
+                
+                // Show modal with delay to prevent immediate closing
+                setTimeout(() => {
+                    editModal.classList.remove('hidden');
+                    editModal.style.display = 'flex';
+                    document.body.style.overflow = 'hidden'; // Prevent background scroll
+                    
+                    console.log("Edit modal ditampilkan");
+                }, 10);
+            };
+            
+            // Close Edit Modal Function
+            window.closeEditModal = function() {
+                if (editModal) {
+                    editModal.classList.add('hidden');
+                    editModal.style.display = 'none';
+                    document.body.style.overflow = ''; // Restore scroll
+                    console.log("Edit modal ditutup");
+                }
+            };
+            
+            // Save Comment Function
+            window.saveComment = function() {
+                const commentIdInput = document.getElementById('edit-comment-id');
+                const newCommentInput = document.getElementById('edit-comment');
+                
+                if (!commentIdInput || !newCommentInput) {
+                    console.error("Input elements tidak ditemukan");
+                    return;
+                }
+                
+                const commentId = commentIdInput.value;
+                const newComment = newCommentInput.value;
+                
+                if (!commentId || !newComment.trim()) {
+                    alert('Harap isi komentar!');
+                    return;
+                }
+                
+                // Update local data
+                if (commentData[commentId]) {
+                    commentData[commentId].comment = newComment;
+                }
+                
+                // Update UI - find and update the comment text in the table
+                const commentTextElement = document.getElementById(`comment-text-${commentId}`);
+                if (commentTextElement) {
+                    commentTextElement.textContent = newComment;
+                }
+                
+                // Close modal
+                closeEditModal();
+                
+                // Show success notification
+                showNotification('Komentar berhasil diperbarui!', 'success');
+                
+                // In real application, you would send AJAX request here:
+                /*
+                fetch(`/admin/comments/${commentId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        content: newComment
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showNotification('Komentar berhasil diperbarui!', 'success');
+                    } else {
+                        showNotification('Gagal memperbarui komentar!', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('Terjadi kesalahan!', 'error');
+                });
+                */
+            };
+            
+            // Confirm Delete Function
+            window.confirmDelete = function(commentId, event) {
+                // Prevent event bubbling
+                if (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                
+                console.log("confirmDelete dipanggil dengan ID:", commentId);
+                
+                if (!deleteModal) {
+                    console.error("Delete modal tidak ditemukan!");
+                    return;
+                }
+                
+                currentCommentId = commentId;
+                
+                // Show modal with delay to prevent immediate closing
+                setTimeout(() => {
+                    deleteModal.classList.remove('hidden');
+                    deleteModal.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                    
+                    console.log("Delete modal ditampilkan");
+                }, 10);
+            };
+            
+            // Close Delete Modal Function
+            window.closeDeleteModal = function() {
+                if (deleteModal) {
+                    deleteModal.classList.add('hidden');
+                    deleteModal.style.display = 'none';
+                    document.body.style.overflow = '';
+                    currentCommentId = null;
+                    console.log("Delete modal ditutup");
+                }
+            };
+            
+            // Delete Comment Function
+            window.deleteComment = function() {
+                if (!currentCommentId) {
+                    console.error("No comment ID selected for deletion");
+                    return;
+                }
+                
+                // Find and hide the comment row
+                const commentRow = document.getElementById(`comment-row-${currentCommentId}`);
+                if (commentRow) {
+                    commentRow.style.display = 'none';
+                    
+                    // Remove from local data
+                    if (commentData[currentCommentId]) {
+                        delete commentData[currentCommentId];
+                    }
+                    
+                    // Close modal
+                    closeDeleteModal();
+                    
+                    // Show success notification
+                    showNotification('Komentar berhasil dihapus!', 'success');
+                    
+                    // In real application, you would send AJAX request here:
+                    /*
+                    fetch(`/admin/comments/${currentCommentId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showNotification('Komentar berhasil dihapus!', 'success');
+                        } else {
+                            showNotification('Gagal menghapus komentar!', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showNotification('Terjadi kesalahan!', 'error');
+                    });
+                    */
                 } else {
-                    mainWrapper.style.marginLeft = '260px';
+                    console.error("Comment row tidak ditemukan:", currentCommentId);
                 }
-            } else {
-                // Reset to mobile view
-                mainWrapper.style.marginLeft = '0';
-            }
-        });
-        
-        // Close modal when clicking outside
-        window.addEventListener('click', function(e) {
-            if (editModal && !editModal.classList.contains('hidden')) {
-                const modalContent = editModal.querySelector('.inline-block');
-                if (modalContent && !modalContent.contains(e.target) && e.target !== modalContent) {
-                    closeEditModal();
-                }
+            };
+            
+            // Notification Function
+            function showNotification(message, type = 'info') {
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg text-white transition-all duration-300 ${
+                    type === 'success' ? 'bg-green-600' : 
+                    type === 'error' ? 'bg-red-600' : 
+                    'bg-blue-600'
+                }`;
+                notification.textContent = message;
+                
+                // Add to page
+                document.body.appendChild(notification);
+                
+                // Remove after 3 seconds
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 3000);
             }
             
-            if (deleteModal && !deleteModal.classList.contains('hidden')) {
-                const modalContent = deleteModal.querySelector('.inline-block');
-                if (modalContent && !modalContent.contains(e.target) && e.target !== modalContent) {
-                    closeDeleteModal();
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                // Add delay to prevent immediate triggering
+                setTimeout(() => {
+                    // Close edit modal when clicking outside
+                    if (editModal && !editModal.classList.contains('hidden')) {
+                        const modalContent = editModal.querySelector('.inline-block');
+                        if (modalContent && !modalContent.contains(e.target) && e.target !== editModal) {
+                            console.log("Closing edit modal due to outside click");
+                            closeEditModal();
+                        }
+                    }
+                    
+                    // Close delete modal when clicking outside
+                    if (deleteModal && !deleteModal.classList.contains('hidden')) {
+                        const modalContent = deleteModal.querySelector('.inline-block');
+                        if (modalContent && !modalContent.contains(e.target) && e.target !== deleteModal) {
+                            console.log("Closing delete modal due to outside click");
+                            closeDeleteModal();
+                        }
+                    }
+                }, 100);
+            });
+            
+            // Handle ESC key to close modals
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    if (editModal && !editModal.classList.contains('hidden')) {
+                        closeEditModal();
+                    }
+                    if (deleteModal && !deleteModal.classList.contains('hidden')) {
+                        closeDeleteModal();
+                    }
                 }
-            }
+            });
+            
+            // Handle window resize for sidebar (if needed)
+            window.addEventListener('resize', function() {
+                const sidebar = document.querySelector('.sidebar');
+                const mainWrapper = document.querySelector('.main-wrapper');
+                const sidebarOverlay = document.querySelector('.sidebar-overlay');
+                
+                if (sidebar && mainWrapper) {
+                    if (window.innerWidth >= 768) {
+                        // Reset mobile sidebar state
+                        if (sidebar.classList.contains('show')) {
+                            sidebar.classList.remove('show');
+                        }
+                        if (sidebarOverlay && sidebarOverlay.classList.contains('show')) {
+                            sidebarOverlay.classList.remove('show');
+                        }
+                        document.body.style.overflow = '';
+                        
+                        // Maintain desktop sidebar state
+                        if (sidebar.classList.contains('collapsed')) {
+                            mainWrapper.style.marginLeft = '70px';
+                        } else {
+                            mainWrapper.style.marginLeft = '260px';
+                        }
+                    } else {
+                        // Reset to mobile view
+                        mainWrapper.style.marginLeft = '0';
+                    }
+                }
+            });
+            
+            console.log("Modal functions initialized successfully");
         });
     </script>
     @endpush

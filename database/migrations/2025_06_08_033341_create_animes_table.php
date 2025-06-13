@@ -23,11 +23,13 @@ return new class extends Migration
             $table->string('duration')->nullable(); // "24 min per ep"
             $table->float('score')->nullable();
             $table->integer('rank')->nullable();
+            $table->integer('popularity')->nullable();
             $table->string('status')->nullable(); // Airing, Finished, etc
             $table->string('season')->nullable(); // spring, fall, etc
             $table->integer('year')->nullable();
             $table->string('category')->nullable();
             $table->string('image_url')->nullable();
+            $table->string('large_image_url')->nullable();
             $table->timestamp('aired_from')->nullable();
             $table->timestamp('aired_to')->nullable();
             $table->timestamps();

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Anime;
+use App\Models\User;
 
 class Comment extends Model
 {
@@ -21,8 +23,10 @@ class Comment extends Model
      */
     public function anime()
     {
-        return $this->belongsTo(Anime::class);
+        return $this->belongsTo(Anime::class, 'anime_id', 'mal_id');
     }
+    
+
 
     /**
      * Relationship with User.

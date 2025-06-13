@@ -95,11 +95,13 @@
             <!-- Carousel Banner Section -->
             <div class="relative overflow-hidden mb-12 rounded-xl glow-effect">
                 <!-- Carousel Container -->
+                {{-- @dd($animeUpcomings); --}}
                 <div class="carousel-container flex transition-transform duration-500 ease-in-out">
                     <?php foreach (array_slice($animeUpcomings, 0, 5) as $index => $anime): ?>
+                    {{-- @dd($anime); --}}
                     <!-- Carousel Item -->
                     <div class="carousel-item w-full flex-shrink-0 relative">
-                        <img src="<?= $anime['image_url'] ?? 'https://via.placeholder.com/800x400?text=No+Image' ?>"
+                        <img src="<?= $anime['images']['jpg']['image_url'] ?? 'https://via.placeholder.com/800x400?text=No+Image' ?>"
                             alt="<?= htmlspecialchars($anime['title']) ?>"
                             class="w-full h-[400px] object-cover brightness-50">
                         <div
@@ -233,7 +235,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
+{{-- @dd($animeTopRated); --}}
                     @foreach ($animeTopRated as $anime)
                         <div
                             class="bg-gray-800/80 border border-gray-700 rounded-lg p-4 flex items-center gap-4 card-hover">
@@ -282,12 +284,12 @@
                         </svg>
                     </a>
                 </div>
-
+                {{-- @dd($animeCurrentSeasonal); --}}
                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <?php foreach (array_slice($animeCurrentSeasonal, 0, 4) as $anime): ?>
+                    <?php foreach ($animeCurrentSeasonal->take(4) as $anime): ?>
                     <div class="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-lg card-hover">
                         <div class="relative overflow-hidden">
-                            <img src="<?= $anime['images']['jpg']['large_image_url'] ?? 'https://via.placeholder.com/400x600?text=No+Image' ?>"
+                            <img src="<?= $anime['image_url'] ?? 'https://via.placeholder.com/400x600?text=No+Image' ?>"
                                 alt="<?= htmlspecialchars($anime['title']) ?>"
                                 class="w-full h-56 object-cover transition-transform duration-500 hover:scale-110">
                             <div
@@ -320,10 +322,11 @@
                         <div class="p-4">
                             <h3 class="text-xl font-semibold mb-2 text-white"><?= htmlspecialchars($anime['title']) ?></h3>
                             <div class="flex flex-wrap gap-2 mb-3">
-                                <?php foreach (array_slice($anime['genres'] ?? [], 0, 2) as $genre): ?>
-                                <span
-                                    class="bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded"><?= htmlspecialchars($genre['name']) ?></span>
-                                <?php endforeach; ?>
+                                @foreach($anime->genres->take(3) as $genre)
+                                    <span class="bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded">
+                                        {{ htmlspecialchars($genre['name']) }}
+                                    </span>
+                                @endforeach
                             </div>
                             <p class="text-sm text-gray-400 mb-3"><strong>Airing:</strong>
                                 <?= $anime['season'] ?? 'Unknown' ?> <?= $anime['year'] ?? '' ?></p>
@@ -340,7 +343,7 @@
                 </div>
             </div>
 
-
+{{-- @dd($animePopular) --}}
             <!-- POPULAR This Season Section -->
             <div class="mb-12">
                 <div class="flex justify-between items-center mb-6">
@@ -356,61 +359,61 @@
                         </svg>
                     </a>
                 </div>
-
+{{-- @dd($animePopular); --}}
                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <?php foreach (array_slice($animePopular, 0, 4) as $anime): ?>
-                    <div class="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-lg card-hover">
-                        <div class="relative overflow-hidden">
-                            <img src="<?= $anime['images']['jpg']['large_image_url'] ?? 'https://via.placeholder.com/400x600?text=No+Image' ?>"
-                                alt="<?= htmlspecialchars($anime['title']) ?>"
-                                class="w-full h-56 object-cover transition-transform duration-500 hover:scale-110">
-                            <div
-                                class="absolute top-0 right-0 bg-purple-700 text-white px-2 py-1 m-2 rounded text-xs font-bold">
-                                <?= number_format($anime['score'] ?? 0, 1) ?> ★
+                    @foreach($animePopular->take(4) as $anime)
+                        <div class="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-lg card-hover">
+                            <div class="relative overflow-hidden">
+                                <img src="{{ $anime->image_url ?? 'https://via.placeholder.com/400x600?text=No+Image' }}"
+                                     alt="{{ htmlspecialchars($anime->title) }}"
+                                     class="w-full h-56 object-cover transition-transform duration-500 hover:scale-110">
+                                <div class="absolute top-0 right-0 bg-purple-700 text-white px-2 py-1 m-2 rounded text-xs font-bold">
+                                    {{ number_format($anime->score ?? 0, 1) }} ★
+                                </div>
+                                <div class="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 m-2 rounded-r-lg text-xs font-bold flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20"
+                                         fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                              d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                                              clip-rule="evenodd" />
+                                    </svg>
+                                    POPULAR
+                                </div>
+                                @if ($anime->status === 'Currently Airing')
+                                    <div class="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 m-2 rounded-r-lg text-xs font-bold flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20"
+                                             fill="currentColor">
+                                            <path fill-rule="evenodd"
+                                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                                                  clip-rule="evenodd" />
+                                        </svg>
+                                        NEW
+                                    </div>
+                                @endif
                             </div>
-                            <div
-                                class="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 m-2 rounded-r-lg text-xs font-bold flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                                POPULAR
+                            <div class="p-4">
+                                <h3 class="text-xl font-semibold mb-2 text-white">{{ htmlspecialchars($anime->title) }}</h3>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    {{-- Contoh ambil 2 genre --}}
+                                    @foreach($anime->genres->take(2) as $genre)
+                                        <span class="bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded">
+                                            {{ htmlspecialchars($genre['name']) }}
+                                        </span>
+                                    @endforeach
+                                </div>
+                                <p class="text-sm text-gray-400 mb-3">
+                                    <strong>Airing:</strong> {{ $anime->season ?? 'Unknown' }} {{ $anime->year ?? '' }}
+                                </p>
+                                <p class="text-sm text-gray-400 mt-2 h-16 overflow-hidden">
+                                    {{ htmlspecialchars(substr($anime->synopsis ?? 'No synopsis available', 0, 100)) }}...
+                                </p>
+                                <a href="{{ route('anime.show', ['id' => $anime->mal_id]) }}"
+                                   class="inline-block mt-4 bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-600 transition-colors btn-glow">
+                                    Details
+                                </a>
                             </div>
-                            <?php if (($anime['airing'] ?? false) || ($anime['status'] === 'Currently Airing')): ?>
-                            <div
-                                class="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 m-2 rounded-r-lg text-xs font-bold flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                                NEW
-                            </div>
-                            <?php endif; ?>
                         </div>
-                        <div class="p-4">
-                            <h3 class="text-xl font-semibold mb-2 text-white"><?= htmlspecialchars($anime['title']) ?></h3>
-                            <div class="flex flex-wrap gap-2 mb-3">
-                                <?php foreach (array_slice($anime['genres'] ?? [], 0, 2) as $genre): ?>
-                                <span
-                                    class="bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded"><?= htmlspecialchars($genre['name']) ?></span>
-                                <?php endforeach; ?>
-                            </div>
-                            <p class="text-sm text-gray-400 mb-3"><strong>Airing:</strong>
-                                <?= $anime['season'] ?? 'Unknown' ?> <?= $anime['year'] ?? '' ?></p>
-                            <p class="text-sm text-gray-400 mt-2 h-16 overflow-hidden">
-                                <?= htmlspecialchars(substr($anime['synopsis'] ?? 'No synopsis available', 0, 100)) ?>...
-                            </p>
-                            <a href="<?= route('anime.show', ['id' => $anime['mal_id']]) ?>"
-                                class="inline-block mt-4 bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-600 transition-colors btn-glow">
-                                Details
-                            </a>
-                        </div>
-                    </div>
-                    <?php endforeach; ?>
+                    @endforeach
                 </div>
             </div>
 

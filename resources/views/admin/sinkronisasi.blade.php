@@ -155,6 +155,27 @@
             background: rgba(101, 31, 255, 0.4);
             border-radius: 3px;
         }
+
+         /* Collapsed sidebar styles */
+         .sidebar.collapsed {
+            width: 70px;
+        }
+
+        .sidebar.collapsed .sidebar-text {
+            display: none;
+        }
+
+        .sidebar.collapsed .sidebar-logo-text {
+            display: none;
+        }
+
+        .sidebar.collapsed .sidebar-group-label {
+            display: none;
+        }
+
+        .main-wrapper.sidebar-collapsed {
+            margin-left: 70px;
+        }
     </style>
 @endpush
 
@@ -324,6 +345,89 @@
 
 @push('scripts')
     <script>
+
+        // Toggle user dropdown
+        const userMenu = document.getElementById('user-menu');
+        const userDropdown = document.getElementById('user-dropdown');
+
+        if (userMenu && userDropdown) {
+            userMenu.addEventListener('click', function(e) {
+                e.stopPropagation();
+                userDropdown.classList.toggle('show');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function() {
+                userDropdown.classList.remove('show');
+            });
+        }
+
+        // Sidebar toggle functionality
+        const toggleSidebarBtn = document.getElementById('toggleSidebarBtn');
+        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const mainWrapper = document.getElementById('mainWrapper');
+
+        // Function to toggle sidebar in desktop mode
+        function toggleDesktopSidebar() {
+            if (window.innerWidth >= 768) {
+                sidebar.classList.toggle('collapsed');
+                mainWrapper.classList.toggle('sidebar-collapsed');
+
+                if (sidebar.classList.contains('collapsed')) {
+                    mainWrapper.style.marginLeft = '70px';
+                } else {
+                    mainWrapper.style.marginLeft = '260px';
+                }
+            }
+        }
+
+        // Function to open sidebar in mobile mode
+        function openMobileSidebar() {
+            if (window.innerWidth < 768) {
+                sidebar.classList.add('show');
+                sidebarOverlay.classList.add('show');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling when sidebar is open
+            }
+        }
+
+        // Function to close sidebar in mobile mode
+        function closeMobileSidebar() {
+            if (window.innerWidth < 768) {
+                sidebar.classList.remove('show');
+                sidebarOverlay.classList.remove('show');
+                document.body.style.overflow = ''; // Re-enable scrolling
+            }
+        }
+
+        // Toggle sidebar on button click
+        if (toggleSidebarBtn) {
+            toggleSidebarBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (window.innerWidth >= 768) {
+                    // Desktop mode
+                    toggleDesktopSidebar();
+                } else {
+                    // Mobile mode
+                    if (sidebar.classList.contains('show')) {
+                        closeMobileSidebar();
+                    } else {
+                        openMobileSidebar();
+                    }
+                }
+            });
+        }
+
+        // Close sidebar when clicking the close button
+        if (closeSidebarBtn) {
+            closeSidebarBtn.addEventListener('click', closeMobileSidebar);
+        }
+
+        // Close sidebar when clicking the overlay
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', closeMobileSidebar);
+        }
         // Add a loading state to the sync button when clicked
         document.addEventListener('DOMContentLoaded', function() {
             const syncForm = document.querySelector('#syncform');

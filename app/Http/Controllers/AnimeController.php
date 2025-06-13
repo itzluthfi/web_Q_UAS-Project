@@ -42,14 +42,15 @@ class AnimeController extends Controller
         });
 
         $animeCurrentSeasonal = Cache::remember('current_seasonal_anime', 60, function () {
-            return $this->animeModel->getCurrentSeasonAnime(6)['data'] ?? [];
+            return $this->animeModel->getCurrentSeasonAnimeDB(4)?? [];
         });
+
 
         $animePopular = Cache::remember('popular_anime', 60, function () {
-            return $this->animeModel->getPopularAnime(6)['data'] ?? [];
+            return $this->animeModel->getPopularAnimeDB(6) ?? [];
         });
 
-
+// dd($animeCurrentSeasonal);
 
         return view('user.anime.beranda', compact(
             'animePopular',

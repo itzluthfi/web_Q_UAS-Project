@@ -19,14 +19,23 @@ class Anime extends Model
         'duration',
         'score',
         'rank',
+        'popularity',
         'status',
         'season',
         'year',
         'category',
         'image_url',
+        'large_image_url',
         'aired_from',
         'aired_to',
     ];
+
+public function comments()
+    {
+        return $this->hasMany(Comment::class, 'anime_id', 'mal_id')
+            ->whereNull('parent_id') // Hanya ambil komentar utama
+            ->with('user', 'replies'); // Eager load user dan replies
+    }
 
     public function categories()
     {
@@ -76,20 +85,22 @@ class Anime extends Model
             ->get();
     }
 
-    public static function getCurrentSeasonAnimeDB($limit = 12)
+    public static function getCurrentSeasonAnimeDB($limit = 10)
     {
-        return self::where('season', now()->format('F'))
-            ->where('year', now()->year)
-            ->orderByDesc('score')
-            ->take($limit)
-            ->get();
+        return self::where('category', 'current-season')
+        ->orderByRaw("FIELD(season, 'Winter', 'Spring', 'Summer', 'Fall')")
+        ->orderByDesc('year')
+        ->take($limit)
+        ->get();
     }
+    
 
     public static function getPopularAnimeDB($limit = 10)
     {
-        return self::orderByDesc('members')
+        return self::orderByDesc('popularity')
             ->take($limit)
             ->get();
+
     }
 
 
@@ -113,6 +124,7 @@ class Anime extends Model
             'limit' => $limit,
             'page' => $page
         ]);
+        // dd($response->json());
         return $response->json();
     }
 
