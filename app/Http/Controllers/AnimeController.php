@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Anime; // Ganti jika AnimeModel kamu pakai nama lain
 use App\Models\Comment;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Pagination\LengthAwarePaginator; // Untuk pagination manual
+use App\Models\Genre;
 
 class AnimeController extends Controller
 {
@@ -28,14 +30,20 @@ class AnimeController extends Controller
         //     return $this->animeModel->getUpcomingAnime(5)['data'] ?? [];
         // });
 
+        $animeUpcomings = Cache::remember('upcoming_anime', 60, function () {
+            return $this->animeModel->getUpcomingAnimeDB(5) ?? [];
+        });
+
+        // dd($animeUpcomings);
+
         $animeTopRated = Cache::remember('top_rated_anime', 60, function () {
             return $this->animeModel->getTopRatedAnimeDB(6) ?? [];
         });
         // dd($animeTopRated);
 
-        // $lastestNews = Cache::remember('latest_news', 60, function () {
-        //     return $this->animeModel->getPopularNewsAnime(3);
-        // });
+        $lastestNews = Cache::remember('latest_news', 60, function () {
+            return $this->animeModel->getPopularNewsAnime(3);
+        });
 
         // $genres = Cache::remember('all_genres', 60, function () {
         //     return $this->animeModel->getAllGenres(10)['data'] ?? [];
@@ -51,9 +59,9 @@ class AnimeController extends Controller
         });
 
         // dd($animeCurrentSeasonal);
-        $animeUpcomings = [];
+        // $animeUpcomings = [];
         $genres = [];
-        $lastestNews = [];
+        // $lastestNews = [];
 
         return view('user.anime.beranda', compact(
             'animePopular',
@@ -83,38 +91,95 @@ class AnimeController extends Controller
 
 
 
+    // public function viewAllByLabel($label)
+    // {
+    //     $page = request()->query('page', 1); // default ke 1 jika tidak ada
+    //     $method = 'get' . ucfirst($label) . 'Anime';
+
+    //     if (!method_exists($this->animeModel, $method)) {
+    //         return abort(404, "Label '$label' tidak valid.");
+    //     }
+
+    //     $result = $this->animeModel->$method(12, $page); // ← UBAH: tambah parameter $page
+    //     $animeList = $result['data'] ?? [];              // ← UBAH: ambil dari $result
+    //     $pagination = $result['pagination'] ?? [];       // ← UBAH: ambil dari $result
+
+    //     return view('user.anime.viewAllByLabel', compact('animeList', 'label', 'pagination'));
+    // }
+
     public function viewAllByLabel($label)
     {
-        $page = request()->query('page', 1); // default ke 1 jika tidak ada
+        $page = request()->query('page', 1);
+        $perPage = 12;
         $method = 'get' . ucfirst($label) . 'Anime';
 
         if (!method_exists($this->animeModel, $method)) {
             return abort(404, "Label '$label' tidak valid.");
         }
 
-        $result = $this->animeModel->$method(12, $page); // ← UBAH: tambah parameter $page
-        $animeList = $result['data'] ?? [];              // ← UBAH: ambil dari $result
-        $pagination = $result['pagination'] ?? [];       // ← UBAH: ambil dari $result
+        // Ambil SEMUA data dari model (pastikan return Collection)
+        $allData = collect($this->animeModel->$method());
 
+        // Slice sesuai halaman
+        $items = $allData->slice(($page - 1) * $perPage, $perPage)->values();
+
+        // Buat paginator manual
+        $paginator = new LengthAwarePaginator(
+            $items,
+            $allData->count(),
+            $perPage,
+            $page,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+
+        // Data untuk looping anime
+        $animeList = $paginator->items();
+
+        // Data untuk pagination component (format array sesuai kebutuhan blade)
+        $pagination = [
+            'current_page'        => $paginator->currentPage(),
+            'last_visible_page'   => $paginator->lastPage(),
+        ];
+
+        // Kirim ke view
         return view('user.anime.viewAllByLabel', compact('animeList', 'label', 'pagination'));
     }
 
 
 
+    // public function showByGenre($genreId)
+    // {
+    //     $page = request()->query('page', 1); // default ke 1 jika tidak ada
+    //     $limit = 10;
 
+    //     $response = $this->animeModel->getAnimeByGenre($genreId, $limit, $page);
+    //     $animeList = $response['data'] ?? [];
+    //     $pagination = $response['pagination'] ?? [];
+
+    //     $label = $this->animeModel->getGenreNameById($genreId);
+
+    //     return view('user.anime.viewAllByLabel', compact('animeList', 'pagination', 'label', 'genreId'));
+    // }
 
     public function showByGenre($genreId)
     {
-        $page = request()->query('page', 1); // default ke 1 jika tidak ada
-        $limit = 10;
+        $page = request()->query('page', 1);
+        $perPage = 12;
 
-        $response = $this->animeModel->getAnimeByGenre($genreId, $limit, $page);
-        $animeList = $response['data'] ?? [];
-        $pagination = $response['pagination'] ?? [];
+        // Ambil anime berdasarkan genre (Eloquent Paginator)
+        $paginated = $this->animeModel->getAnimeByGenre($genreId, $perPage, $page);
 
+        // Ambil nama genre
         $label = $this->animeModel->getGenreNameById($genreId);
 
-        return view('user.anime.viewAllByLabel', compact('animeList', 'pagination', 'label', 'genreId'));
+        // Format untuk viewAllByLabel
+        $animeList = $paginated->items();
+        $pagination = [
+            'current_page' => $paginated->currentPage(),
+            'last_visible_page' => $paginated->lastPage()
+        ];
+
+        return view('user.anime.viewAllByLabel', compact('animeList', 'label', 'pagination', 'genreId'));
     }
 
     public function show($id)
@@ -175,11 +240,11 @@ class AnimeController extends Controller
 
     public function viewAllGenre(Request $request)
     {
-        $genres = $this->animeModel->getAllGenres(77);
-        // dd($genres);
+        $genres = Genre::getAllGenres(); // Mengambil data + count
 
         return view('user.anime.viewAllGenre', compact('genres'));
     }
+
     public function viewAllNews(Request $request)
     {
         $news = $this->animeModel->getPopularNewsAnime(5);

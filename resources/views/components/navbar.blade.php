@@ -159,6 +159,7 @@
             animation: shimmer 1.5s infinite;
         }
 </style>
+{{-- @dd($genres); --}}
 
 <nav class="bg-gray-900 border-b border-gray-800 sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -232,7 +233,6 @@
                                     58 => 'Gore',
                                 ];
                             @endphp
-                
                             @foreach ($genres as $id => $name)
                                 <a href="{{ route('anime.showByGenre', $id) }}" class="genre-item text-gray-300 hover:text-white">{{ $name }}</a>
                             @endforeach

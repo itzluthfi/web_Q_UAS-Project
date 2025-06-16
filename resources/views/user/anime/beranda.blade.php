@@ -92,58 +92,63 @@
             <?php unset($_SESSION['success_message']); ?>
             <?php endif; ?>
 
+            {{-- @dd($animeUpcomings); --}}
+
             <!-- Carousel Banner Section -->
             <div class="relative overflow-hidden mb-12 rounded-xl glow-effect">
                 @if ($animeUpcomings)
                     <!-- Carousel Container -->
                     <div class="carousel-container flex transition-transform duration-500 ease-in-out">
-                        <?php foreach (array_slice($animeUpcomings, 0, 5) as $index => $anime): ?>
-                        {{-- @dd($anime); --}}
-                        <!-- Carousel Item -->
-                        <div class="carousel-item w-full flex-shrink-0 relative">
-                            <img src="<?= $anime['images']['jpg']['image_url'] ?? 'https://via.placeholder.com/800x400?text=No+Image' ?>"
-                                alt="<?= htmlspecialchars($anime['title']) ?>"
-                                class="w-full h-[400px] object-cover brightness-50">
-                            <div
-                                class="absolute inset-0 flex flex-col justify-end p-8 bg-gradient-to-t from-black/80 to-transparent">
-                                <span
-                                    class="bg-red-700 text-white px-3 py-1 rounded-full text-sm font-medium inline-block mb-3 w-max">
-                                    <?= 'Upcoming' ?>
-                                </span>
-                                <h2 class="text-3xl md:text-4xl font-bold text-white mb-2">
-                                    <?= htmlspecialchars($anime['title']) ?></h2>
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    <?php foreach (array_slice($anime['genres'] ?? [], 0, 2) as $genre): ?>
-                                    <span
-                                        class="bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded"><?= htmlspecialchars($genre['name']) ?></span>
-                                    <?php endforeach; ?>
-                                </div>
-                                <p class="text-gray-200 mb-4 max-w-2xl">
-                                    <?= htmlspecialchars(substr($anime['synopsis'] ?? 'No synopsis available', 0, 150)) ?>...
-                                </p>
-                                <div class="flex space-x-4">
-                                    <a href="<?= route('anime.show', ['id' => $anime['mal_id']]) ?>"
-                                        class="bg-purple-700 hover:bg-purple-600 text-white px-6 py-2 rounded-lg transition-all btn-glow flex items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
-                                            fill="currentColor">
-                                            <path fill-rule="evenodd"
-                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                        Details
-                                    </a>
-                                    <a href="#"
-                                        class="border border-gray-400 hover:border-purple-500 text-white px-6 py-2 rounded-lg transition-all flex items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
-                                            fill="currentColor">
-                                            <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
-                                        </svg>
-                                        Add to List
-                                    </a>
+                        @foreach ($animeUpcomings->take(5) as $index => $anime)
+                            <!-- Carousel Item -->
+                            <div class="carousel-item w-full flex-shrink-0 relative">
+                                <img 
+                                    src="{{ $anime->image_url ?? 'https://via.placeholder.com/800x400?text=No+Image' }}" 
+                                    alt="{{ htmlspecialchars($anime->title) }}" 
+                                    class="w-full h-[400px] object-cover brightness-50"
+                                >
+                                <div class="absolute inset-0 flex flex-col justify-end p-8 bg-gradient-to-t from-black/80 to-transparent">
+                                    <span class="bg-red-700 text-white px-3 py-1 rounded-full text-sm font-medium inline-block mb-3 w-max">
+                                        {{ 'Upcoming' }}
+                                    </span>
+                                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-2">
+                                        {{ htmlspecialchars($anime->title) }}
+                                    </h2>
+                                    <div class="flex flex-wrap gap-2 mb-3">
+                                        @php
+                                            // Pastikan genres ada dan ambil 2 genre pertama
+                                            $genres = is_array($anime->genres) ? $anime->genres : json_decode($anime->genres, true);
+                                            $slicedGenres = array_slice($genres ?? [], 0, 2);
+                                        @endphp
+                                        @foreach ($slicedGenres as $genre)
+                                            <span class="bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded">
+                                                {{ htmlspecialchars($genre['name']) }}
+                                            </span>
+                                        @endforeach
+                                    </div>
+                                    <p class="text-gray-200 mb-4 max-w-2xl">
+                                        {{ htmlspecialchars(substr($anime->synopsis ?? 'No synopsis available', 0, 150)) }}...
+                                    </p>
+                                    <div class="flex space-x-4">
+                                        <a 
+                                            href="{{ route('anime.show', ['id' => $anime->mal_id]) }}" 
+                                            class="bg-purple-700 hover:bg-purple-600 text-white px-6 py-2 rounded-lg transition-all btn-glow flex items-center"
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                                            </svg>
+                                            Details
+                                        </a>
+                                        <a href="#" class="border border-gray-400 hover:border-purple-500 text-white px-6 py-2 rounded-lg transition-all flex items-center"> 
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                                <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
+                                            </svg>
+                                            Add to List
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <?php endforeach; ?>
+                        @endforeach
                     </div>
                 @endif
 
@@ -168,11 +173,11 @@
 
                 <!-- Carousel Indicators -->
                 <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-10">
-                    <?php foreach (array_slice($animeUpcomings, 0, 5) as $index => $anime): ?>
-                    <button
-                        class="w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-colors carousel-indicator <?= $index === 0 ? 'active' : '' ?>"
-                        data-index="<?= $index ?>"></button>
-                    <?php endforeach; ?>
+                    @foreach ($animeUpcomings->take(5) as $index => $anime)
+                        <button
+                            class="w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-colors carousel-indicator {{ $index === 0 ? 'active' : '' }}"
+                            data-index="{{ $index }}"></button>
+                    @endforeach
                 </div>
             </div>
 

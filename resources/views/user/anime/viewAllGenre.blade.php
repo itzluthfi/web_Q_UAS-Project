@@ -182,6 +182,7 @@ body {
     @endif
 
     <!-- Genre List -->
+    {{-- @dd($genres); --}}
     @if(!empty($genres))
         <div class="genre-container">
             <div class="genre-grid p-4">
@@ -191,10 +192,10 @@ body {
                             <div class="genre-info">
                                 <h3 class="text-lg font-medium text-white">{{ $genre['name'] }}</h3>
                                 <div class="genre-badge">
-                                    {{ $genre['count'] ?? '0' }} Anime
+                                    {{ $genre['count'] }} Anime
                                 </div>
                             </div>
-                            <a href="{{ route('anime.showByGenre', ['id' => $genre['mal_id']]) }}" class="view-btn">
+                            <a href="{{ route('anime.showByGenre', ['id' => $genre['id']]) }}" class="view-btn">
                                 Lihat Anime
                             </a>
                         </div>

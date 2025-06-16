@@ -17,4 +17,18 @@ class Genre extends Model
         return $this->belongsToMany(Anime::class, 'anime_genre', 'genre_id', 'anime_id')
             ->withTimestamps();
     }
+
+    public static function getAllGenres()
+    {
+        return static::withCount('animes')
+            ->orderBy('name')
+            ->get()
+            ->map(function ($genre) {
+                return [
+                    'id' => $genre->id,
+                    'name' => $genre->name,
+                    'count' => $genre->animes_count ?? 0,
+                ];
+            });
+    }
 }

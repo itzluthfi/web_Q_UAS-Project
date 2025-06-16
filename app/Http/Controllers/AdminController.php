@@ -20,8 +20,9 @@ class AdminController extends Controller
     // Tampilkan semua user
     public function users()
     {
-        $users = User::all();
-        // dd($users);
+        // Ambil 10 user per halaman
+        $users = User::paginate(10);
+        
         return view('admin.users.index', compact('users'));
     }
 
@@ -46,8 +47,9 @@ class AdminController extends Controller
 
     public function comment()
     {
-        $comments = Comment::with(['user', 'anime'])->get();
-        // dd($comments);
+        // Gunakan paginate() untuk mengaktifkan pagination
+        $comments = Comment::with(['user', 'anime'])->paginate(10); // Tampilkan 10 komentar per halaman
+        
         return view('admin.comment', compact('comments'));
     }
     public function syncAnimePage()

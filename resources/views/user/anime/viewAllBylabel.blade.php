@@ -64,6 +64,7 @@ body {
 </style>
 @endpush
 
+
     @section('content')
     <div class="container mx-auto px-4 py-6">
         <h1 class="text-3xl font-bold text-center text-purple-500 mb-8">
@@ -92,31 +93,47 @@ body {
                 <span>{{ session('success_message') }}</span>
             </div>
         @endif
-    
+    {{-- @dd($animeList); --}}
         <!-- Anime Grid -->
         @if(!empty($animeList))
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($animeList as $anime)
                     <div class="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-lg card-hover">
                         <div class="relative overflow-hidden">
-                            <img src="{{ $anime['images']['jpg']['image_url'] }}" alt="{{ $anime['title'] }}"
-                                 class="w-full h-56 object-cover transition-transform duration-500 hover:scale-110">
-                            <div class="absolute top-0 right-0 bg-purple-700 text-white px-2 py-1 m-2 rounded text-xs font-bold">
-                                {{ $anime['score'] }} ★
-                            </div>
+                            <!-- Asumsi cover disimpan di public/covers/ -->
+                            <img src="{{$anime->image_url}}" alt="{{ $anime->title }}"
+                                class="w-full h-56 object-cover transition-transform duration-500 hover:scale-110">
+
+                            @if($anime->score)
+                                <div class="absolute top-0 right-0 bg-purple-700 text-white px-2 py-1 m-2 rounded text-xs font-bold">
+                                    {{ $anime->score }} ★
+                                </div>
+                            @endif
                         </div>
                         <div class="p-4">
-                            <h3 class="text-xl font-semibold mb-2 text-white">{{ $anime['title'] }}</h3>
+                            <h3 class="text-xl font-semibold mb-2 text-white">{{ $anime->title }}</h3>
                             <div class="flex flex-wrap gap-2 mb-3">
-                                <span class="bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded">{{ $anime['status'] }}</span>
-                                <span class="bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded">{{ $anime['episodes'] }} Episode</span>
+                                <span class="bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded">
+                                    {{ ucfirst($anime->status) }}
+                                </span>
+                                @if($anime->episodes)
+                                    <span class="bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded">
+                                        {{ $anime->episodes }} Episode
+                                    </span>
+                                @endif
                             </div>
-                            <p class="text-sm text-gray-400 mb-3"><strong>Tayang:</strong> {{ $anime['aired']['string'] }}</p>
-                            <p class="text-sm text-gray-400 mt-2 h-16 overflow-hidden">
-                                {{ \Illuminate\Support\Str::limit($anime['synopsis'] ?? 'No synopsis available', 100) }}...
+
+                            <p class="text-sm text-gray-400 mb-3">
+                                <strong>Tayang:</strong>
+                                {{ \Carbon\Carbon::parse($anime->start_date)->format('M Y') }}
                             </p>
-                            <a href="{{ route('anime.show', ['id' => $anime['mal_id']]) }}"
-                               class="inline-block mt-4 bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-600 transition-colors btn-glow">
+
+                            <p class="text-sm text-gray-400 mt-2 h-16 overflow-hidden">
+                                {{ \Illuminate\Support\Str::limit($anime->synopsis ?? 'Tidak ada deskripsi.', 100) }}
+                            </p>
+
+                            <a href="{{ route('anime.show', ['id' => $anime->id]) }}"
+                            class="inline-block mt-4 bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-600 transition-colors btn-glow">
                                 Lihat Detail
                             </a>
                         </div>
@@ -126,14 +143,14 @@ body {
 
             <!-- Pagination Controls -->
             <x-pagination :pagination="$pagination" :base-url="url()->current()" />
-    
+
         @else
             <div class="bg-gray-800/50 border border-gray-700 rounded-lg p-8 text-center max-w-2xl mx-auto">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <p class="text-gray-400">Gagal mengambil data anime dari API.</p>
-                <p class="text-gray-500 text-sm mt-2">Silakan coba lagi nanti atau periksa koneksi internet Anda.</p>
+                <p class="text-gray-400">Belum ada anime tersedia untuk kategori ini.</p>
+                <p class="text-gray-500 text-sm mt-2">Silakan coba lagi nanti atau hubungi admin.</p>
             </div>
         @endif
     </div>

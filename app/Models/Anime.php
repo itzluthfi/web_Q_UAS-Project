@@ -69,7 +69,7 @@ class Anime extends Model
     // ===================== //
     // === GET BY DATABASE === //
     // ===================== //
-    public static function getTopRatedAnimeDB($limit = 12)
+    public static function getTopRatedAnimeDB($limit = null)
     {
         return self::whereNotNull('score')
             ->orderByDesc('score')
@@ -85,7 +85,7 @@ class Anime extends Model
             ->get();
     }
 
-    public static function getCurrentSeasonAnimeDB($limit = 10)
+    public static function getCurrentSeasonAnimeDB($limit = null)
     {
         return self::where('category', 'current-season')
             ->orderByRaw("FIELD(season, 'Winter', 'Spring', 'Summer', 'Fall')")
@@ -117,36 +117,49 @@ class Anime extends Model
 
 
 
-    public static function getPopularAnime($limit = 10, $page = 1)
+    public static function getPopularAnime($limit = null)
     {
-        $response = Http::get("https://api.jikan.moe/v4/top/anime", [
-            'filter' => 'bypopularity',
-            'limit' => $limit,
-            'page' => $page
-        ]);
-        // dd($response->json());
-        return $response->json();
+        $query = self::whereNotNull('popularity')
+            ->orderBy('popularity'); // dari yang paling populer
+
+        if ($limit !== null) {
+            return $query->take($limit)->get();
+        }
+
+        return $query->get();
     }
 
-    public static function getPopularAnimeForHome($limit = 10)
-    {
-        $response = Http::get("https://api.jikan.moe/v4/top/anime", [
-            'filter' => 'bypopularity',
-            'limit' => $limit,
-            'page' => 1
-        ]);
-        return $response->json('data', []);
-    }
+    // public static function getPopularAnimeForHome($limit = 10)
+    // {
+    //     $response = Http::get("https://api.jikan.moe/v4/top/anime", [
+    //         'filter' => 'bypopularity',
+    //         'limit' => $limit,
+    //         'page' => 1
+    //     ]);
+    //     return $response->json('data', []);
+    // }
 
-    public static function getTopRatedAnime($limit = 10)
-    {
-        $response = Http::get("https://api.jikan.moe/v4/top/anime", [
-            'limit' => $limit
-        ]);
-        // dd($response->json());
-        return $response->json();
-    }
+    // public static function getTopRatedAnime($limit = 10)
+    // {
+    //     $response = Http::get("https://api.jikan.moe/v4/top/anime", [
+    //         'limit' => $limit
+    //     ]);
+    //     // dd($response->json());
+    //     return $response->json();
+    // }
 
+    public static function getTopRatedAnime($limit = null)
+    {
+        $query = self::whereNotNull('score')->orderByDesc('score');
+
+        if ($limit !== null) {
+            return $query->take($limit)->get(); // return Collection
+        }
+
+        $result = $query->get();
+        // dd($result); // Debugging line, remove in production
+        return $result; // return Collection
+    }
 
 
     public static function getAiringAnime($limit = 10)
@@ -171,32 +184,62 @@ class Anime extends Model
     // === BY CATEGORY === //
     // =================== //
 
-    public static function getCurrentSeasonAnime($limit = 12, $page = 1)
+    public static function getCurrentSeasonAnime($limit = null)
     {
-        $response = Http::get("https://api.jikan.moe/v4/seasons/now", [
-            'limit' => $limit,
-            'page' => $page
-        ]);
-        return $response->json();
+        $query = self::where('category', 'current-season')
+            ->orderByRaw("FIELD(season, 'Winter', 'Spring', 'Summer', 'Fall')")
+            ->orderByDesc('year');
+    
+        if ($limit !== null) {
+            return $query->take($limit)->get(); // Ambil jumlah tertentu
+        }
+    
+        return $query->get(); // Ambil semua data
     }
 
-    public static function getCurrentSeasonAnimeForHome($limit = 12)
-    {
-        $response = Http::get("https://api.jikan.moe/v4/seasons/now", [
-            'limit' => $limit,
-            'page' => 1
-        ]);
-        return $response->json('data', []);
-    }
+    // public static function getCurrentSeasonAnimeForHome($limit = 12)
+    // {
+    //     $response = Http::get("https://api.jikan.moe/v4/seasons/now", [
+    //         'limit' => $limit,
+    //         'page' => 1
+    //     ]);
+    //     return $response->json('data', []);
+    // }
 
-    public static function getAnimeByGenre($genreId, $limit = 10, $page = 1)
+    // public static function getAnimeByGenre($genreId, $limit = 10, $page = 1)
+    // {
+    //     $response = Http::get("https://api.jikan.moe/v4/anime", [
+    //         'genres' => $genreId,
+    //         'limit' => $limit,
+    //         'page' => $page
+    //     ]);
+    //     return $response->json();
+    // }
+
+    public static function getAnimeByGenre($genreId, $perPage = 12, $page = 1)
     {
-        $response = Http::get("https://api.jikan.moe/v4/anime", [
-            'genres' => $genreId,
-            'limit' => $limit,
-            'page' => $page
-        ]);
-        return $response->json();
+        // Debug 1: Pastikan genreId diterima dengan benar
+        // dd("Debug Genre ID: ", $genreId);
+
+        // Debug 2: Lihat SQL Query dan binding
+        $query = self::whereHas('genres', function ($q) use ($genreId) {
+            $q->where('genre_id', $genreId);
+        })->with('genres');
+
+        // Tampilkan query SQL + binding
+        // \Log::info($query->toSql(), $query->getBindings());
+        // dd("Query SQL:", $query->toSql(), "Binding:", $query->getBindings());
+
+        // Debug 3: Jalankan query tanpa pagination untuk lihat hasil langsung
+        $results = $query->get();
+        // dd("Hasil Query Tanpa Pagination: ", $results);
+
+        // Debug 4: Jalankan query dengan pagination
+        $paginated = $query->paginate($perPage, ['*'], 'page', $page);
+        // dd("Hasil Dengan Pagination: ", $paginated);
+
+        // Return akhir
+        return $paginated;
     }
 
     public static function getAnimeByStudio($studioId, $limit = 10)
@@ -207,43 +250,50 @@ class Anime extends Model
         return $response->json();
     }
 
-    public static function searchAnime($query, $limit = 10, $page = 1)
+    public static function searchAnime($query, $perPage = 12, $page = 1)
     {
-        $response = Http::get("https://api.jikan.moe/v4/anime", [
-            'q' => $query,
-            'limit' => $limit,
-            'page' => $page
-        ]);
-
-        $data = $response->json();
-
+        // Bangun query pencarian
+        $dbQuery = self::query()
+            ->where('title', 'like', "%$query%");
+    
+        // Tambahkan eager loading jika perlu
+        $dbQuery->with(['genres']);
+    
+        // Jalankan pagination
+        $paginated = $dbQuery->paginate($perPage, ['*'], 'page', $page);
+    
         return [
-            'results' => $data['data'] ?? [],
-            'total' => $data['pagination']['items']['total'] ?? 0,
-            'page' => $page,
-            'pagination' => $data['pagination'] ?? []
+            'results' => $paginated->items(),
+            'total' => $paginated->total(),
+            'page' => $paginated->currentPage(),
+            'pagination' => $paginated
         ];
     }
 
+    // public static function getAllGenres()
+    // {
+    //     $response = Http::get("https://api.jikan.moe/v4/genres/anime");
+    //     return $response->json('data', []);
+    // }
+
     public static function getAllGenres()
     {
-        $response = Http::get("https://api.jikan.moe/v4/genres/anime");
-        return $response->json('data', []);
+        return static::withCount('animes')
+            ->orderBy('name')
+            ->get()
+            ->map(function ($genre) {
+                return [
+                    'id' => $genre->id,
+                    'name' => $genre->name,
+                    'count' => $genre->animes_count ?? 0,
+                ];
+            });
     }
 
     public static function getGenreNameById($genreId)
     {
-        $response = Http::get("https://api.jikan.moe/v4/genres/anime");
-
-        if ($response->successful()) {
-            foreach ($response->json('data') as $genre) {
-                if ($genre['mal_id'] == $genreId) {
-                    return $genre['name'];
-                }
-            }
-        }
-
-        return 'Unknown Genre';
+        // Ambil nama genre dari database
+        return Genre::find($genreId)?->name ?? 'Unknown Genre';
     }
 
     public static function getRandomAnimes($count = 5)
