@@ -118,6 +118,7 @@ class AuthController extends Controller
 
     public function uploadProfileImage(Request $request)
     {
+        dd($request->all());
         $user = Auth::user();
 
         if (!$user instanceof User) {
