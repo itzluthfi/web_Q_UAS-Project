@@ -103,7 +103,7 @@
                             <!-- Carousel Item -->
                             <div class="carousel-item w-full flex-shrink-0 relative">
                                 <img 
-                                    src="{{ $anime->image_url ?? 'https://via.placeholder.com/800x400?text=No+Image' }}" 
+                                    src="{{ $anime->large_image_url ?? 'https://via.placeholder.com/800x400?text=No+Image' }}" 
                                     alt="{{ htmlspecialchars($anime->title) }}" 
                                     class="w-full h-[400px] object-cover brightness-50"
                                 >

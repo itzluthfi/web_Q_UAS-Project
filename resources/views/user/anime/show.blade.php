@@ -138,6 +138,7 @@
 @endpush
 
 @section('content')
+{{-- @dd($anime); --}}
     <div class="anime-backdrop">
         <div class="max-w-4xl mx-auto bg-gray-800 shadow-xl rounded-lg overflow-hidden glow-effect">
             <!-- Title and Image -->
@@ -145,13 +146,13 @@
                 <div class="md:w-64 flex-shrink-0 mb-6 md:mb-0">
                     <!-- Gambar dengan fallback -->
                     <img class="w-full h-auto rounded-lg shadow-lg border border-gray-700"
-                        src="{{ $anime['images']['jpg']['image_url'] ?? $anime['images']['webp']['image_url'] ?? asset('assets/image-notFound.jpg') }}"
-                        alt="{{ $anime['title'] ?? 'Untitled' }}">
+                        src="{{ $anime->image_url ?? $anime['images']['webp']['image_url'] ?? asset('assets/image-notFound.jpg') }}"
+                        alt="{{ $anime->title ?? 'Untitled' }}">
 
                     <!-- Score dengan fallback -->
                     <div class="mt-4 bg-gray-700 rounded-lg p-3 text-center">
                         <div class="text-3xl font-bold text-yellow-400">
-                            {{ $anime['score'] ?? 'N/A' }}
+                            {{ $anime->score ?? 'N/A' }}
                         </div>
                         <div class="text-xs text-gray-400 mt-1">SCORE</div>
                     </div>
@@ -168,18 +169,18 @@
                 <div class="md:ml-6 flex-1">
                     <!-- Judul dengan fallback -->
                     <h1 class="text-3xl font-bold text-purple-400 mb-4">
-                        {{ $anime['title'] ?? 'Untitled' }}
+                        {{ $anime->title ?? 'Untitled' }}
                     </h1>
 
                     <div class="flex flex-wrap gap-2 mb-4">
                         <!-- Status dengan fallback -->
                         <span class="bg-purple-900/50 text-purple-200 px-3 py-1 rounded-full text-sm">
-                            {{ $anime['status'] ?? 'Unknown' }}
+                            {{ $anime->status ?? 'Unknown' }}
                         </span>
 
                         <!-- Episode dengan fallback -->
                         <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">
-                            {{ $anime['episodes'] ?? 'Unknown' }} Episode
+                            {{ $anime->episodes ?? 'Unknown' }} Episode
                         </span>
 
                         <!-- Rating dengan fallback -->
@@ -191,22 +192,23 @@
                     <div class="mb-4 text-gray-400">
                         <!-- Aired dengan fallback -->
                         <p class="mb-1"><strong class="text-gray-300">Tayang:</strong> 
-                            {{ $anime['aired']['string'] ?? 'Unknown' }}
+                            {{ $anime->aired_to ?? 'Unknown' }} - {{ $anime->aired_from ?? 'Unknown' }}
                         </p>
 
-                        <!-- Studio dengan fallback -->
+                        {{-- <!-- Studio dengan fallback -->
                         <p class="mb-1"><strong class="text-gray-300">Studio:</strong> 
                             @if (!empty($anime['studios']))
                                 {{ $anime['studios'][0]['name'] ?? 'Unknown' }}
                             @else
                                 Unknown
                             @endif
-                        </p>
+                        </p> --}}
 
                         <!-- Genre dengan fallback -->
-                        <p class="mb-1"><strong class="text-gray-300">Genre:</strong> 
-                            @if (!empty($anime['genres']))
-                                {{ implode(', ', array_column($anime['genres'], 'name')) }}
+                        <p class="mb-1">
+                            <strong class="text-gray-300">Genre:</strong> 
+                            @if ($anime->genres->isNotEmpty())
+                                {{ $anime->genres->pluck('name')->implode(', ') }}
                             @else
                                 Not specified
                             @endif
@@ -217,8 +219,8 @@
                         <h3 class="text-xl font-semibold text-purple-300 mb-2">Sinopsis</h3>
                         <div class="text-gray-300 leading-relaxed">
                             <!-- Sinopsis dengan fallback -->
-                            @if (!empty($anime['synopsis']))
-                                <p>{!! nl2br(e($anime['synopsis'])) !!}</p>
+                            @if (!empty($anime->synopsis))
+                                <p>{!! nl2br(e($anime->synopsis)) !!}</p>
                             @else
                                 <p class="text-gray-500 italic">Sinopsis tidak tersedia.</p>
                             @endif
@@ -383,8 +385,8 @@
                     <div class="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:border-purple-500 transition related-anime-card">
                         
                         <img src="{{ 
-                            $relatedAnime['images']['jpg']['image_url'] ?? 
-                            $relatedAnime['images']['webp']['image_url'] ?? 
+                            $relatedAnime->image_url ?? 
+                            $relatedAnime->image_url ?? 
                             'https://via.placeholder.com/400x600?text=No+Image ' 
                         }}" 
                         alt="{{ $anime['title'] ?? 'Anime Title' }}" class="w-full h-48 object-cover">
@@ -424,7 +426,7 @@
             left: 0;
             right: 0;
             height: 200px;
-            background-image: url('{{ $anime['images']['jpg']['large_image_url'] ?? $anime['images']['jpg']['image_url'] }}');
+            background-image: url('{{ $anime->large_image_url ?? $anime->image_url }}');
             background-size: cover;
             background-position: center;
             filter: blur(10px) brightness(0.3);

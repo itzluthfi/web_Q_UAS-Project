@@ -184,36 +184,72 @@ class AnimeController extends Controller
 
     public function show($id)
     {
-        // Ambil detail anime dari API
-        $anime = Anime::getAnimeById($id);
+        // // Ambil detail anime dari API
+        // $anime = Anime::getAnimeById($id);
 
+        // // dd($anime);
+        // if (!$anime) {
+        //     return abort(404, 'Anime detail tidak ditemukan.');
+        // }
         // dd($anime);
-        if (!$anime) {
-            return abort(404, 'Anime detail tidak ditemukan.');
-        }
 
-        // Akses genre dengan array syntax
-        $genre = is_array($anime['genres'])
-            ? implode(',', array_column($anime['genres'], 'name')) // atau 'mal_id' jika ingin ID genre
-            : $anime['genres'];
+        // // Akses genre dengan array syntax
+        // $genre = is_array($anime['genres'])
+        //     ? implode(',', array_column($anime['genres'], 'name')) // atau 'mal_id' jika ingin ID genre
+        //     : $anime['genres'];
 
-        // Ambil anime terkait berdasarkan genre ID pertama (jika ada)
-        $firstGenreId = $anime['genres'][0]['mal_id'] ?? null;
-        $relatedAnimes = [];
+        // // Ambil anime terkait berdasarkan genre ID pertama (jika ada)
+        // $firstGenreId = $anime['genres'][0]['mal_id'] ?? null;
+        // $relatedAnimes = [];
 
-        if ($firstGenreId) {
-            $response = Anime::getAnimeByGenre($firstGenreId, 4);
-            $relatedAnimes = $response['data'] ?? [];
-        }
+        // if ($firstGenreId) {
+        //     $response = Anime::getAnimeByGenre($firstGenreId, 4);
+        //     $relatedAnimes = $response['data'] ?? [];
+        // }
 
-        $comments = Comment::with('user')
-            ->where('anime_id', $id)
-            ->whereNull('parent_id')
-            ->get();
-        // dd($comments);
+        // $comments = Comment::with('user')
+        //     ->where('anime_id', $id)
+        //     ->whereNull('parent_id')
+        //     ->get();
+        // // dd($comments);
 
-        // Kirim ke view
-        return view('user.anime.show', compact('anime', 'relatedAnimes', 'comments'));
+        // // Kirim ke view
+        // return view('user.anime.show', compact('anime', 'relatedAnimes', 'comments'));
+
+        // Ambil detail anime dari model (sudah sebagai Eloquent model)
+    $anime = Anime::getAnimeById($id);
+    // dd($anime);
+
+    if (!$anime) {
+        return abort(404, 'Anime detail tidak ditemukan.');
+    }
+
+    // ✅ Akses relasi genres sebagai collection, bukan array
+    $genre = $anime->genres->isNotEmpty()
+        ? $anime->genres->pluck('name')->implode(',') 
+        : 'Tidak ada genre';
+
+    
+    // ✅ Ambil ID genre pertama dari relasi Eloquent
+    $firstGenreId = $anime->genres->first()?->mal_id;
+
+    $relatedAnimes = [];
+
+    if ($firstGenreId) {
+        $relatedAnimes = Anime::getAnimeByGenre($firstGenreId, 4); 
+
+    }
+    // dd($relatedAnimes);
+
+    // ✅ Ambil komentar dengan relasi user
+    $comments = Comment::with('user')
+        ->where('anime_id', $id)
+        ->whereNull('parent_id')
+        ->get();
+
+    // Kirim ke view
+    return view('user.anime.show', compact('anime', 'relatedAnimes', 'comments'));
+
     }
 
     public function search(Request $request)

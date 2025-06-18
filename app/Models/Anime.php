@@ -314,8 +314,11 @@ class Anime extends Model
 
     public static function getAnimeById($id)
     {
-        $response = Http::get("https://api.jikan.moe/v4/anime/$id");
-        return $response->json('data', []);
+        // $response = Http::get("https://api.jikan.moe/v4/anime/$id");
+        // return $response->json('data', []);
+        return self::with('genres')->where('mal_id', $id)
+            ->with(['genres', 'details'])
+            ->first();
     }
 
     public static function getAnimeRelations($animeId)
