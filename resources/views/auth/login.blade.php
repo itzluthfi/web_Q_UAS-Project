@@ -60,7 +60,7 @@
                             </svg>
                         </div>
                     </div> --}}
-                    <h1 class="text-3xl font-bold text-white">Selamat Datang</h1>
+                    <h1 class="text-2xl font-bold text-white">Selamat Datang Lagi</h1>
                     <p class="text-gray-400 mt-2">Masuk ke akun Animeverse anda</p>
                 </div>
 
@@ -179,7 +179,7 @@
                             </svg>
                             <span>Google</span>
                         </button>
-                    
+
                         <!-- GitHub Auth Button -->
                         <button id="github-auth" type="button" class="w-full inline-flex justify-center items-center py-2 px-4 border border-gray-700 rounded-lg shadow-sm bg-gray-800 text-sm font-medium text-gray-400 hover:bg-gray-700 transition-colors">
                             <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
@@ -189,7 +189,7 @@
                             <span>GitHub</span>
                         </button>
                     </div>
-                    
+
 
                 </div>
             </div>

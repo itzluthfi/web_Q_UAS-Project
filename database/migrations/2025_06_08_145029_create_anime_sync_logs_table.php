@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::dropIfExists('anime_sync_logs');
+
         Schema::create('anime_sync_logs', function (Blueprint $table) {
             $table->id();
             $table->string('category');
             $table->integer('limit_data');
             $table->integer('pages_fetched');
             $table->integer('anime_synced');
+            $table->string('status')->nullable(); // success, failed
+            $table->string('keterangan')->nullable(); // Optional error message if status is failed
             $table->timestamp('synced_at')->useCurrent();
             $table->timestamps();
         });

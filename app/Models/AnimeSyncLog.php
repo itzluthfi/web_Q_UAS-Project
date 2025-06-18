@@ -17,6 +17,8 @@ class AnimeSyncLog extends Model
         'limit_data',
         'pages_fetched',
         'anime_synced',
+        'status',
+        'keterangan',
         'synced_at',
     ];
 

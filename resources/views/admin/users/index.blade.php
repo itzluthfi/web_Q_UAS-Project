@@ -163,11 +163,11 @@
             display: block;
         }
 
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
-                transition: transform 0.3s ease;
             }
 
             .sidebar.show {
@@ -175,19 +175,68 @@
             }
 
             .main-wrapper {
-                margin-left: 0;
-            }
-
-            .mobile-menu-button {
-                display: block;
+                margin-left: 0 !important;
             }
         }
 
-        @media (min-width: 769px) {
-            .mobile-menu-button {
-                display: none;
+        /* Responsive Table */
+        .admin-table {
+            min-width: 700px;
+        }
+
+        @media (max-width: 640px) {
+            .admin-table {
+                min-width: 600px;
+                font-size: 0.85rem;
+            }
+
+            .admin-table th,
+            .admin-table td {
+                padding-left: 0.5rem;
+                padding-right: 0.5rem;
             }
         }
+
+        /* Responsive Modal */
+        .modal {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .modal.hidden {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+        }
+
+        @media (max-width: 640px) {
+            .modal .sm\:max-w-lg {
+                max-width: 98vw !important;
+                width: 98vw !important;
+                margin: 0 !important;
+                border-radius: 0.75rem !important;
+            }
+
+            .modal .sm\:p-6 {
+                padding: 1rem !important;
+            }
+        }
+
+        /* Notification badge */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            height: 18px;
+            width: 18px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
 
         /* Action buttons */
         .action-button {
@@ -237,12 +286,9 @@
                 <p class="text-gray-400 mt-1">Kelola semua pengguna yang terdaftar di MyAnimeList</p>
             </div>
             <div class="mt-4 md:mt-0">
-                <button onclick="openAddUserModal()"
-                    class="bg-purple-700 hover:bg-purple-600 text-white px-4 py-2 rounded-md flex items-center btn-glow transition-all">
+                <button onclick="openAddUserModal()" class="bg-purple-700 hover:bg-purple-600 text-white px-4 py-2 rounded-md flex items-center btn-glow transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                            clip-rule="evenodd" />
+                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                     </svg>
                     Tambah Pengguna
                 </button>
@@ -253,13 +299,10 @@
         <div class="bg-gray-800 rounded-lg p-4 mb-6">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div class="relative flex-grow">
-                    <input type="text" placeholder="Cari berdasarkan username, email, atau ID..."
-                        class="input-dark w-full pl-10 pr-4 py-2 rounded-lg text-sm focus:outline-none">
+                    <input type="text" placeholder="Cari berdasarkan username, email, atau ID..." class="input-dark w-full pl-10 pr-4 py-2 rounded-lg text-sm focus:outline-none">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </div>
                 </div>
@@ -294,8 +337,7 @@
                         <tr>
                             <th class="px-6 py-3 text-left text-xs text-gray-300 uppercase tracking-wider">
                                 <div class="flex items-center">
-                                    <input type="checkbox"
-                                        class="form-checkbox h-4 w-4 text-purple-600 transition duration-150 ease-in-out">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-purple-600 transition duration-150 ease-in-out">
                                     <span class="ml-2">ID</span>
                                 </div>
                             </th>
@@ -322,24 +364,21 @@
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    <input type="checkbox"
-                                        class="form-checkbox h-4 w-4 text-purple-600 transition duration-150 ease-in-out">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-purple-600 transition duration-150 ease-in-out">
                                     <span class="ml-2 text-sm text-gray-300"><?= $user['id'] ?></span>
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <div class="h-8 w-8 rounded-full bg-purple-600 flex items-center justify-center mr-3">
-                                        <span
-                                            class="font-bold text-white"><?= strtoupper(substr($user['username'], 0, 1)) ?></span>
+                                        <span class="font-bold text-white"><?= strtoupper(substr($user['username'], 0, 1)) ?></span>
                                     </div>
                                     <div class="text-sm font-medium text-white"><?= $user['username'] ?></div>
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300"><?= $user['email'] ?></td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span
-                                    class="badge <?= $user['role'] === 'admin' ? 'badge-admin' : ($user['role'] === 'moderator' ? 'badge-moderator' : 'badge-user') ?>">
+                                <span class="badge <?= $user['role'] === 'admin' ? 'badge-admin' : ($user['role'] === 'moderator' ? 'badge-moderator' : 'badge-user') ?>">
                                     <?= ucfirst($user['role']) ?>
                                 </span>
                             </td>
@@ -349,33 +388,22 @@
 
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <div class="flex justify-end space-x-3">
-                                    <button onclick="openViewModal(<?= $user['id'] ?>)"
-                                        class="action-button text-blue-400 hover:text-blue-300 transition-colors tooltip">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                            fill="currentColor">
+                                    <button onclick="openViewModal(<?= $user['id'] ?>)" class="action-button text-blue-400 hover:text-blue-300 transition-colors tooltip">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                             <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                                            <path fill-rule="evenodd"
-                                                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                                                clip-rule="evenodd" />
+                                            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
                                         </svg>
                                         <span class="tooltip-text">Lihat Detail</span>
                                     </button>
-                                    <button onclick="openEditModal(<?= $user['id'] ?>)"
-                                        class="action-button text-indigo-400 hover:text-indigo-300 transition-colors tooltip">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                            fill="currentColor">
-                                            <path
-                                                d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                    <button onclick="openEditModal(<?= $user['id'] ?>)" class="action-button text-indigo-400 hover:text-indigo-300 transition-colors tooltip">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                                         </svg>
                                         <span class="tooltip-text">Edit</span>
                                     </button>
-                                    <button onclick="confirmDelete(<?= $user['id'] ?>, '<?= $user['username'] ?>')"
-                                        class="action-button text-red-400 hover:text-red-300 transition-colors tooltip">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                            fill="currentColor">
-                                            <path fill-rule="evenodd"
-                                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                                clip-rule="evenodd" />
+                                    <button onclick="confirmDelete(<?= $user['id'] ?>, '<?= $user['username'] ?>')" class="action-button text-red-400 hover:text-red-300 transition-colors tooltip">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                                         </svg>
                                         <span class="tooltip-text">Hapus</span>
                                     </button>
@@ -397,8 +425,7 @@
                             <option value="deactivate">Nonaktifkan</option>
                             <option value="delete">Hapus</option>
                         </select>
-                        <button
-                            class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md text-sm transition-all">
+                        <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md text-sm transition-all">
                             Terapkan
                         </button>
                     </div>
@@ -419,16 +446,12 @@
                 </div>
 
                 <!-- Modal panel -->
-                <div
-                    class="inline-block align-bottom bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="inline-block align-bottom bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                     <div class="bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div class="sm:flex sm:items-start">
-                            <div
-                                class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
                             </div>
                             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
@@ -438,10 +461,8 @@
                                 <div class="mt-4">
                                     <div class="bg-gray-700 rounded-lg p-4 mb-4">
                                         <div class="flex flex-col items-center sm:flex-row sm:items-start">
-                                            <div
-                                                class="h-20 w-20 rounded-full bg-purple-600 flex items-center justify-center mb-4 sm:mb-0 sm:mr-4">
-                                                <span class="font-bold text-white text-2xl"
-                                                    id="view-user-initial">N</span>
+                                            <div class="h-20 w-20 rounded-full bg-purple-600 flex items-center justify-center mb-4 sm:mb-0 sm:mr-4">
+                                                <span class="font-bold text-white text-2xl" id="view-user-initial">N</span>
                                             </div>
                                             <div>
                                                 <h4 class="text-lg font-medium text-white" id="view-username">
@@ -450,9 +471,7 @@
                                                 <p class="text-gray-300" id="view-email">naruto@konoha.com</p>
                                                 <div class="mt-2 flex items-center">
                                                     <span class="badge badge-user mr-2" id="view-role">User</span>
-                                                    <span
-                                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-                                                        id="view-status">
+                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800" id="view-status">
                                                         Aktif
                                                     </span>
                                                 </div>
@@ -512,16 +531,12 @@
                 </div>
 
                 <!-- Modal panel -->
-                <div
-                    class="inline-block align-bottom bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="inline-block align-bottom bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                     <div class="bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div class="sm:flex sm:items-start">
-                            <div
-                                class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-purple-100 sm:mx-0 sm:h-10 sm:w-10">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-purple-100 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                                 </svg>
                             </div>
                             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
@@ -530,31 +545,23 @@
                                 </h3>
                                 <div class="mt-4 space-y-4">
                                     <div>
-                                        <label for="add-username"
-                                            class="block text-sm font-medium text-gray-300">Username</label>
-                                        <input type="text" id="add-username"
-                                            class="mt-1 input-dark w-full rounded-md">
+                                        <label for="add-username" class="block text-sm font-medium text-gray-300">Username</label>
+                                        <input type="text" id="add-username" class="mt-1 input-dark w-full rounded-md">
                                     </div>
                                     <div>
-                                        <label for="add-email"
-                                            class="block text-sm font-medium text-gray-300">Email</label>
+                                        <label for="add-email" class="block text-sm font-medium text-gray-300">Email</label>
                                         <input type="email" id="add-email" class="mt-1 input-dark w-full rounded-md">
                                     </div>
                                     <div>
-                                        <label for="add-password"
-                                            class="block text-sm font-medium text-gray-300">Password</label>
-                                        <input type="password" id="add-password"
-                                            class="mt-1 input-dark w-full rounded-md">
+                                        <label for="add-password" class="block text-sm font-medium text-gray-300">Password</label>
+                                        <input type="password" id="add-password" class="mt-1 input-dark w-full rounded-md">
                                     </div>
                                     <div>
-                                        <label for="add-confirm-password"
-                                            class="block text-sm font-medium text-gray-300">Konfirmasi Password</label>
-                                        <input type="password" id="add-confirm-password"
-                                            class="mt-1 input-dark w-full rounded-md">
+                                        <label for="add-confirm-password" class="block text-sm font-medium text-gray-300">Konfirmasi Password</label>
+                                        <input type="password" id="add-confirm-password" class="mt-1 input-dark w-full rounded-md">
                                     </div>
                                     <div>
-                                        <label for="add-role"
-                                            class="block text-sm font-medium text-gray-300">Peran</label>
+                                        <label for="add-role" class="block text-sm font-medium text-gray-300">Peran</label>
                                         <select id="add-role" class="mt-1 input-dark w-full rounded-md">
                                             <option value="user">User</option>
                                             <option value="moderator">Moderator</option>
@@ -562,8 +569,7 @@
                                         </select>
                                     </div>
                                     <div>
-                                        <label for="add-status"
-                                            class="block text-sm font-medium text-gray-300">Status</label>
+                                        <label for="add-status" class="block text-sm font-medium text-gray-300">Status</label>
                                         <select id="add-status" class="mt-1 input-dark w-full rounded-md">
                                             <option value="active">Aktif</option>
                                             <option value="inactive">Tidak Aktif</option>
@@ -595,16 +601,12 @@
                 </div>
 
                 <!-- Modal panel -->
-                <div
-                    class="inline-block align-bottom bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="inline-block align-bottom bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                     <div class="bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div class="sm:flex sm:items-start">
-                            <div
-                                class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                 </svg>
                             </div>
                             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
@@ -613,26 +615,20 @@
                                 </h3>
                                 <div class="mt-4 space-y-4">
                                     <div>
-                                        <label for="edit-username"
-                                            class="block text-sm font-medium text-gray-300">Username</label>
-                                        <input type="text" id="edit-username"
-                                            class="mt-1 input-dark w-full rounded-md">
+                                        <label for="edit-username" class="block text-sm font-medium text-gray-300">Username</label>
+                                        <input type="text" id="edit-username" class="mt-1 input-dark w-full rounded-md">
                                     </div>
                                     <div>
-                                        <label for="edit-email"
-                                            class="block text-sm font-medium text-gray-300">Email</label>
+                                        <label for="edit-email" class="block text-sm font-medium text-gray-300">Email</label>
                                         <input type="email" id="edit-email" class="mt-1 input-dark w-full rounded-md">
                                     </div>
                                     <div>
-                                        <label for="edit-password"
-                                            class="block text-sm font-medium text-gray-300">Password
+                                        <label for="edit-password" class="block text-sm font-medium text-gray-300">Password
                                             Baru (kosongkan jika tidak ingin mengubah)</label>
-                                        <input type="password" id="edit-password"
-                                            class="mt-1 input-dark w-full rounded-md">
+                                        <input type="password" id="edit-password" class="mt-1 input-dark w-full rounded-md">
                                     </div>
                                     <div>
-                                        <label for="edit-role"
-                                            class="block text-sm font-medium text-gray-300">Peran</label>
+                                        <label for="edit-role" class="block text-sm font-medium text-gray-300">Peran</label>
                                         <select id="edit-role" class="mt-1 input-dark w-full rounded-md">
                                             <option value="user">User</option>
                                             <option value="moderator">Moderator</option>
@@ -640,8 +636,7 @@
                                         </select>
                                     </div>
                                     <div>
-                                        <label for="edit-status"
-                                            class="block text-sm font-medium text-gray-300">Status</label>
+                                        <label for="edit-status" class="block text-sm font-medium text-gray-300">Status</label>
                                         <select id="edit-status" class="mt-1 input-dark w-full rounded-md">
                                             <option value="active">Aktif</option>
                                             <option value="inactive">Tidak Aktif</option>
@@ -674,16 +669,12 @@
                 </div>
 
                 <!-- Modal panel -->
-                <div
-                    class="inline-block align-bottom bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="inline-block align-bottom bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                     <div class="bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div class="sm:flex sm:items-start">
-                            <div
-                                class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                 </svg>
                             </div>
                             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">

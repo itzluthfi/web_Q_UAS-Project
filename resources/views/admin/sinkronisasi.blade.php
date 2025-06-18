@@ -156,8 +156,8 @@
             border-radius: 3px;
         }
 
-         /* Collapsed sidebar styles */
-         .sidebar.collapsed {
+        /* Collapsed sidebar styles */
+        .sidebar.collapsed {
             width: 70px;
         }
 
@@ -176,6 +176,22 @@
         .main-wrapper.sidebar-collapsed {
             margin-left: 70px;
         }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-wrapper {
+                margin-left: 0 !important;
+            }
+        }
     </style>
 @endpush
 
@@ -186,7 +202,10 @@
             <div class="flex items-center justify-between">
                 <h1 class="sync-title text-2xl font-bold">Sinkronisasi Anime</h1>
                 <div class="text-sm text-gray-400">
-                    <span>Terakhir diperbarui: {{ now()->format('d M Y, H:i') }}</span>
+                    <span>
+                        Terakhir diperbarui:
+                        {{ $lastSync ? \Carbon\Carbon::parse($lastSync->synced_at)->format('d M Y, H:i') : 'Belum Ada Sinkronisasi' }}
+                    </span>
                 </div>
             </div>
         </div>
@@ -195,16 +214,16 @@
             <!-- Stats Overview -->
             <div class="sync-stats grid grid-cols-4 gap-4 p-4 rounded-xl mb-6">
                 <div class="stat-item p-3 text-center">
-                    <div class="text-xs uppercase tracking-wider text-gray-400">Total Anime</div>
-                    <div class="stat-value text-xl mt-1">2,458</div>
+                    <div class="text-xs uppercase tracking-wider text-gray-400">Total Anime Di Database</div>
+                    <div class="stat-value text-xl mt-1">{{ $jmlAnime ?? 0 }}</div>
                 </div>
                 <div class="stat-item p-3 text-center">
                     <div class="text-xs uppercase tracking-wider text-gray-400">Terakhir Sync</div>
-                    <div class="stat-value text-xl mt-1">2 jam lalu</div>
+                    <div class="stat-value text-xl mt-1">{{ $lastSyncTime ?? 'Belum Ada Sinkronisasi' }}</div>
                 </div>
                 <div class="stat-item p-3 text-center">
                     <div class="text-xs uppercase tracking-wider text-gray-400">Ditambahkan Hari Ini</div>
-                    <div class="stat-value text-xl mt-1">24</div>
+                    <div class="stat-value text-xl mt-1">{{ $todaySynced ?? 0 }}</div>
                 </div>
                 <div class="stat-item p-3 text-center">
                     <div class="text-xs uppercase tracking-wider text-gray-400">Status API</div>
@@ -247,25 +266,20 @@
                             <label class="form-label block text-sm">Opsi Tambahan:</label>
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="flex items-center">
-                                    <input type="checkbox" id="update_existing" name="update_existing"
-                                        class="rounded bg-transparent border-gray-600 text-purple-600 focus:ring-purple-500">
+                                    <input type="checkbox" id="update_existing" name="update_existing" class="rounded bg-transparent border-gray-600 text-purple-600 focus:ring-purple-500">
                                     <label for="update_existing" class="ml-2 text-sm text-gray-300">Update yang sudah
                                         ada</label>
                                 </div>
                                 <div class="flex items-center">
-                                    <input type="checkbox" id="force_sync" name="force_sync"
-                                        class="rounded bg-transparent border-gray-600 text-purple-600 focus:ring-purple-500">
+                                    <input type="checkbox" id="force_sync" name="force_sync" class="rounded bg-transparent border-gray-600 text-purple-600 focus:ring-purple-500">
                                     <label for="force_sync" class="ml-2 text-sm text-gray-300">Paksa sinkronisasi</label>
                                 </div>
                             </div>
                         </div>
 
-                        <button type="submit"
-                            class="sync-btn w-full py-3 px-6 text-white font-medium rounded-xl flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="sync-icon h-5 w-5" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        <button type="submit" class="sync-btn w-full py-3 px-6 text-white font-medium rounded-xl flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="sync-icon h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
                             Sinkronkan Sekarang
                         </button>
@@ -276,34 +290,27 @@
                     <div class="bg-opacity-20 bg-gray-800 p-4 rounded-xl">
                         <h3 class="text-sm font-medium text-gray-300 mb-3">Riwayat Sinkronisasi</h3>
                         <div class="sync-history space-y-3">
-                            <div class="p-3 bg-opacity-30 bg-gray-800 rounded-lg text-xs">
-                                <div class="flex justify-between text-gray-400">
-                                    <span>Top Anime</span>
-                                    <span>2 jam lalu</span>
+                            {{-- @dd($historySync) --}}
+                            @forelse($historySync as $sync)
+                                <div class="p-3 bg-opacity-30 bg-gray-800 rounded-lg text-xs">
+                                    <div class="flex justify-between text-gray-400">
+                                        <span>{{ ucfirst(str_replace('-', ' ', $sync->category)) }}</span>
+                                        <span>
+                                            {{ $sync->synced_at ? $sync->synced_at->locale('id')->diffForHumans() : '-' }}
+                                        </span>
+                                    </div>
+                                    <div class="mt-1 {{ $sync->status === 'berhasil' ? 'text-green-400' : 'text-red-400' }}">
+                                        {{ ucfirst($sync->status) }}
+                                        @if ($sync->status === 'berhasil')
+                                            - {{ $sync->anime_synced ?? 0 }} anime
+                                        @else
+                                            - {{ $sync->keterangan ?? 'Gagal' }}
+                                        @endif
+                                    </div>
                                 </div>
-                                <div class="mt-1 text-green-400">Berhasil - 50 anime</div>
-                            </div>
-                            <div class="p-3 bg-opacity-30 bg-gray-800 rounded-lg text-xs">
-                                <div class="flex justify-between text-gray-400">
-                                    <span>Current Season</span>
-                                    <span>5 jam lalu</span>
-                                </div>
-                                <div class="mt-1 text-green-400">Berhasil - 25 anime</div>
-                            </div>
-                            <div class="p-3 bg-opacity-30 bg-gray-800 rounded-lg text-xs">
-                                <div class="flex justify-between text-gray-400">
-                                    <span>Upcoming</span>
-                                    <span>1 hari lalu</span>
-                                </div>
-                                <div class="mt-1 text-red-400">Gagal - API error</div>
-                            </div>
-                            <div class="p-3 bg-opacity-30 bg-gray-800 rounded-lg text-xs">
-                                <div class="flex justify-between text-gray-400">
-                                    <span>Popular</span>
-                                    <span>1 hari lalu</span>
-                                </div>
-                                <div class="mt-1 text-green-400">Berhasil - 100 anime</div>
-                            </div>
+                            @empty
+                                <div class="text-gray-400 text-xs">Belum ada riwayat sinkronisasi.</div>
+                            @endforelse
                         </div>
                     </div>
                 </div>
@@ -312,11 +319,8 @@
             <!-- Status Messages -->
             @if (session('success'))
                 <div class="status-card status-success mt-6 p-4 rounded-lg flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-3 mt-0.5" viewBox="0 0 20 20"
-                        fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                            clip-rule="evenodd" />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-3 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <div>
                         <h4 class="font-medium text-green-500">Sinkronisasi Berhasil</h4>
@@ -327,11 +331,8 @@
 
             @if (session('error'))
                 <div class="status-card status-error mt-6 p-4 rounded-lg flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 mr-3 mt-0.5" viewBox="0 0 20 20"
-                        fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                            clip-rule="evenodd" />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 mr-3 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
                     </svg>
                     <div>
                         <h4 class="font-medium text-red-500">Sinkronisasi Gagal</h4>
@@ -345,7 +346,6 @@
 
 @push('scripts')
     <script>
-
         // Toggle user dropdown
         const userMenu = document.getElementById('user-menu');
         const userDropdown = document.getElementById('user-dropdown');
