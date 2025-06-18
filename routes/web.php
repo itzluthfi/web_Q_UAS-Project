@@ -5,8 +5,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnimeController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\SocialAuthController;
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Mail;
+
 
 // Guest routes
 Route::middleware(['guest'])->group(function () {
@@ -50,6 +52,11 @@ Route::get('/anime/Allnews', [AnimeController::class, 'viewAllNews'])->name('ani
 // routes/web.php
 Route::get('/admin/sync-anime', [AdminController::class, 'syncAnimePage'])->name('admin.syncAnimePage');
 Route::post('/admin/sync-anime', [AdminController::class, 'syncAnime'])->name('admin.syncAnime');
+Route::get('/auth/{provider}', [SocialAuthController::class, 'redirect']);
+Route::get('/auth/{provider}/callback', [SocialAuthController::class, 'callback']);
+
+
+
 
 
 // Route::get('/tes-kirim-email', function () {
