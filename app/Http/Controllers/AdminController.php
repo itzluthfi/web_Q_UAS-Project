@@ -11,6 +11,8 @@ use App\Models\AnimeDetail;
 use App\Models\Category;
 use App\Models\AnimeSyncLog;
 use App\Models\Comment;
+// use Illuminate\Container\Attributes\Auth;
+use Illuminate\Support\Facades\Auth;
 
 
 class AdminController extends Controller
@@ -22,14 +24,17 @@ class AdminController extends Controller
     {
         // Ambil 10 user per halaman
         $users = User::paginate(10);
-        
+
         return view('admin.users.index', compact('users'));
     }
 
     public function profile()
     {
-        $users = User::all();
-        return view('auth.profile', compact('users'));
+        $user = Auth::user();
+        // dd($user);
+        $my_comments = Comment::where('user_id', $user->id);
+        $jml_komentar = $my_comments->count();
+        return view('auth.profile', compact('user', 'jml_komentar', 'my_comments'));
     }
 
     public function setting()
@@ -49,7 +54,7 @@ class AdminController extends Controller
     {
         // Gunakan paginate() untuk mengaktifkan pagination
         $comments = Comment::with(['user', 'anime'])->paginate(10); // Tampilkan 10 komentar per halaman
-        
+
         return view('admin.comment', compact('comments'));
     }
     public function syncAnimePage()
@@ -182,7 +187,7 @@ class AdminController extends Controller
                     // Ambil detail tambahan dari endpoint detail
                     $detailResponse = Http::timeout(20)->retry(3, 500)->get("https://api.jikan.moe/v4/anime/{$animeData['mal_id']}");
                     // dd($detailResponse);
-                
+
                     if ($detailResponse->ok()) {
                         $detailData = $detailResponse['data'];
                         AnimeDetail::updateOrCreate(
