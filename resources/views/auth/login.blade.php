@@ -44,7 +44,7 @@
             <div class="hidden md:block w-1/2 relative anime-bg" style="background-image: url('{{ asset('assets/system/run.gif') }}'); background-size: cover; background-position: center;">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                 <div class="absolute bottom-0 left-0 p-8 text-white z-10">
-                    <h2 class="text-2xl font-bold mb-2">My Anime List</h2>
+                    <h2 class="text-2xl font-bold mb-2">Anime Verse</h2>
                     <p class="text-sm opacity-80">Bergabunglah dan mulai koleksi animemu</p>
                 </div>
             </div>
@@ -53,15 +53,15 @@
             <!-- Bagian Form Login -->
             <div class="w-full md:w-1/2 p-8 bg-gray-900">
                 <div class="mb-8 text-center">
-                    <div class="flex justify-center mb-4">
+                    {{-- <div class="flex justify-center mb-4">
                         <div class="w-16 h-16 rounded-full bg-purple-700 flex items-center justify-center glow-effect">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
                             </svg>
                         </div>
-                    </div>
+                    </div> --}}
                     <h1 class="text-3xl font-bold text-white">Selamat Datang</h1>
-                    <p class="text-gray-400 mt-2">Masuk ke akun MAL Anda</p>
+                    <p class="text-gray-400 mt-2">Masuk ke akun Animeverse anda</p>
                 </div>
 
                 {{-- Error Message --}}
@@ -170,20 +170,26 @@
                         </div>
                     </div>
 
-                    <div class="mt-6 grid grid-cols-2 gap-3">
-                        <button id="google-auth" type="button" class="w-full inline-flex justify-center py-2 px-4 border border-gray-700 rounded-lg shadow-sm bg-gray-800 text-sm font-medium text-gray-400 hover:bg-gray-700 transition-colors">
-                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                    <div class="mt-4 grid grid-cols-2 gap-3">
+                        <!-- Google Auth Button -->
+                        <button id="google-auth" type="button" class="w-full inline-flex justify-center items-center py-2 px-4 border border-gray-700 rounded-lg shadow-sm bg-gray-800 text-sm font-medium text-gray-400 hover:bg-gray-700 transition-colors">
+                            <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M12.545 10.239v3.821h5.445c-0.712 2.315-2.647 3.972-5.445 3.972-3.332 0-6.033-2.701-6.033-6.032s2.701-6.032 6.033-6.032c1.498 0 2.866 0.549 3.921 1.453l2.814-2.814c-1.787-1.676-4.139-2.701-6.735-2.701-5.522 0-10.001 4.478-10.001 10s4.479 10 10.001 10c8.396 0 10.249-7.85 9.426-11.748l-9.426 0.081z" />
                             </svg>
+                            <span>Google</span>
                         </button>
-                        <button id="github-auth" type="button" class="w-full inline-flex justify-center py-2 px-4 border border-gray-700 rounded-lg shadow-sm bg-gray-800 text-sm font-medium text-gray-400 hover:bg-gray-700 transition-colors">
-                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                    
+                        <!-- GitHub Auth Button -->
+                        <button id="github-auth" type="button" class="w-full inline-flex justify-center items-center py-2 px-4 border border-gray-700 rounded-lg shadow-sm bg-gray-800 text-sm font-medium text-gray-400 hover:bg-gray-700 transition-colors">
+                            <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                                 <path
-                                    d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
+                                    d="M12 .5C5.648.5.5 5.648.5 12c0 5.086 3.292 9.387 7.863 10.91.575.106.786-.25.786-.555 0-.273-.01-1-.016-1.961-3.2.695-3.878-1.543-3.878-1.543-.523-1.328-1.277-1.681-1.277-1.681-1.045-.715.079-.701.079-.701 1.155.082 1.762 1.186 1.762 1.186 1.028 1.76 2.699 1.251 3.357.957.104-.745.402-1.251.73-1.539-2.553-.291-5.238-1.277-5.238-5.682 0-1.255.449-2.28 1.186-3.084-.119-.291-.515-1.462.114-3.05 0 0 .968-.31 3.17 1.178A11.041 11.041 0 0 1 12 6.844c.98.004 1.966.132 2.887.387 2.2-1.487 3.166-1.178 3.166-1.178.631 1.588.235 2.759.116 3.05.74.804 1.184 1.829 1.184 3.084 0 4.416-2.691 5.387-5.256 5.673.41.354.777 1.049.777 2.114 0 1.528-.014 2.76-.014 3.136 0 .308.208.666.792.553C20.713 21.384 24 17.084 24 12c0-6.352-5.148-11.5-12-11.5z" />
                             </svg>
+                            <span>GitHub</span>
                         </button>
                     </div>
+                    
 
                 </div>
             </div>
