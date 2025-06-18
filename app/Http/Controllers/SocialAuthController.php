@@ -12,9 +12,10 @@ class SocialAuthController extends Controller
 {
     public function callback($provider)
     {
-        $socialUser = Socialite::driver($provider)->user();
+        $socialUser = Socialite::driver($provider)->stateless()->user();
 
         $user = User::where('email', $socialUser->getEmail())->first();
+        // dd($user);
 
         if (!$user) {
             $user = User::create([
