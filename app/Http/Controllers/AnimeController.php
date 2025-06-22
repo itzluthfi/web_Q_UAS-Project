@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-
 use Illuminate\Http\Request;
-use App\Models\Anime; // Ganti jika AnimeModel kamu pakai nama lain
+use App\Models\Anime;
 use App\Models\Comment;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Pagination\LengthAwarePaginator; // Untuk pagination manual
 use App\Models\Genre;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
 
 class AnimeController extends Controller
 {
@@ -16,52 +16,38 @@ class AnimeController extends Controller
 
     /**
      * Konstruktor controller ini, menginisialisasi model Anime
-     *
-     * @return void
      */
     public function __construct()
     {
-        $this->animeModel = new Anime(); // Ganti Anime dengan AnimeModel jika nama file-nya begitu
+        $this->animeModel = new Anime();
     }
 
+    // ==========================
+    // ======= BERANDA ==========
+    // ==========================
     public function beranda()
     {
-        // $animeUpcomings = Cache::remember('upcoming_anime', 60, function () {
-        //     return $this->animeModel->getUpcomingAnime(5)['data'] ?? [];
-        // });
-
         $animeUpcomings = Cache::remember('upcoming_anime', 60, function () {
             return $this->animeModel->getUpcomingAnimeDB(5) ?? [];
         });
 
-        // dd($animeUpcomings);
-
         $animeTopRated = Cache::remember('top_rated_anime', 60, function () {
             return $this->animeModel->getTopRatedAnimeDB(6) ?? [];
         });
-        // dd($animeTopRated);
 
         $lastestNews = Cache::remember('latest_news', 60, function () {
             return $this->animeModel->getPopularNewsAnime(3);
         });
 
-        // $genres = Cache::remember('all_genres', 60, function () {
-        //     return $this->animeModel->getAllGenres(10)['data'] ?? [];
-        // });
-
         $animeCurrentSeasonal = Cache::remember('current_seasonal_anime', 60, function () {
             return $this->animeModel->getCurrentSeasonAnimeDB(4) ?? [];
         });
-
 
         $animePopular = Cache::remember('popular_anime', 60, function () {
             return $this->animeModel->getPopularAnimeDB(6) ?? [];
         });
 
-        // dd($animeCurrentSeasonal);
-        // $animeUpcomings = [];
         $genres = [];
-        // $lastestNews = [];
 
         return view('user.anime.beranda', compact(
             'animePopular',
@@ -72,41 +58,24 @@ class AnimeController extends Controller
             'genres',
         ));
     }
+
     public function berandaTemp()
     {
-        // $animeTop = $this->animeModel->getTopAnime(10);
-        // $animeUpcomings = $this->animeModel->getUpcomingAnime(5);
-        // $animePopular = $this->animeModel->getPopularAnime();
-        // $animeCurrentSeasonal = $this->animeModel->getCurrentSeasonAnime();
-        // $categories = $this->animeModel->getAllGenres();
-
         return view('user.anime.berandaTemp');
     }
 
+    // ==========================
+    // ======= STUDIO ===========
+    // ==========================
     public function showByStudio($studioId)
     {
         $animeList = $this->animeModel->getAnimeByStudio($studioId, 10);
         // dd($animeList);
     }
 
-
-
-    // public function viewAllByLabel($label)
-    // {
-    //     $page = request()->query('page', 1); // default ke 1 jika tidak ada
-    //     $method = 'get' . ucfirst($label) . 'Anime';
-
-    //     if (!method_exists($this->animeModel, $method)) {
-    //         return abort(404, "Label '$label' tidak valid.");
-    //     }
-
-    //     $result = $this->animeModel->$method(12, $page); // ← UBAH: tambah parameter $page
-    //     $animeList = $result['data'] ?? [];              // ← UBAH: ambil dari $result
-    //     $pagination = $result['pagination'] ?? [];       // ← UBAH: ambil dari $result
-
-    //     return view('user.anime.viewAllByLabel', compact('animeList', 'label', 'pagination'));
-    // }
-
+    // ==========================
+    // ======= LABEL =============
+    // ==========================
     public function viewAllByLabel($label)
     {
         $page = request()->query('page', 1);
@@ -117,13 +86,9 @@ class AnimeController extends Controller
             return abort(404, "Label '$label' tidak valid.");
         }
 
-        // Ambil SEMUA data dari model (pastikan return Collection)
         $allData = collect($this->animeModel->$method());
-
-        // Slice sesuai halaman
         $items = $allData->slice(($page - 1) * $perPage, $perPage)->values();
 
-        // Buat paginator manual
         $paginator = new LengthAwarePaginator(
             $items,
             $allData->count(),
@@ -132,124 +97,74 @@ class AnimeController extends Controller
             ['path' => request()->url(), 'query' => request()->query()]
         );
 
-        // Data untuk looping anime
         $animeList = $paginator->items();
-
-        // Data untuk pagination component (format array sesuai kebutuhan blade)
         $pagination = [
-            'current_page'        => $paginator->currentPage(),
-            'last_visible_page'   => $paginator->lastPage(),
+            'current_page'      => $paginator->currentPage(),
+            'last_visible_page' => $paginator->lastPage(),
         ];
 
-        // Kirim ke view
         return view('user.anime.viewAllByLabel', compact('animeList', 'label', 'pagination'));
     }
 
-
-
-    // public function showByGenre($genreId)
-    // {
-    //     $page = request()->query('page', 1); // default ke 1 jika tidak ada
-    //     $limit = 10;
-
-    //     $response = $this->animeModel->getAnimeByGenre($genreId, $limit, $page);
-    //     $animeList = $response['data'] ?? [];
-    //     $pagination = $response['pagination'] ?? [];
-
-    //     $label = $this->animeModel->getGenreNameById($genreId);
-
-    //     return view('user.anime.viewAllByLabel', compact('animeList', 'pagination', 'label', 'genreId'));
-    // }
-
+    // ==========================
+    // ======= GENRE ============
+    // ==========================
     public function showByGenre($genreId)
     {
         $page = request()->query('page', 1);
         $perPage = 12;
 
-        // Ambil anime berdasarkan genre (Eloquent Paginator)
         $paginated = $this->animeModel->getAnimeByGenre($genreId, $perPage, $page);
-
-        // Ambil nama genre
         $label = $this->animeModel->getGenreNameById($genreId);
 
-        // Format untuk viewAllByLabel
         $animeList = $paginated->items();
         $pagination = [
-            'current_page' => $paginated->currentPage(),
+            'current_page'      => $paginated->currentPage(),
             'last_visible_page' => $paginated->lastPage()
         ];
 
         return view('user.anime.viewAllByLabel', compact('animeList', 'label', 'pagination', 'genreId'));
     }
 
+    public function viewAllGenre(Request $request)
+    {
+        $genres = Genre::getAllGenres();
+        return view('user.anime.viewAllGenre', compact('genres'));
+    }
+
+    // ==========================
+    // ======= DETAIL ===========
+    // ==========================
     public function show($id)
     {
-        // // Ambil detail anime dari API
-        // $anime = Anime::getAnimeById($id);
-
-        // // dd($anime);
-        // if (!$anime) {
-        //     return abort(404, 'Anime detail tidak ditemukan.');
-        // }
-        // dd($anime);
-
-        // // Akses genre dengan array syntax
-        // $genre = is_array($anime['genres'])
-        //     ? implode(',', array_column($anime['genres'], 'name')) // atau 'mal_id' jika ingin ID genre
-        //     : $anime['genres'];
-
-        // // Ambil anime terkait berdasarkan genre ID pertama (jika ada)
-        // $firstGenreId = $anime['genres'][0]['mal_id'] ?? null;
-        // $relatedAnimes = [];
-
-        // if ($firstGenreId) {
-        //     $response = Anime::getAnimeByGenre($firstGenreId, 4);
-        //     $relatedAnimes = $response['data'] ?? [];
-        // }
-
-        // $comments = Comment::with('user')
-        //     ->where('anime_id', $id)
-        //     ->whereNull('parent_id')
-        //     ->get();
-        // // dd($comments);
-
-        // // Kirim ke view
-        // return view('user.anime.show', compact('anime', 'relatedAnimes', 'comments'));
-
-        // Ambil detail anime dari model (sudah sebagai Eloquent model)
         $anime = Anime::getAnimeById($id);
-        // dd($anime);
 
         if (!$anime) {
             return abort(404, 'Anime detail tidak ditemukan.');
         }
 
-        // ✅ Akses relasi genres sebagai collection, bukan array
         $genre = $anime->genres->isNotEmpty()
             ? $anime->genres->pluck('name')->implode(',')
             : 'Tidak ada genre';
 
-
-        // ✅ Ambil ID genre pertama dari relasi Eloquent
         $firstGenreId = $anime->genres->first()?->mal_id;
-
         $relatedAnimes = [];
 
         if ($firstGenreId) {
             $relatedAnimes = Anime::getAnimeByGenre($firstGenreId, 4);
         }
-        // dd($relatedAnimes);
 
-        // ✅ Ambil komentar dengan relasi user
         $comments = Comment::with('user')
             ->where('anime_id', $id)
             ->whereNull('parent_id')
             ->get();
 
-        // Kirim ke view
         return view('user.anime.show', compact('anime', 'relatedAnimes', 'comments'));
     }
 
+    // ==========================
+    // ======= SEARCH ===========
+    // ==========================
     public function search(Request $request)
     {
         $query = $request->query('q');
@@ -259,30 +174,101 @@ class AnimeController extends Controller
             return redirect()->route('home')->with('error', 'Masukkan kata kunci pencarian.');
         }
 
-        $result = $this->animeModel->searchAnime($query, 10, $page); // pastikan $page dikirim
+        $result = $this->animeModel->searchAnime($query, 10, $page);
         $animeList = $result['results'];
         $jmlResult = $result['total'];
         $pagination = [
-            'current_page' => $result['pagination']['current_page'] ?? 1,
+            'current_page'      => $result['pagination']['current_page'] ?? 1,
             'last_visible_page' => $result['pagination']['last_visible_page'] ?? 1,
         ];
 
         return view('user.anime.viewAllByLabel', compact('animeList', 'jmlResult', 'query', 'pagination'));
     }
 
-
-
-    public function viewAllGenre(Request $request)
-    {
-        $genres = Genre::getAllGenres(); // Mengambil data + count
-
-        return view('user.anime.viewAllGenre', compact('genres'));
-    }
-
+    // ==========================
+    // ======= NEWS =============
+    // ==========================
     public function viewAllNews(Request $request)
     {
         $news = $this->animeModel->getPopularNewsAnime(5);
-        // dd($news);
         return view('user.anime.viewAllNews', compact('news'));
     }
+
+    // ==========================
+    // ===== FAVORITES ==========
+    // ==========================
+    public function toggleFavorite($mal_id)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['status' => 'error', 'message' => 'Unauthenticated.'], 401);
+        }
+
+        // Pastikan relasi di model User: favoritesAnimes()
+        $anime = Anime::where('mal_id', $mal_id)->firstOrFail();
+
+        // Toggle: jika sudah ada, hapus. Jika belum, tambahkan.
+        $isFavorited = $user->favoriteAnimes()->where('mal_id', $anime->mal_id)->exists();
+
+        if ($isFavorited) {
+            $user->favoriteAnimes()->detach($anime->mal_id);
+            $status = 'removed';
+        } else {
+            $user->favoriteAnimes()->attach($anime->mal_id);
+            $status = 'added';
+        }
+
+        return response()->json(['status' => 'success', 'action' => $status]);
+    }
+
+
+    // ==========================
+    // ===== KOMENTAR CODE ======
+    // ==========================
+    // public function viewAllByLabel($label)
+    // {
+    //     $page = request()->query('page', 1); // default ke 1 jika tidak ada
+    //     $method = 'get' . ucfirst($label) . 'Anime';
+    //     if (!method_exists($this->animeModel, $method)) {
+    //         return abort(404, "Label '$label' tidak valid.");
+    //     }
+    //     $result = $this->animeModel->$method(12, $page);
+    //     $animeList = $result['data'] ?? [];
+    //     $pagination = $result['pagination'] ?? [];
+    //     return view('user.anime.viewAllByLabel', compact('animeList', 'label', 'pagination'));
+    // }
+
+    // public function showByGenre($genreId)
+    // {
+    //     $page = request()->query('page', 1); // default ke 1 jika tidak ada
+    //     $limit = 10;
+    //     $response = $this->animeModel->getAnimeByGenre($genreId, $limit, $page);
+    //     $animeList = $response['data'] ?? [];
+    //     $pagination = $response['pagination'] ?? [];
+    //     $label = $this->animeModel->getGenreNameById($genreId);
+    //     return view('user.anime.viewAllByLabel', compact('animeList', 'pagination', 'label', 'genreId'));
+    // }
+
+    // public function show($id)
+    // {
+    //     // Ambil detail anime dari API
+    //     // $anime = Anime::getAnimeById($id);
+    //     // if (!$anime) {
+    //     //     return abort(404, 'Anime detail tidak ditemukan.');
+    //     // }
+    //     // $genre = is_array($anime['genres'])
+    //     //     ? implode(',', array_column($anime['genres'], 'name'))
+    //     //     : $anime['genres'];
+    //     // $firstGenreId = $anime['genres'][0]['mal_id'] ?? null;
+    //     // $relatedAnimes = [];
+    //     // if ($firstGenreId) {
+    //     //     $response = Anime::getAnimeByGenre($firstGenreId, 4);
+    //     //     $relatedAnimes = $response['data'] ?? [];
+    //     // }
+    //     // $comments = Comment::with('user')
+    //     //     ->where('anime_id', $id)
+    //     //     ->whereNull('parent_id')
+    //     //     ->get();
+    //     // return view('user.anime.show', compact('anime', 'relatedAnimes', 'comments'));
+    // }
 }

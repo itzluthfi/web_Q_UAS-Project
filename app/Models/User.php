@@ -28,5 +28,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-  
+
+    public function favoriteAnimes()
+    {
+        // user_id = kolom di favorite_anime, anime_mal_id = kolom di favorite_anime, id = users, mal_id = animes
+        return $this->belongsToMany(Anime::class, 'favorite_anime', 'user_id', 'anime_mal_id', 'id', 'mal_id')
+            ->withTimestamps();
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

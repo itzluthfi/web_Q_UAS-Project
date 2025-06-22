@@ -58,6 +58,14 @@ class Anime extends Model
         return $this->hasOne(AnimeDetail::class);
     }
 
+    public function favoritedByUsers()
+    {
+        // anime_mal_id = kolom di favorite_anime, user_id = kolom di favorite_anime, mal_id = animes, id = users
+        return $this->belongsToMany(User::class, 'favorite_anime', 'anime_mal_id', 'user_id', 'mal_id', 'id')
+            ->withTimestamps();
+    }
+
+
 
 
     private static function baseUrl($path = '')

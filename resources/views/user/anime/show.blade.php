@@ -159,6 +159,24 @@
             height: 0.875rem;
             margin-right: 0.25rem;
         }
+
+
+        /* ...existing code... */
+        .fav-btn-spinner {
+            transition: opacity 0.2s;
+        }
+
+        .fav-btn-text {
+            transition: color 0.2s, opacity 0.2s;
+        }
+
+        .fav-btn-icon {
+            transition: color 0.2s, opacity 0.2s;
+        }
+
+        .fav-btn-spinner {
+            transition: opacity 0.2s;
+        }
     </style>
 @endpush
 
@@ -180,14 +198,29 @@
                         <div class="text-xs text-gray-400 mt-1">SCORE</div>
                     </div>
 
-                    <!-- Tombol Favorite -->
-                    <button class="w-full mt-4 px-4 py-3 bg-yellow-600 text-white rounded-lg hover:bg-yellow-500 transition flex items-center justify-center btn-glow">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                            <path
-                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-.185 1.118.588 1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                        Tambahkan ke Favorite
+                    @php
+                        $isFavorited = auth()->check() && auth()->user()->favoriteAnimes->contains('mal_id', $anime->mal_id);
+                    @endphp
+
+                    <button id="favorite-button" type="button" data-mal-id="{{ $anime->mal_id }}" class="w-full mt-4 px-4 py-3 {{ $isFavorited ? 'bg-green-600' : 'bg-yellow-600' }} text-white rounded-lg hover:bg-yellow-500 transition flex items-center justify-center btn-glow relative overflow-hidden"
+                        style="min-height:48px">
+                        <span class="fav-btn-icon transition-all duration-200 mr-2 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-.185 1.118.588 1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                        </span>
+                        <span class="fav-btn-text transition-all duration-200">
+                            {{ $isFavorited ? 'Sudah difavoritkan' : 'Tambahkan ke Favorite' }}
+                        </span>
+                        <span class="fav-btn-spinner absolute left-4 top-1/2 -translate-y-1/2 hidden">
+                            <svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                            </svg>
+                        </span>
                     </button>
+
                 </div>
 
                 <div class="md:ml-6 flex-1">
@@ -568,6 +601,61 @@
             }
         </script>
 
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const button = document.getElementById('favorite-button');
+                if (!button) return;
+
+                const btnText = button.querySelector('.fav-btn-text');
+                const btnIcon = button.querySelector('.fav-btn-icon');
+                const btnSpinner = button.querySelector('.fav-btn-spinner');
+
+                button.addEventListener('click', function() {
+                    if (button.disabled) return;
+                    button.disabled = true;
+                    btnSpinner.classList.remove('hidden');
+                    btnText.textContent = 'Loading...';
+
+                    const malId = button.dataset.malId;
+                    fetch(`/anime/${malId}/favorite`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({})
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            btnSpinner.classList.add('hidden');
+                            button.disabled = false;
+
+                            if (data.status === 'success') {
+                                if (data.action === 'added') {
+
+                                    btnText.textContent = 'Sudah difavoritkan';
+                                } else {
+                                    button.classList.remove('bg-green-600');
+                                    button.classList.add('bg-yellow-600');
+                                    btnText.textContent = 'Tambahkan ke Favorite';
+                                }
+                            } else {
+                                btnText.textContent = 'Gagal';
+                                alert(data.message || 'Gagal menambahkan ke favorit.');
+                            }
+                        })
+                        .catch(err => {
+                            btnSpinner.classList.add('hidden');
+                            button.disabled = false;
+                            btnText.textContent = 'Gagal';
+                            console.error(err);
+                            alert('Terjadi kesalahan saat menambahkan ke favorit.');
+                        });
+                });
+            });
+        </script>
+
+
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -596,6 +684,9 @@
                 const commentForm = document.getElementById('form-komentar');
                 const parentIdInput = document.getElementById('parent_id');
                 const commentInput = document.getElementById('comment-input');
+
+
+
 
 
                 // Tombol "Balas" diklik

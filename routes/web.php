@@ -32,9 +32,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/auth/setting', [AdminController::class, 'setting'])->name('auth.setting');
     Route::get('/auth/dashboard', [AdminController::class, 'dashboard'])->name('auth.dashboard');
     Route::get('/notifikasi-email', [AuthController::class, 'kirimNotifikasi']);
-    // Pastikan middleware 'auth' digunakan, karena hanya user login yang boleh upload
-    Route::post('auth/profile/upload-image', [AuthController::class, 'uploadProfileImage'])
-        ->name('auth.profile.uploadImage');
+    Route::post('auth/profile/upload-image', [AuthController::class, 'uploadProfileImage'])->name('auth.profile.uploadImage');
+    Route::get('/anime/favorites', [AuthController::class, 'favoriteList'])->name('anime.favorites');
+    Route::post('/anime/{mal_id}/favorite', [AnimeController::class, 'toggleFavorite'])->name('anime.favorite');
 });
 
 // Public routes

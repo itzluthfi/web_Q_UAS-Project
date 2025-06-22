@@ -110,6 +110,8 @@ class AuthController extends Controller
             }
         }
 
+
+
         return back()->withErrors([
             'username' => 'Username atau password salah.',
         ]);
@@ -118,7 +120,7 @@ class AuthController extends Controller
 
     public function uploadProfileImage(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         $user = Auth::user();
 
         if (!$user instanceof User) {
@@ -139,5 +141,14 @@ class AuthController extends Controller
     {
         Session::flush();
         return redirect()->route('home');
+    }
+
+    public function favoriteList()
+    {
+        $user = Auth::user();
+        $favorites = $user->favoriteAnimes()->get();
+        // dd($favorites);
+
+        return view('user.anime.animeList', compact('favorites'));
     }
 }

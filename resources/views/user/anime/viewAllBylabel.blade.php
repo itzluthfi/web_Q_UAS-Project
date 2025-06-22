@@ -4,79 +4,77 @@
 
 
 @push('styles')
-<style>
-body {
-    font-family: 'Poppins', sans-serif;
-    background-color: #0f1116;
-}
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0f1116;
+        }
 
-.glow-effect {
-    box-shadow: 0 0 15px rgba(101, 31, 255, 0.4);
-}
+        .glow-effect {
+            box-shadow: 0 0 15px rgba(101, 31, 255, 0.4);
+        }
 
-.btn-glow:hover {
-    box-shadow: 0 0 20px rgba(101, 31, 255, 0.6);
-}
+        .btn-glow:hover {
+            box-shadow: 0 0 20px rgba(101, 31, 255, 0.6);
+        }
 
-.card-hover {
-    transition: all 0.3s ease;
-}
+        .card-hover {
+            transition: all 0.3s ease;
+        }
 
-.card-hover:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0 25px rgba(101, 31, 255, 0.5);
-}
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(101, 31, 255, 0.5);
+        }
 
-.input-dark {
-    background-color: rgba(30, 32, 44, 0.8);
-    border-color: #2e3346;
-    color: #e2e8f0;
-}
+        .input-dark {
+            background-color: rgba(30, 32, 44, 0.8);
+            border-color: #2e3346;
+            color: #e2e8f0;
+        }
 
-.input-dark::placeholder {
-    color: #64748b;
-}
+        .input-dark::placeholder {
+            color: #64748b;
+        }
 
-.input-dark:focus {
-    border-color: #651fff;
-    box-shadow: 0 0 0 2px rgba(101, 31, 255, 0.2);
-}
+        .input-dark:focus {
+            border-color: #651fff;
+            box-shadow: 0 0 0 2px rgba(101, 31, 255, 0.2);
+        }
 
-/* Custom scrollbar for webkit browsers */
-::-webkit-scrollbar {
-    width: 8px;
-}
+        /* Custom scrollbar for webkit browsers */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
 
-::-webkit-scrollbar-track {
-    background: #1f2937;
-}
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
 
-::-webkit-scrollbar-thumb {
-    background: #4c1d95;
-    border-radius: 4px;
-}
+        ::-webkit-scrollbar-thumb {
+            background: #4c1d95;
+            border-radius: 4px;
+        }
 
-::-webkit-scrollbar-thumb:hover {
-    background: #6d28d9;
-}
-
-
-</style>
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6d28d9;
+        }
+    </style>
 @endpush
 
 
-    @section('content')
+@section('content')
     <div class="container mx-auto px-4 py-6">
         <h1 class="text-3xl font-bold text-center text-purple-500 mb-8">
-            @if(isset($query) && $query)
+            @if (isset($query) && $query)
                 {{ $jmlResult }} hasil ditemukan untuk pencarian: "{{ $query }}"
             @else
                 Daftar Anime "{{ ucfirst($label) }}"
             @endif
         </h1>
-    
+
         <!-- Alert Message -->
-        @if(session('error_message'))
+        @if (session('error_message'))
             <div class="p-3 bg-red-900/50 border-l-4 border-red-500 text-red-200 flex items-center rounded-r mb-4 max-w-2xl mx-auto">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
@@ -84,8 +82,8 @@ body {
                 <span>{{ session('error_message') }}</span>
             </div>
         @endif
-    
-        @if(session('success_message'))
+
+        @if (session('success_message'))
             <div class="p-3 bg-green-900/50 border-l-4 border-green-500 text-green-200 flex items-center rounded-r mb-4 max-w-2xl mx-auto">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
@@ -93,18 +91,17 @@ body {
                 <span>{{ session('success_message') }}</span>
             </div>
         @endif
-    {{-- @dd($animeList); --}}
+        {{-- @dd($animeList); --}}
         <!-- Anime Grid -->
-        @if(!empty($animeList))
+        @if (!empty($animeList))
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @foreach($animeList as $anime)
+                @foreach ($animeList as $anime)
                     <div class="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-lg card-hover">
                         <div class="relative overflow-hidden">
                             <!-- Asumsi cover disimpan di public/covers/ -->
-                            <img src="{{$anime->image_url}}" alt="{{ $anime->title }}"
-                                class="w-full h-56 object-cover transition-transform duration-500 hover:scale-110">
+                            <img src="{{ $anime->image_url }}" alt="{{ $anime->title }}" class="w-full h-56 object-cover transition-transform duration-500 hover:scale-110">
 
-                            @if($anime->score)
+                            @if ($anime->score)
                                 <div class="absolute top-0 right-0 bg-purple-700 text-white px-2 py-1 m-2 rounded text-xs font-bold">
                                     {{ $anime->score }} ★
                                 </div>
@@ -116,7 +113,7 @@ body {
                                 <span class="bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded">
                                     {{ ucfirst($anime->status) }}
                                 </span>
-                                @if($anime->episodes)
+                                @if ($anime->episodes)
                                     <span class="bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded">
                                         {{ $anime->episodes }} Episode
                                     </span>
@@ -132,8 +129,7 @@ body {
                                 {{ \Illuminate\Support\Str::limit($anime->synopsis ?? 'Tidak ada deskripsi.', 100) }}
                             </p>
 
-                            <a href="{{ route('anime.show', ['id' => $anime->id]) }}"
-                            class="inline-block mt-4 bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-600 transition-colors btn-glow">
+                            <a href="{{ route('anime.show', ['id' => $anime->id]) }}" class="inline-block mt-4 bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-600 transition-colors btn-glow">
                                 Lihat Detail
                             </a>
                         </div>
@@ -143,7 +139,6 @@ body {
 
             <!-- Pagination Controls -->
             <x-pagination :pagination="$pagination" :base-url="url()->current()" />
-
         @else
             <div class="bg-gray-800/50 border border-gray-700 rounded-lg p-8 text-center max-w-2xl mx-auto">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -154,6 +149,4 @@ body {
             </div>
         @endif
     </div>
-    @endsection
-    
-
+@endsection
