@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('source')->nullable(); // Manga, Light Novel, Original
             $table->string('rating')->nullable(); // PG-13, R, etc
             $table->string('trailer_url')->nullable();
+            $table->string('trailer_embed_url')->nullable();
+            $table->string('url')->nullable();
             $table->integer('scored_by')->nullable(); // jumlah reviewer
             $table->integer('popularity')->nullable();
             $table->integer('members')->nullable();

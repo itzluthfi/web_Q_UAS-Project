@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('mal_id')->unique();
             $table->string('title');
             $table->string('title_english')->nullable();
+            $table->string('url')->nullable();
             $table->text('synopsis')->nullable();
             $table->string('type')->nullable(); // TV, Movie, OVA, etc
             $table->integer('episodes')->nullable();

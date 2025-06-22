@@ -250,17 +250,17 @@
                             @endif
                         </div>
                     </div>
-
+                    <!-- Watch buttons -->
                     <div class="watch-buttons">
-                        <a href="{{ $anime['trailer_url'] ?? '#' }}" target="_blank" class="watch-button watch-now">
+                        <a href="{{ $anime->url }}" target="_blank" class="watch-button watch-now">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
                             </svg>
                             Tonton Sekarang
                         </a>
 
-                        @if (!empty($anime['trailer_url']['embed_url']))
-                            <a href="javascript:void(0);" onclick="watchTrailer('{{ $anime['trailer']['embed_url'] }}')" class="watch-button watch-trailer">
+                        @if ($anime->details->trailer_embed_url ?? null)
+                            <a href="javascript:void(0);" onclick="watchTrailer('{{ $anime->details->trailer_embed_url }}')" class="watch-button watch-trailer">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                                     <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
                                 </svg>

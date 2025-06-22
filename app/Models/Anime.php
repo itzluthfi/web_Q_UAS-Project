@@ -14,6 +14,7 @@ class Anime extends Model
         'title',
         'title_english',
         'synopsis',
+        'url',
         'type',
         'episodes',
         'duration',
@@ -189,11 +190,11 @@ class Anime extends Model
         $query = self::where('category', 'current-season')
             ->orderByRaw("FIELD(season, 'Winter', 'Spring', 'Summer', 'Fall')")
             ->orderByDesc('year');
-    
+
         if ($limit !== null) {
             return $query->take($limit)->get(); // Ambil jumlah tertentu
         }
-    
+
         return $query->get(); // Ambil semua data
     }
 
@@ -255,13 +256,13 @@ class Anime extends Model
         // Bangun query pencarian
         $dbQuery = self::query()
             ->where('title', 'like', "%$query%");
-    
+
         // Tambahkan eager loading jika perlu
         $dbQuery->with(['genres']);
-    
+
         // Jalankan pagination
         $paginated = $dbQuery->paginate($perPage, ['*'], 'page', $page);
-    
+
         return [
             'results' => $paginated->items(),
             'total' => $paginated->total(),

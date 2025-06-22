@@ -11,6 +11,7 @@ class AnimeDetail extends Model
         'source',
         'rating',
         'trailer_url',
+        'trailer_embed_url',
         'scored_by',
         'popularity',
         'members',

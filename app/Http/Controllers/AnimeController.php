@@ -217,39 +217,37 @@ class AnimeController extends Controller
         // return view('user.anime.show', compact('anime', 'relatedAnimes', 'comments'));
 
         // Ambil detail anime dari model (sudah sebagai Eloquent model)
-    $anime = Anime::getAnimeById($id);
-    // dd($anime);
+        $anime = Anime::getAnimeById($id);
+        // dd($anime);
 
-    if (!$anime) {
-        return abort(404, 'Anime detail tidak ditemukan.');
-    }
+        if (!$anime) {
+            return abort(404, 'Anime detail tidak ditemukan.');
+        }
 
-    // ✅ Akses relasi genres sebagai collection, bukan array
-    $genre = $anime->genres->isNotEmpty()
-        ? $anime->genres->pluck('name')->implode(',') 
-        : 'Tidak ada genre';
+        // ✅ Akses relasi genres sebagai collection, bukan array
+        $genre = $anime->genres->isNotEmpty()
+            ? $anime->genres->pluck('name')->implode(',')
+            : 'Tidak ada genre';
 
-    
-    // ✅ Ambil ID genre pertama dari relasi Eloquent
-    $firstGenreId = $anime->genres->first()?->mal_id;
 
-    $relatedAnimes = [];
+        // ✅ Ambil ID genre pertama dari relasi Eloquent
+        $firstGenreId = $anime->genres->first()?->mal_id;
 
-    if ($firstGenreId) {
-        $relatedAnimes = Anime::getAnimeByGenre($firstGenreId, 4); 
+        $relatedAnimes = [];
 
-    }
-    // dd($relatedAnimes);
+        if ($firstGenreId) {
+            $relatedAnimes = Anime::getAnimeByGenre($firstGenreId, 4);
+        }
+        // dd($relatedAnimes);
 
-    // ✅ Ambil komentar dengan relasi user
-    $comments = Comment::with('user')
-        ->where('anime_id', $id)
-        ->whereNull('parent_id')
-        ->get();
+        // ✅ Ambil komentar dengan relasi user
+        $comments = Comment::with('user')
+            ->where('anime_id', $id)
+            ->whereNull('parent_id')
+            ->get();
 
-    // Kirim ke view
-    return view('user.anime.show', compact('anime', 'relatedAnimes', 'comments'));
-
+        // Kirim ke view
+        return view('user.anime.show', compact('anime', 'relatedAnimes', 'comments'));
     }
 
     public function search(Request $request)
