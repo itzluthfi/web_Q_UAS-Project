@@ -170,13 +170,13 @@
             <!-- Logo and Desktop Navigation -->
             <div class="flex items-center">
                 <!-- Logo -->
-                <div class="flex-shrink-0 flex items-center ">
-                    <div class="h-10 w-10 bg-purple-700 rounded-full flex items-center justify-center mr-2 glow-effect">
-                        <div class="h-10 w-10 rounded-full overflow-hidden mr-2 glow-effect logo-pulse">
-                            <img src="{{ asset('assets/system/kobong.gif') }}" alt="AnimeVerse Logo" class="h-full w-full object-cover">
+                <div class="flex-shrink-0 flex items-center">
+                    <div class="h-10 w-10 bg-purple-700 rounded-full flex items-center justify-center glow-effect">
+                        <div class="h-10 w-10 rounded-full overflow-hidden logo-pulse">
+                            <img src="{{ asset('assets/system/sjw.png') }}" alt="AnimeVerse Logo" class="h-full w-full object-cover">
                         </div>
                     </div>
-                    <span class="text-2xl font-bold gradient-text">Anime<span class="text-white">Verse</span></span>
+                    <span class="ml-2 text-2xl font-bold gradient-text">Anime<span class="text-white">Verse</span></span>
                 </div>
                 <!-- Desktop Navigation Links -->
                 <div class="hidden md:ml-6 md:flex md:items-center md:space-x-4">
