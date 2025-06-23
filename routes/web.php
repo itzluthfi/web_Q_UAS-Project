@@ -34,6 +34,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notifikasi-email', [AuthController::class, 'kirimNotifikasi']);
     Route::post('auth/profile/upload-image', [AuthController::class, 'uploadProfileImage'])->name('auth.profile.uploadImage');
     Route::get('/anime/favorites', [AuthController::class, 'favoriteList'])->name('anime.favorites');
+    Route::get('/anime/favorites/dashboard', [AuthController::class, 'favoriteListDashboard'])->name('anime.favorites.dashboard');
     Route::post('/anime/{mal_id}/favorite', [AnimeController::class, 'toggleFavorite'])->name('anime.favorite');
 });
 

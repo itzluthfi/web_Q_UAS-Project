@@ -147,8 +147,13 @@ class AuthController extends Controller
     {
         $user = Auth::user();
         $favorites = $user->favoriteAnimes()->get();
-        // dd($favorites);
+        return view('user.anime.animeFavoriteList', compact('favorites'));
+    }
 
-        return view('user.anime.animeList', compact('favorites'));
+    public function favoriteListDashboard()
+    {
+        $user = Auth::user();
+        $favorites = $user->favoriteAnimes()->get();
+        return view('auth.animeFavoriteList', compact('favorites'));
     }
 }

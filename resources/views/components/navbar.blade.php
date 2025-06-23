@@ -248,11 +248,11 @@
 
                     @auth
                         <!-- Menu tambahan untuk user yang sudah login -->
-                        <a href="{{ route('anime.favorites') }}" class="nav-link px-3 py-2 text-sm font-medium text-gray-300 hover:text-white">
+                        <a href="{{ route('anime.favorites.dashboard') }}" class="nav-link px-3 py-2 text-sm font-medium text-gray-300 hover:text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
                             </svg>
-                            Anime List
+                            Anime Favorite
                         </a>
                         <a href="#" class="nav-link px-3 py-2 text-sm font-medium text-gray-300 hover:text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
@@ -309,7 +309,7 @@
                                 <a href="{{ route('auth.dashboard') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white" role="menuitem">Dashboard</a>
                                 <a href="@php if (auth()->user()->role == 'admin') { echo route('auth.profile'); } else { echo route('auth.profile'); } @endphp" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white" role="menuitem">Profil Saya</a>
                                 <a href="{{ route('auth.setting') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white" role="menuitem">Pengaturan</a>
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white" role="menuitem">Anime Favorit</a>
+                                <a href="{{ route('anime.favorites.dashboard') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white" role="menuitem">Anime Favorit</a>
                                 <form action="{{ route('logout') }}" method="POST" class="inline">
                                     @csrf
                                     <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700">
@@ -385,8 +385,8 @@
 
             @auth
                 <!-- Menu tambahan untuk user yang sudah login (mobile) -->
-                <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Anime
-                    List</a>
+                <a href="{{ route('anime.favorites.dashboard') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Anime
+                    Favorite</a>
                 <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Community</a>
             @endauth
         </div>
@@ -421,8 +421,8 @@
                     <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Profil
                         Saya</a>
                     <a href="{{ route('auth.setting') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Pengaturan</a>
-                    <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Anime
-                        Favorit</a>
+                    <a href="{{ route('anime.favorites.dashboard') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Anime
+                        Favorite</a>
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button onclick="confirm('Apakah Anda yakin ingin keluar?')" type="submit" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Keluar</button>

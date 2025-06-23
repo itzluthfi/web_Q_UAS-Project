@@ -67,12 +67,9 @@
 
             <!-- Alert Message -->
             <?php if (!empty($_SESSION['error_message'])): ?>
-            <div
-                class="p-3 bg-red-900/50 border-l-4 border-red-500 text-red-200 flex items-center rounded-r mb-4 max-w-2xl mx-auto">
+            <div class="p-3 bg-red-900/50 border-l-4 border-red-500 text-red-200 flex items-center rounded-r mb-4 max-w-2xl mx-auto">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd"
-                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                        clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
                 </svg>
                 <span><?= htmlspecialchars($_SESSION['error_message']) ?></span>
             </div>
@@ -80,12 +77,9 @@
             <?php endif; ?>
 
             <?php if (!empty($_SESSION['success_message'])): ?>
-            <div
-                class="p-3 bg-green-900/50 border-l-4 border-green-500 text-green-200 flex items-center rounded-r mb-4 max-w-2xl mx-auto">
+            <div class="p-3 bg-green-900/50 border-l-4 border-green-500 text-green-200 flex items-center rounded-r mb-4 max-w-2xl mx-auto">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                 </svg>
                 <span><?= htmlspecialchars($_SESSION['success_message']) ?></span>
             </div>
@@ -102,11 +96,7 @@
                         @foreach ($animeUpcomings->take(5) as $index => $anime)
                             <!-- Carousel Item -->
                             <div class="carousel-item w-full flex-shrink-0 relative">
-                                <img 
-                                    src="{{ $anime->large_image_url ?? 'https://via.placeholder.com/800x400?text=No+Image' }}" 
-                                    alt="{{ htmlspecialchars($anime->title) }}" 
-                                    class="w-full h-[400px] object-cover brightness-50"
-                                >
+                                <img src="{{ $anime->large_image_url ?? 'https://via.placeholder.com/800x400?text=No+Image' }}" alt="{{ htmlspecialchars($anime->title) }}" class="w-full h-[400px] object-cover brightness-50">
                                 <div class="absolute inset-0 flex flex-col justify-end p-8 bg-gradient-to-t from-black/80 to-transparent">
                                     <span class="bg-red-700 text-white px-3 py-1 rounded-full text-sm font-medium inline-block mb-3 w-max">
                                         {{ 'Upcoming' }}
@@ -130,16 +120,13 @@
                                         {{ htmlspecialchars(substr($anime->synopsis ?? 'No synopsis available', 0, 150)) }}...
                                     </p>
                                     <div class="flex space-x-4">
-                                        <a 
-                                            href="{{ route('anime.show', ['id' => $anime->mal_id]) }}" 
-                                            class="bg-purple-700 hover:bg-purple-600 text-white px-6 py-2 rounded-lg transition-all btn-glow flex items-center"
-                                        >
+                                        <a href="{{ route('anime.show', ['id' => $anime->mal_id]) }}" class="bg-purple-700 hover:bg-purple-600 text-white px-6 py-2 rounded-lg transition-all btn-glow flex items-center">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
                                             </svg>
                                             Details
                                         </a>
-                                        <a href="#" class="border border-gray-400 hover:border-purple-500 text-white px-6 py-2 rounded-lg transition-all flex items-center"> 
+                                        <a href="#" class="border border-gray-400 hover:border-purple-500 text-white px-6 py-2 rounded-lg transition-all flex items-center">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                                                 <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
                                             </svg>
@@ -154,19 +141,13 @@
 
 
                 <!-- Carousel Controls -->
-                <button
-                    class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-purple-700 text-white p-2 rounded-full transition-colors z-10"
-                    id="prevBtn">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
+                <button class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-purple-700 text-white p-2 rounded-full transition-colors z-10" id="prevBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
                 </button>
-                <button
-                    class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-purple-700 text-white p-2 rounded-full transition-colors z-10"
-                    id="nextBtn">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
+                <button class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-purple-700 text-white p-2 rounded-full transition-colors z-10" id="nextBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
                 </button>
@@ -174,9 +155,7 @@
                 <!-- Carousel Indicators -->
                 <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-10">
                     @foreach ($animeUpcomings->take(5) as $index => $anime)
-                        <button
-                            class="w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-colors carousel-indicator {{ $index === 0 ? 'active' : '' }}"
-                            data-index="{{ $index }}"></button>
+                        <button class="w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-colors carousel-indicator {{ $index === 0 ? 'active' : '' }}" data-index="{{ $index }}"></button>
                     @endforeach
                 </div>
             </div>
@@ -187,11 +166,8 @@
                     <h2 class="text-2xl font-bold text-purple-400">Top Anime Studios</h2>
                     <a href="#" class="text-purple-400 hover:text-purple-300 transition-colors flex items-center">
                         View All
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                clip-rule="evenodd" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                         </svg>
                     </a>
                 </div>
@@ -208,14 +184,10 @@
                 ];
                 
                 foreach ($studios as $studio): ?>
-                    <a href="#"
-                        class="bg-gray-800/80 hover:bg-gray-700/80 border border-gray-700 rounded-lg p-4 text-center transition-all card-hover">
-                        <div
-                            class="bg-purple-700/20 rounded-full p-3 mx-auto w-16 h-16 flex items-center justify-center mb-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-400" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="<?= $studio['icon'] ?>" />
+                    <a href="#" class="bg-gray-800/80 hover:bg-gray-700/80 border border-gray-700 rounded-lg p-4 text-center transition-all card-hover">
+                        <div class="bg-purple-700/20 rounded-full p-3 mx-auto w-16 h-16 flex items-center justify-center mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<?= $studio['icon'] ?>" />
                             </svg>
                         </div>
                         <h3 class="font-medium text-white"><?= $studio['name'] ?></h3>
@@ -229,14 +201,10 @@
             <div class="mb-12">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-2xl font-bold text-purple-400">Top Rated Anime</h2>
-                    <a href="{{ route('anime.viewAllByLabel', ['label' => 'TopRated']) }}"
-                        class="text-purple-400 hover:text-purple-300 transition-colors flex items-center">
+                    <a href="{{ route('anime.viewAllByLabel', ['label' => 'TopRated']) }}" class="text-purple-400 hover:text-purple-300 transition-colors flex items-center">
                         View All
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                clip-rule="evenodd" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                         </svg>
                     </a>
                 </div>
@@ -244,13 +212,10 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {{-- @dd($animeTopRated); --}}
                     @foreach ($animeTopRated as $anime)
-                        <div
-                            class="bg-gray-800/80 border border-gray-700 rounded-lg p-4 flex items-center gap-4 card-hover">
+                        <div class="bg-gray-800/80 border border-gray-700 rounded-lg p-4 flex items-center gap-4 card-hover">
                             <div class="flex-shrink-0 relative">
-                                <img src="{{ $anime['image_url'] }}" alt="{{ $anime['title'] }}"
-                                    class="w-20 h-28 object-cover rounded">
-                                <div
-                                    class="absolute -top-2 -left-2 bg-purple-700 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">
+                                <img src="{{ $anime['image_url'] }}" alt="{{ $anime['title'] }}" class="w-20 h-28 object-cover rounded">
+                                <div class="absolute -top-2 -left-2 bg-purple-700 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">
                                     {{ $anime['rank'] ?? '-' }}
                                 </div>
                             </div>
@@ -258,8 +223,7 @@
                                 <h3 class="font-semibold text-white text-lg">{{ $anime['title'] }}</h3>
                                 <div class="flex items-center gap-2 mt-1">
                                     <div class="flex items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-400"
-                                            viewBox="0 0 20 20" fill="currentColor">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
                                             <path
                                                 d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                         </svg>
@@ -267,8 +231,7 @@
                                     </div>
                                     <span class="text-gray-400 text-sm">{{ $anime['year'] ?? 'N/A' }}</span>
                                 </div>
-                                <a href="{{ route('anime.show', ['id' => $anime['mal_id']]) }}"
-                                    class="text-purple-400 hover:text-purple-300 text-sm mt-2 inline-block">View
+                                <a href="{{ route('anime.show', ['id' => $anime['mal_id']]) }}" class="text-purple-400 hover:text-purple-300 text-sm mt-2 inline-block">View
                                     Details</a>
                             </div>
                         </div>
@@ -280,14 +243,10 @@
             <div class="mb-12">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-2xl font-bold text-purple-400">Anime This Season</h2>
-                    <a href="{{ route('anime.viewAllByLabel', ['label' => 'CurrentSeason']) }} "
-                        class= "text-purple-400 hover:text-purple-300 transition-colors flex items-center">
+                    <a href="{{ route('anime.viewAllByLabel', ['label' => 'CurrentSeason']) }} " class= "text-purple-400 hover:text-purple-300 transition-colors flex items-center">
                         View All
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                clip-rule="evenodd" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                         </svg>
                     </a>
                 </div>
@@ -296,31 +255,20 @@
                     <?php foreach ($animeCurrentSeasonal->take(4) as $anime): ?>
                     <div class="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-lg card-hover">
                         <div class="relative overflow-hidden">
-                            <img src="<?= $anime['image_url'] ?? 'https://via.placeholder.com/400x600?text=No+Image' ?>"
-                                alt="<?= htmlspecialchars($anime['title']) ?>"
-                                class="w-full h-56 object-cover transition-transform duration-500 hover:scale-110">
-                            <div
-                                class="absolute top-0 right-0 bg-purple-700 text-white px-2 py-1 m-2 rounded text-xs font-bold">
+                            <img src="<?= $anime['image_url'] ?? 'https://via.placeholder.com/400x600?text=No+Image' ?>" alt="<?= htmlspecialchars($anime['title']) ?>" class="w-full h-56 object-cover transition-transform duration-500 hover:scale-110">
+                            <div class="absolute top-0 right-0 bg-purple-700 text-white px-2 py-1 m-2 rounded text-xs font-bold">
                                 <?= number_format($anime['score'] ?? 0, 1) ?> ★
                             </div>
-                            <div
-                                class="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 m-2 rounded-r-lg text-xs font-bold flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                                        clip-rule="evenodd" />
+                            <div class="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 m-2 rounded-r-lg text-xs font-bold flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
                                 </svg>
                                 NEW
                             </div>
                             <?php if (($anime['airing'] ?? false) || ($anime['status'] === 'Currently Airing')): ?>
-                            <div
-                                class="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 m-2 rounded-r-lg text-xs font-bold flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                                        clip-rule="evenodd" />
+                            <div class="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 m-2 rounded-r-lg text-xs font-bold flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
                                 </svg>
                                 NEW
                             </div>
@@ -340,8 +288,7 @@
                             <p class="text-sm text-gray-400 mt-2 h-16 overflow-hidden">
                                 <?= htmlspecialchars(substr($anime['synopsis'] ?? 'No synopsis available', 0, 100)) ?>...
                             </p>
-                            <a href="<?= route('anime.show', ['id' => $anime['mal_id']]) ?>"
-                                class="inline-block mt-4 bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-600 transition-colors btn-glow">
+                            <a href="<?= route('anime.show', ['id' => $anime['mal_id']]) ?>" class="inline-block mt-4 bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-600 transition-colors btn-glow">
                                 Details
                             </a>
                         </div>
@@ -355,14 +302,10 @@
             <div class="mb-12">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-2xl font-bold text-purple-400">Popular This Season</h2>
-                    <a href="{{ route('anime.viewAllByLabel', ['label' => 'Popular']) }}"
-                        class="text-purple-400 hover:text-purple-300 transition-colors flex items-center">
+                    <a href="{{ route('anime.viewAllByLabel', ['label' => 'Popular']) }}" class="text-purple-400 hover:text-purple-300 transition-colors flex items-center">
                         View All
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                clip-rule="evenodd" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                         </svg>
                     </a>
                 </div>
@@ -371,31 +314,20 @@
                     @foreach ($animePopular->take(4) as $anime)
                         <div class="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-lg card-hover">
                             <div class="relative overflow-hidden">
-                                <img src="{{ $anime->image_url ?? 'https://via.placeholder.com/400x600?text=No+Image' }}"
-                                    alt="{{ htmlspecialchars($anime->title) }}"
-                                    class="w-full h-56 object-cover transition-transform duration-500 hover:scale-110">
-                                <div
-                                    class="absolute top-0 right-0 bg-purple-700 text-white px-2 py-1 m-2 rounded text-xs font-bold">
+                                <img src="{{ $anime->image_url ?? 'https://via.placeholder.com/400x600?text=No+Image' }}" alt="{{ htmlspecialchars($anime->title) }}" class="w-full h-56 object-cover transition-transform duration-500 hover:scale-110">
+                                <div class="absolute top-0 right-0 bg-purple-700 text-white px-2 py-1 m-2 rounded text-xs font-bold">
                                     {{ number_format($anime->score ?? 0, 1) }} ★
                                 </div>
-                                <div
-                                    class="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 m-2 rounded-r-lg text-xs font-bold flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20"
-                                        fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                                            clip-rule="evenodd" />
+                                <div class="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 m-2 rounded-r-lg text-xs font-bold flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
                                     </svg>
                                     POPULAR
                                 </div>
                                 @if ($anime->status === 'Currently Airing')
-                                    <div
-                                        class="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 m-2 rounded-r-lg text-xs font-bold flex items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20"
-                                            fill="currentColor">
-                                            <path fill-rule="evenodd"
-                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                                                clip-rule="evenodd" />
+                                    <div class="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 m-2 rounded-r-lg text-xs font-bold flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
                                         </svg>
                                         NEW
                                     </div>
@@ -418,8 +350,7 @@
                                 <p class="text-sm text-gray-400 mt-2 h-16 overflow-hidden">
                                     {{ htmlspecialchars(substr($anime->synopsis ?? 'No synopsis available', 0, 100)) }}...
                                 </p>
-                                <a href="{{ route('anime.show', ['id' => $anime->mal_id]) }}"
-                                    class="inline-block mt-4 bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-600 transition-colors btn-glow">
+                                <a href="{{ route('anime.show', ['id' => $anime->mal_id]) }}" class="inline-block mt-4 bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-600 transition-colors btn-glow">
                                     Details
                                 </a>
                             </div>
@@ -433,14 +364,10 @@
             <div class="mb-12">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-2xl font-bold text-purple-400">Latest Anime News</h2>
-                    <a href="{{ route('anime.viewAllNews', ['label' => 'PopularNews']) }}"
-                        class="text-purple-400 hover:text-purple-300 transition-colors flex items-center">
+                    <a href="{{ route('anime.viewAllNews', ['label' => 'PopularNews']) }}" class="text-purple-400 hover:text-purple-300 transition-colors flex items-center">
                         All News
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                clip-rule="evenodd" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                         </svg>
                     </a>
                 </div>
@@ -450,16 +377,10 @@
                         <div class="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-lg card-hover">
 
                             <div class="relative overflow-hidden h-48">
-                                <img src="{{ $news['images']['jpg']['image_url'] ?? 'https://via.placeholder.com/400x225?text=Anime+News' }}"
-                                    alt="{{ $news['title'] }}"
-                                    class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
-                                <div
-                                    class="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 m-2 rounded-r-lg text-xs font-bold flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20"
-                                        fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                                            clip-rule="evenodd" />
+                                <img src="{{ $news['images']['jpg']['image_url'] ?? 'https://via.placeholder.com/400x225?text=Anime+News' }}" alt="{{ $news['title'] }}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                                <div class="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 m-2 rounded-r-lg text-xs font-bold flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
                                     </svg>
                                     NEWS
                                 </div>
@@ -475,14 +396,10 @@
                                 <p class="text-gray-300 text-sm mb-4">
                                     {{ Str::limit($news['excerpt'], 120) }}
                                 </p>
-                                <a href="{{ $news['url'] }}" target="_blank"
-                                    class="text-purple-400 hover:text-purple-300 font-medium flex items-center">
+                                <a href="{{ $news['url'] }}" target="_blank" class="text-purple-400 hover:text-purple-300 font-medium flex items-center">
                                     Read More
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20"
-                                        fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                                            clip-rule="evenodd" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
                                     </svg>
                                 </a>
                             </div>
@@ -493,17 +410,14 @@
 
 
             <!-- Newsletter Section -->
-            <div
-                class="mb-12 bg-gradient-to-r from-purple-900/30 to-gray-800/30 rounded-xl p-8 border border-purple-900/50 glow-effect">
+            <div class="mb-12 bg-gradient-to-r from-purple-900/30 to-gray-800/30 rounded-xl p-8 border border-purple-900/50 glow-effect">
                 <div class="max-w-3xl mx-auto text-center">
                     <h2 class="text-2xl font-bold text-white mb-4">Stay Updated with Anime Releases</h2>
                     <p class="text-gray-300 mb-6">Subscribe to our newsletter and never miss updates on your favorite anime
                         series, new releases, and exclusive content.</p>
                     <form class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
-                        <input type="email" placeholder="Your email address"
-                            class="input-dark flex-1 px-4 py-3 rounded-lg focus:outline-none">
-                        <button type="submit"
-                            class="bg-purple-700 hover:bg-purple-600 text-white px-6 py-3 rounded-lg transition-colors btn-glow font-medium">
+                        <input type="email" placeholder="Your email address" class="input-dark flex-1 px-4 py-3 rounded-lg focus:outline-none">
+                        <button type="submit" class="bg-purple-700 hover:bg-purple-600 text-white px-6 py-3 rounded-lg transition-colors btn-glow font-medium">
                             Subscribe
                         </button>
                     </form>
