@@ -611,6 +611,10 @@
                 const btnSpinner = button.querySelector('.fav-btn-spinner');
 
                 button.addEventListener('click', function() {
+                    @if (!auth()->check())
+                        alert('Silakan login terlebih dahulu untuk menggunakan fitur favorite.');
+                        return;
+                    @endif
                     if (button.disabled) return;
                     button.disabled = true;
                     btnSpinner.classList.remove('hidden');
@@ -640,7 +644,6 @@
                                     btnText.textContent = 'Tambahkan ke Favorite';
                                 }
                             } else {
-                                btnText.textContent = 'Gagal';
                                 alert(data.message || 'Gagal menambahkan ke favorit.');
                             }
                         })

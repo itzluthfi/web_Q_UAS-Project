@@ -161,6 +161,10 @@
         background-size: 200% 100%;
         animation: shimmer 1.5s infinite;
     }
+
+    .filter-purple {
+        filter: brightness(90%) saturate(100%) invert(17%) sepia(91%) saturate(1779%) hue-rotate(246deg) brightness(100%) contrast(97%);
+    }
 </style>
 {{-- @dd($genres); --}}
 
@@ -170,14 +174,20 @@
             <!-- Logo and Desktop Navigation -->
             <div class="flex items-center">
                 <!-- Logo -->
-                <div class="flex-shrink-0 flex items-center">
-                    <div class="h-10 w-10 bg-purple-700 rounded-full flex items-center justify-center glow-effect">
-                        <div class="h-10 w-10 rounded-full overflow-hidden logo-pulse">
-                            <img src="{{ asset('assets/system/sjw.png') }}" alt="AnimeVerse Logo" class="h-full w-full object-cover">
-                        </div>
+                <a href="{{ route('home') }}" class="flex-shrink-0 flex items-center space-x-2">
+                    <!-- Logo Bulat dengan Background -->
+                    <div class="h-10 w-10 bg-purple-700 rounded-full flex items-center justify-center glow-effect overflow-hidden">
+                        <img src="{{ asset('assets/system/sjw.png') }}" alt="AnimeVerse Logo" class="h-full w-full object-cover logo-pulse">
                     </div>
+
+                    <!-- Logo Teks atau Tambahan -->
+                    {{-- <img src="https://i0.wp.com/animeversefest.com/wp-content/uploads/2024/11/AnimeVerse-Icon-Logo.png?resize=1080%2C288&ssl=1" alt="AnimeVerse Icon Logo" title="AnimeVerse Icon Logo" decoding="async" fetchpriority="high" class="h-8 object-contain filter-purple"> --}}
+
+                    {{-- Optional Title --}}
                     <span class="ml-2 text-2xl font-bold gradient-text">Anime<span class="text-white">Verse</span></span>
-                </div>
+
+                </a>
+
                 <!-- Desktop Navigation Links -->
                 <div class="hidden md:ml-6 md:flex md:items-center md:space-x-4">
                     <a href="{{ route('home') }}" class="nav-link active px-3 py-2 text-sm font-medium text-white">
