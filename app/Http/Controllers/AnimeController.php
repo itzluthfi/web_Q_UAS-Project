@@ -59,11 +59,6 @@ class AnimeController extends Controller
         ));
     }
 
-    public function berandaTemp()
-    {
-        return view('user.anime.berandaTemp');
-    }
-
     // ==========================
     // ======= STUDIO ===========
     // ==========================

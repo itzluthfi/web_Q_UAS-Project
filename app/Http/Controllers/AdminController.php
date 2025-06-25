@@ -53,10 +53,9 @@ class AdminController extends Controller
 
     public function comment()
     {
-        // Gunakan paginate() untuk mengaktifkan pagination
-        $comments = Comment::with(['user', 'anime'])->paginate(10); // Tampilkan 10 komentar per halaman
         $todayComments = Comment::whereDate('created_at', Carbon::today())->count();
         $jmlCommentReply = Comment::whereNotNull('parent_id')->count();
+        $comments = Comment::with(['user', 'anime'])->paginate(10); // Tampilkan 10 komentar per halaman
         return view('admin.comment', compact('comments', 'todayComments', 'jmlCommentReply'));
     }
     public function syncAnimePage()
@@ -188,6 +187,8 @@ class AdminController extends Controller
                             $animeModel->genres()->syncWithoutDetaching([$genre->id]);
                         }
 
+                        usleep(350000);
+
                         // Detail tambahan
                         $detailResponse = Http::timeout(20)->retry(3, 500)->get("https://api.jikan.moe/v4/anime/{$animeData['mal_id']}");
                         if ($detailResponse->ok()) {
@@ -245,7 +246,6 @@ class AdminController extends Controller
                 'synced_at'     => now(),
             ]);
 
-            // Jika gagal, hentikan proses dan tampilkan pesan error
             if ($status === 'gagal') {
                 return back()->with('error', "Sinkronisasi kategori $category gagal: $logMessage");
             }

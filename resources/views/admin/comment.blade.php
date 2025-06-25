@@ -34,6 +34,20 @@
             transform: scale(0.95);
             pointer-events: none;
         }
+
+        .modal.show {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+            display: flex !important;
+        }
+
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(17, 24, 39, 0.75);
+            z-index: 40;
+        }
     </style>
 @endpush
 
@@ -50,7 +64,7 @@
                 </div>
                 <div>
                     <p class="text-gray-400 text-sm">Total Komentar</p>
-                    <h3 class="text-2xl font-bold text-white">{{ $comments->count() }}</h3>
+                    <h3 class="text-2xl font-bold text-white">{{ $comments->total() }}</h3>
 
                 </div>
             </div>
@@ -201,54 +215,49 @@
         }
         </script>
 
-<!-- Edit Comment Modal -->
-<div id="editModal" class="fixed inset-0 z-50 overflow-y-auto hidden flex items-center justify-center">
-    <div class="w-full max-w-lg mx-4">
-        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-            <div class="absolute inset-0 bg-gray-900 opacity-75"></div>
-        </div>
 
-        <!-- Modal panel -->
-        <div class="inline-block align-bottom bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <div class="bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <div class="sm:flex sm:items-start">
-                    <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-purple-100 sm:mx-0 sm:h-10 sm:w-10">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                    </div>
-                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                        <h3 class="text-lg leading-6 font-medium text-white" id="modal-title">
-                            Edit Komentar
-                        </h3>
-                        <div class="mt-4 space-y-4">
-                            <div>
-                                <label for="edit-username" class="block text-sm font-medium text-gray-300">Pengguna</label>
-                                <input type="text" id="edit-username" class="mt-1 input-dark w-full rounded-md" disabled>
-                            </div>
-                            <div>
-                                <label for="edit-content" class="block text-sm font-medium text-gray-300">Konten</label>
-                                <input type="text" id="edit-content-type" class="mt-1 input-dark w-full rounded-md" disabled>
-                            </div>
-                            <div>
-                                <label for="edit-comment" class="block text-sm font-medium text-gray-300">Komentar</label>
-                                <textarea id="edit-comment" rows="4" class="mt-1 input-dark w-full rounded-md"></textarea>
-                            </div>
-                            <input type="hidden" id="edit-comment-id">
+<!-- Edit Comment Modal -->
+<div id="editModal" class="modal fixed inset-0 z-50 hidden items-center justify-center">
+    <div class="modal-backdrop" onclick="closeEditModal()"></div>
+    <div class="relative w-full max-w-lg mx-4 z-50 bg-gray-800 rounded-lg shadow-xl">
+        <div class="bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <div class="sm:flex sm:items-start">
+                <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-purple-100 sm:mx-0 sm:h-10 sm:w-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                </div>
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                    <h3 class="text-lg leading-6 font-medium text-white" id="modal-title">
+                        Edit Komentar
+                    </h3>
+                    <div class="mt-4 space-y-4">
+                        <div>
+                            <label for="edit-username" class="block text-sm font-medium text-gray-300">Pengguna</label>
+                            <input type="text" id="edit-username" class="mt-1 input-dark w-full rounded-md" disabled>
                         </div>
+                        <div>
+                            <label for="edit-content-type" class="block text-sm font-medium text-gray-300">Konten</label>
+                            <input type="text" id="edit-content-type" class="mt-1 input-dark w-full rounded-md" disabled>
+                        </div>
+                        <div>
+                            <label for="edit-comment" class="block text-sm font-medium text-gray-300">Komentar</label>
+                            <textarea id="edit-comment" rows="4" class="mt-1 input-dark w-full rounded-md"></textarea>
+                        </div>
+                        <input type="hidden" id="edit-comment-id">
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-900 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button type="button" onclick="saveComment()"
-                    class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-purple-600 text-base font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:ml-3 sm:w-auto sm:text-sm btn-glow">
-                    Simpan Perubahan
-                </button>
-                <button type="button" onclick="closeEditModal()"
-                    class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-600 shadow-sm px-4 py-2 bg-gray-800 text-base font-medium text-gray-300 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                    Batal
-                </button>
-            </div>
+        </div>
+        <div class="bg-gray-900 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+            <button type="button" onclick="saveComment()"
+                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-purple-600 text-base font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:ml-3 sm:w-auto sm:text-sm btn-glow">
+                Simpan Perubahan
+            </button>
+            <button type="button" onclick="closeEditModal()"
+                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-600 shadow-sm px-4 py-2 bg-gray-800 text-base font-medium text-gray-300 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                Batal
+            </button>
         </div>
     </div>
 </div>
@@ -300,246 +309,134 @@
 </div>
 
 @push('scripts')
-    <!-- JavaScript for Modal and Sidebar Functionality -->
     <script>
-       
-        // Edit Modal Functions - Fixed Version
         document.addEventListener('DOMContentLoaded', function() {
+            // Modal & state
             const editModal = document.getElementById('editModal');
             const deleteModal = document.getElementById('deleteModal');
             let currentCommentId = null;
 
-            // Get comment data from script tag
+            // Ambil data komentar dari script tag
             let commentData = {};
             try {
                 const commentDataEl = document.getElementById('comment-data');
                 if (commentDataEl) {
                     commentData = JSON.parse(commentDataEl.textContent);
-                    console.log("Comment data loaded:", commentData);
                 }
             } catch (error) {
                 console.error("Error parsing comment data:", error);
             }
 
-            // Open Edit Modal Function
+            // Modal helpers
+            function openModal(modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('show');
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal(modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('show');
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+
+            // Edit Modal
             window.openEditModal = function(commentId, event) {
-                // Prevent event bubbling
-                if (event) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-
-                console.log("openEditModal dipanggil dengan ID:", commentId);
-
-                if (!editModal) {
-                    console.error("Edit modal tidak ditemukan!");
-                    return;
-                }
-
-                // Get comment data by ID
+                if (event) event.stopPropagation();
                 const comment = commentData[commentId];
-
-                if (!comment) {
-                    console.error("Data komentar tidak ditemukan untuk ID:", commentId);
-                    console.log("Available comment IDs:", Object.keys(commentData));
-                    return;
-                }
-
-                // Fill form with comment data
-                const editUsernameInput = document.getElementById('edit-username');
-                const editContentTypeInput = document.getElementById('edit-content-type');
-                const editCommentTextarea = document.getElementById('edit-comment');
-                const editCommentIdInput = document.getElementById('edit-comment-id');
-
-                if (editUsernameInput) editUsernameInput.value = comment.username || '';
-                if (editContentTypeInput) editContentTypeInput.value = comment.content || '';
-                if (editCommentTextarea) editCommentTextarea.value = comment.comment || '';
-                if (editCommentIdInput) editCommentIdInput.value = commentId;
-
-                // Show modal with delay to prevent immediate closing
-                setTimeout(() => {
-                    editModal.classList.remove('hidden');
-                    editModal.style.display = 'flex';
-                    document.body.style.overflow = 'hidden'; // Prevent background scroll
-
-                    console.log("Edit modal ditampilkan");
-                }, 10);
+                if (!comment) return;
+                document.getElementById('edit-username').value = comment.username || '';
+                document.getElementById('edit-content-type').value = comment.content || '';
+                document.getElementById('edit-comment').value = comment.comment || '';
+                document.getElementById('edit-comment-id').value = commentId;
+                openModal(editModal);
             };
-
-            // Close Edit Modal Function
             window.closeEditModal = function() {
-                if (editModal) {
-                    editModal.classList.add('hidden');
-                    editModal.style.display = 'none';
-                    document.body.style.overflow = ''; // Restore scroll
-                    console.log("Edit modal ditutup");
-                }
+                closeModal(editModal);
             };
 
-            // Save Comment Function
             window.saveComment = function() {
-                const commentIdInput = document.getElementById('edit-comment-id');
-                const newCommentInput = document.getElementById('edit-comment');
-
-                if (!commentIdInput || !newCommentInput) {
-                    console.error("Input elements tidak ditemukan");
-                    return;
-                }
-
-                const commentId = commentIdInput.value;
-                const newComment = newCommentInput.value;
-
+                const commentId = document.getElementById('edit-comment-id').value;
+                const newComment = document.getElementById('edit-comment').value;
                 if (!commentId || !newComment.trim()) {
                     alert('Harap isi komentar!');
                     return;
                 }
-
-                // Update local data
-                if (commentData[commentId]) {
-                    commentData[commentId].comment = newComment;
-                }
-
-                // Update UI - find and update the comment text in the table
-                const commentTextElement = document.getElementById(`comment-text-${commentId}`);
-                if (commentTextElement) {
-                    commentTextElement.textContent = newComment;
-                }
-
-                // Close modal
-                closeEditModal();
-
-                // Show success notification
-                showNotification('Komentar berhasil diperbarui!', 'success');
-
-                // In real application, you would send AJAX request here:
-                /*
-                fetch(`/admin/comments/${commentId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({
-                        content: newComment
+                fetch(`/anime/comment/update/${commentId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({
+                            content: newComment
+                        })
                     })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showNotification('Komentar berhasil diperbarui!', 'success');
-                    } else {
-                        showNotification('Gagal memperbarui komentar!', 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showNotification('Terjadi kesalahan!', 'error');
-                });
-                */
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            if (commentData[commentId]) commentData[commentId].comment = newComment;
+                            const commentTextElement = document.getElementById(`comment-text-${commentId}`);
+                            if (commentTextElement) commentTextElement.textContent = newComment;
+                            closeModal(editModal);
+                            showNotification('Komentar berhasil diperbarui!', 'success');
+                        } else {
+                            showNotification(data.message || 'Gagal memperbarui komentar!', 'error');
+                        }
+                    })
+                    .catch(() => {
+                        showNotification('Terjadi kesalahan!', 'error');
+                    });
             };
 
-            // Confirm Delete Function
+            // Delete Modal
             window.confirmDelete = function(commentId, event) {
-                // Prevent event bubbling
-                if (event) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-
-                console.log("confirmDelete dipanggil dengan ID:", commentId);
-
-                if (!deleteModal) {
-                    console.error("Delete modal tidak ditemukan!");
-                    return;
-                }
-
+                if (event) event.stopPropagation();
                 currentCommentId = commentId;
-
-                // Show modal with delay to prevent immediate closing
-                setTimeout(() => {
-                    deleteModal.classList.remove('hidden');
-                    deleteModal.style.display = 'flex';
-                    document.body.style.overflow = 'hidden';
-
-                    console.log("Delete modal ditampilkan");
-                }, 10);
+                openModal(deleteModal);
             };
-
-            // Close Delete Modal Function
             window.closeDeleteModal = function() {
-                if (deleteModal) {
-                    deleteModal.classList.add('hidden');
-                    deleteModal.style.display = 'none';
-                    document.body.style.overflow = '';
-                    currentCommentId = null;
-                    console.log("Delete modal ditutup");
-                }
+                closeModal(deleteModal);
+                currentCommentId = null;
             };
 
-            // Delete Comment Function
             window.deleteComment = function() {
-                if (!currentCommentId) {
-                    console.error("No comment ID selected for deletion");
-                    return;
-                }
-
-                // Find and hide the comment row
-                const commentRow = document.getElementById(`comment-row-${currentCommentId}`);
-                if (commentRow) {
-                    commentRow.style.display = 'none';
-
-                    // Remove from local data
-                    if (commentData[currentCommentId]) {
-                        delete commentData[currentCommentId];
-                    }
-
-                    // Close modal
-                    closeDeleteModal();
-
-                    // Show success notification
-                    showNotification('Komentar berhasil dihapus!', 'success');
-
-                    // In real application, you would send AJAX request here:
-                    /*
-                    fetch(`/admin/comments/${currentCommentId}`, {
-                        method: 'DELETE',
+                if (!currentCommentId) return;
+                fetch(`/anime/comment/delete/${currentCommentId}`, {
+                        method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         }
                     })
-                    .then(response => response.json())
+                    .then(res => res.json())
                     .then(data => {
                         if (data.success) {
+                            const commentRow = document.getElementById(`comment-row-${currentCommentId}`);
+                            if (commentRow) commentRow.style.display = 'none';
+                            if (commentData[currentCommentId]) delete commentData[currentCommentId];
+                            closeModal(deleteModal);
                             showNotification('Komentar berhasil dihapus!', 'success');
                         } else {
-                            showNotification('Gagal menghapus komentar!', 'error');
+                            showNotification(data.message || 'Gagal menghapus komentar!', 'error');
                         }
                     })
-                    .catch(error => {
-                        console.error('Error:', error);
+                    .catch(() => {
                         showNotification('Terjadi kesalahan!', 'error');
                     });
-                    */
-                } else {
-                    console.error("Comment row tidak ditemukan:", currentCommentId);
-                }
             };
 
-            // Notification Function
+            // Notification
             function showNotification(message, type = 'info') {
-                // Create notification element
                 const notification = document.createElement('div');
                 notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg text-white transition-all duration-300 ${
-                    type === 'success' ? 'bg-green-600' : 
-                    type === 'error' ? 'bg-red-600' : 
-                    'bg-blue-600'
-                }`;
+            type === 'success' ? 'bg-green-600' : 
+            type === 'error' ? 'bg-red-600' : 
+            'bg-blue-600'
+        }`;
                 notification.textContent = message;
-
-                // Add to page
                 document.body.appendChild(notification);
-
-                // Remove after 3 seconds
                 setTimeout(() => {
                     notification.style.opacity = '0';
                     setTimeout(() => {
@@ -548,75 +445,21 @@
                 }, 3000);
             }
 
-            // Close modal when clicking outside
-            window.addEventListener('click', function(e) {
-                // Add delay to prevent immediate triggering
-                setTimeout(() => {
-                    // Close edit modal when clicking outside
-                    if (editModal && !editModal.classList.contains('hidden')) {
-                        const modalContent = editModal.querySelector('.inline-block');
-                        if (modalContent && !modalContent.contains(e.target) && e.target !==
-                            editModal) {
-                            console.log("Closing edit modal due to outside click");
-                            closeEditModal();
-                        }
-                    }
-
-                    // Close delete modal when clicking outside
-                    if (deleteModal && !deleteModal.classList.contains('hidden')) {
-                        const modalContent = deleteModal.querySelector('.inline-block');
-                        if (modalContent && !modalContent.contains(e.target) && e.target !==
-                            deleteModal) {
-                            console.log("Closing delete modal due to outside click");
-                            closeDeleteModal();
-                        }
-                    }
-                }, 100);
+            // Modal close on backdrop click
+            document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+                backdrop.addEventListener('click', function() {
+                    if (editModal.classList.contains('show')) closeModal(editModal);
+                    if (deleteModal.classList.contains('show')) closeModal(deleteModal);
+                });
             });
 
-            // Handle ESC key to close modals
+            // Modal close on ESC
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
-                    if (editModal && !editModal.classList.contains('hidden')) {
-                        closeEditModal();
-                    }
-                    if (deleteModal && !deleteModal.classList.contains('hidden')) {
-                        closeDeleteModal();
-                    }
+                    if (editModal.classList.contains('show')) closeModal(editModal);
+                    if (deleteModal.classList.contains('show')) closeModal(deleteModal);
                 }
             });
-
-            // Handle window resize for sidebar (if needed)
-            window.addEventListener('resize', function() {
-                const sidebar = document.querySelector('.sidebar');
-                const mainWrapper = document.querySelector('.main-wrapper');
-                const sidebarOverlay = document.querySelector('.sidebar-overlay');
-
-                if (sidebar && mainWrapper) {
-                    if (window.innerWidth >= 768) {
-                        // Reset mobile sidebar state
-                        if (sidebar.classList.contains('show')) {
-                            sidebar.classList.remove('show');
-                        }
-                        if (sidebarOverlay && sidebarOverlay.classList.contains('show')) {
-                            sidebarOverlay.classList.remove('show');
-                        }
-                        document.body.style.overflow = '';
-
-                        // Maintain desktop sidebar state
-                        if (sidebar.classList.contains('collapsed')) {
-                            mainWrapper.style.marginLeft = '70px';
-                        } else {
-                            mainWrapper.style.marginLeft = '260px';
-                        }
-                    } else {
-                        // Reset to mobile view
-                        mainWrapper.style.marginLeft = '0';
-                    }
-                }
-            });
-
-            console.log("Modal functions initialized successfully");
         });
     </script>
 @endpush
