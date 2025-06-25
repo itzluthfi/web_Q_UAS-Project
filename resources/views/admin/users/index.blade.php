@@ -575,19 +575,10 @@
                                         <select name="role" id="role" required 
                                             class="mt-1 input-dark w-full rounded-md px-4 py-2">
                                             <option value="user">User</option>
-                                            <option value="moderator">Moderator</option>
                                             <option value="admin">Admin</option>
                                         </select>
                                     </div>
                                     
-                                    <div>
-                                        <label for="status" class="block text-sm font-medium text-gray-300">Status</label>
-                                        <select name="status" id="status" required 
-                                            class="mt-1 input-dark w-full rounded-md px-4 py-2">
-                                            <option value="active">Aktif</option>
-                                            <option value="inactive">Tidak Aktif</option>
-                                        </select>
-                                    </div>
                                 </div>
                             </div>
                         </div>

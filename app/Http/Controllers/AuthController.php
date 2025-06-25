@@ -166,7 +166,7 @@ class AuthController extends Controller
                 'username' => 'required|string|max:255|unique:users',
                 'email' => 'required|email|max:255|unique:users',
                 'password' => 'required|string|min:1|confirmed',
-                'role' => 'required|in:user,moderator,admin', // Tambahkan validasi role
+                'role' => 'required|in:user,admin', // Tambahkan validasi role
             ]);
 
             // Password di-hash
