@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth; // <--- WAJIB!
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
 use App\Notifications\UserNotification;
 
@@ -156,4 +157,101 @@ class AuthController extends Controller
         $favorites = $user->favoriteAnimes()->get();
         return view('auth.animeFavoriteList', compact('favorites'));
     }
+
+    public function addUser(Request $request)
+    {
+        try {
+            // Validasi input (tanpa role & status)
+            $validated = $request->validate([
+                'username' => 'required|string|max:255|unique:users',
+                'email' => 'required|email|max:255|unique:users',
+                'password' => 'required|string|min:1|confirmed',
+            ]);
+
+            // Password di-hash
+            $hashedPassword = Hash::make($request->password);
+
+            // Simpan user baru dengan hanya 5 field yang tersedia di tabel users
+            User::create([
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => $hashedPassword,
+                'profile_image_url' => null, // tidak ada upload dari modal
+                'role' => 'user', // default role seperti di register
+            ]);
+
+            return redirect()->back()->with('success', 'Pengguna berhasil ditambahkan!');
+
+        } catch (ValidationException $e) {
+            // Debugging error validasi
+            dd($e->validator->errors());
+        }
+    }
+
+
+    public function update(Request $request, $id)
+    {
+        // dd($request->all());
+        
+        // Validasi input - PERBAIKAN: Hapus 'confirmed' karena tidak ada password_confirmation
+        $validated = $request->validate([
+            'username' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $id,
+            'password' => 'nullable|string|min:4', // Ubah dari min:1 ke min:4, hapus confirmed
+            'role' => 'required|in:user,moderator,admin',
+        ]);
+
+        // Cari user atau error 404
+        $user = User::findOrFail($id);
+
+        // dd($user);
+        
+        // Siapkan data untuk update (tanpa profile_image_url)
+        $data = $request->only(['username', 'email', 'role']);
+
+        // Update password hanya jika diisi
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
+        }
+
+        // dd($data);
+        
+        // JANGAN ubah profile_image_url sama sekali
+
+        // PERBAIKAN: Update user dengan error handling
+        try {
+            $user->fill($data);
+            $saved = $user->save();
+            
+            // Debug untuk memastikan data tersimpan
+            // dd([
+            //     'saved' => $saved,
+            //     'changes' => $user->getChanges(),
+            //     'user_after' => $user->fresh()->toArray() // Ambil data terbaru dari DB
+            // ]);
+            
+        } catch (\Exception $e) {
+            // Log error jika terjadi masalah
+            // \Log::error('Error updating user: ' . $e->getMessage());
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan saat memperbarui data.')
+                ->withInput();
+        }
+
+        return redirect()->back()->with('success', 'Data pengguna berhasil diperbarui.');
+    }
+
+    public function destroy(Request $request, $id)
+    {
+        // dd($request->all());
+        // Cari user atau error 404
+        $user = User::findOrFail($id);
+
+        // Hapus user dari database (permanent delete)
+        $user->delete();
+
+        // Redirect dengan pesan sukses
+        return redirect()->back()->with('success', 'Pengguna berhasil dihapus.');
+    }
+
 }

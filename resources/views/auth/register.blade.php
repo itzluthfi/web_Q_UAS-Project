@@ -67,13 +67,7 @@
             <!-- Bagian Form Registrasi -->
             <div class="w-full md:w-1/2 p-8 bg-gray-900">
                 <div class="mb-8 text-center">
-                    {{-- <div class="flex justify-center mb-4">
-                        <div class="w-16 h-16 rounded-full bg-purple-700 flex items-center justify-center glow-effect">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
-                            </svg>
-                        </div>
-                    </div> --}}
+                    
                     <h1 class="text-3xl font-bold text-white">Selamat Datang</h1>
                     <p class="text-gray-400 mt-2">Buat akun Anime Verse baru Anda</p>
                 </div>
@@ -160,21 +154,6 @@
                         </div>
                         <p class="mt-1 text-xs text-gray-500">Password minimal 8 karakter</p>
                     </div>
-
-
-                    {{-- <div class="mt-2">
-                        <div class="flex items-start">
-                            <div class="flex items-center h-5">
-                                <input id="terms" name="terms" type="checkbox" required class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-600 rounded bg-gray-700" />
-                            </div>
-                            <div class="ml-3 text-sm">
-                                <label for="terms" class="text-gray-300">
-                                    Saya setuju dengan <a href="#" class="text-purple-400 hover:text-purple-300">Syarat dan
-                                        Ketentuan</a>
-                                </label>
-                            </div>
-                        </div>
-                    </div> --}}
 
                     <div>
                         <button type="submit"

@@ -310,7 +310,6 @@
                     <select class="input-dark rounded-lg px-4 py-2 text-sm focus:outline-none">
                         <option value="">Semua Peran</option>
                         <option value="admin">Admin</option>
-                        <option value="moderator">Moderator</option>
                         <option value="user">User</option>
                     </select>
                     {{-- <select class="input-dark rounded-lg px-4 py-2 text-sm focus:outline-none">
@@ -395,7 +394,7 @@
                                         </svg>
                                         <span class="tooltip-text">Lihat Detail</span>
                                     </button>
-                                    <button onclick="openEditModal(<?= $user['id'] ?>)" class="action-button text-indigo-400 hover:text-indigo-300 transition-colors tooltip">
+                                    <button onclick="openEditModal({{ $user['id'] }})" class="action-button text-indigo-400 hover:text-indigo-300 transition-colors tooltip">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                             <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                                         </svg>
@@ -510,7 +509,7 @@
                         </div>
                     </div>
                     <div class="bg-gray-900 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <button type="button" onclick="openEditModal(2)"
+                        <button type="button" onclick="openEditModal({{ $user['id'] }})"
                             class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
                             Edit Pengguna
                         </button>
@@ -523,16 +522,19 @@
             </div>
         </div>
 
-        <!-- Add User Modal -->
+       <!-- Add User Modal -->
         <div id="addUserModal" class="fixed inset-0 z-50 overflow-y-auto hidden">
             <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <!-- Background overlay -->
                 <div class="fixed inset-0 transition-opacity" aria-hidden="true">
                     <div class="absolute inset-0 bg-gray-900 opacity-75"></div>
                 </div>
 
                 <!-- Modal panel -->
                 <div class="inline-block align-bottom bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                    <div class="bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <form action="{{ route('user.add') }}" method="POST" class="bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        @csrf
+
                         <div class="sm:flex sm:items-start">
                             <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-purple-100 sm:mx-0 sm:h-10 sm:w-10">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -545,32 +547,43 @@
                                 </h3>
                                 <div class="mt-4 space-y-4">
                                     <div>
-                                        <label for="add-username" class="block text-sm font-medium text-gray-300">Username</label>
-                                        <input type="text" id="add-username" class="mt-1 input-dark w-full rounded-md">
+                                        <label for="username" class="block text-sm font-medium text-gray-300">Username</label>
+                                        <input type="text" name="username" id="username" required 
+                                            class="mt-1 input-dark w-full rounded-md px-4 py-2">
                                     </div>
+                                    
                                     <div>
-                                        <label for="add-email" class="block text-sm font-medium text-gray-300">Email</label>
-                                        <input type="email" id="add-email" class="mt-1 input-dark w-full rounded-md">
+                                        <label for="email" class="block text-sm font-medium text-gray-300">Email</label>
+                                        <input type="email" name="email" id="email" required 
+                                            class="mt-1 input-dark w-full rounded-md px-4 py-2">
                                     </div>
+                                    
                                     <div>
-                                        <label for="add-password" class="block text-sm font-medium text-gray-300">Password</label>
-                                        <input type="password" id="add-password" class="mt-1 input-dark w-full rounded-md">
+                                        <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
+                                        <input type="password" name="password" id="password" required 
+                                            class="mt-1 input-dark w-full rounded-md px-4 py-2">
                                     </div>
+                                    
                                     <div>
-                                        <label for="add-confirm-password" class="block text-sm font-medium text-gray-300">Konfirmasi Password</label>
-                                        <input type="password" id="add-confirm-password" class="mt-1 input-dark w-full rounded-md">
+                                        <label for="password_confirmation" class="block text-sm font-medium text-gray-300">Konfirmasi Password</label>
+                                        <input type="password" name="password_confirmation" id="password_confirmation" required 
+                                            class="mt-1 input-dark w-full rounded-md px-4 py-2">
                                     </div>
+                                    
                                     <div>
-                                        <label for="add-role" class="block text-sm font-medium text-gray-300">Peran</label>
-                                        <select id="add-role" class="mt-1 input-dark w-full rounded-md">
+                                        <label for="role" class="block text-sm font-medium text-gray-300">Peran</label>
+                                        <select name="role" id="role" required 
+                                            class="mt-1 input-dark w-full rounded-md px-4 py-2">
                                             <option value="user">User</option>
                                             <option value="moderator">Moderator</option>
                                             <option value="admin">Admin</option>
                                         </select>
                                     </div>
+                                    
                                     <div>
-                                        <label for="add-status" class="block text-sm font-medium text-gray-300">Status</label>
-                                        <select id="add-status" class="mt-1 input-dark w-full rounded-md">
+                                        <label for="status" class="block text-sm font-medium text-gray-300">Status</label>
+                                        <select name="status" id="status" required 
+                                            class="mt-1 input-dark w-full rounded-md px-4 py-2">
                                             <option value="active">Aktif</option>
                                             <option value="inactive">Tidak Aktif</option>
                                         </select>
@@ -578,24 +591,30 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="bg-gray-900 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <button type="button"
-                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-purple-600 text-base font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:ml-3 sm:w-auto sm:text-sm btn-glow">
-                            Tambah Pengguna
-                        </button>
-                        <button type="button" onclick="closeAddUserModal()"
-                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-600 shadow-sm px-4 py-2 bg-gray-800 text-base font-medium text-gray-300 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                            Batal
-                        </button>
-                    </div>
+
+                        <div class="bg-gray-800 px-4 py-3 sm:px-6 flex justify-end space-x-3">
+                            <button type="submit"
+                                class="inline-flex justify-center rounded-md shadow-sm px-4 py-2 bg-purple-600 text-base font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:w-auto sm:text-sm btn-glow transition duration-150 ease-in-out">
+                                Tambah Pengguna
+                            </button>
+                            <button type="button"
+                                onclick="closeAddUserModal()"
+                                class="inline-flex justify-center rounded-md shadow-sm px-4 py-2 bg-gray-900 text-base font-medium text-gray-300 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:w-auto sm:text-sm transition duration-150 ease-in-out">
+                                Batal
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
 
         <!-- Edit User Modal -->
+        <!-- Edit User Modal -->
         <div id="editModal" class="fixed inset-0 z-50 overflow-y-auto hidden">
-            <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <form id="editUserForm" action="" method="POST" class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                @csrf
+                @method('PUT')
+
                 <div class="fixed inset-0 transition-opacity" aria-hidden="true">
                     <div class="absolute inset-0 bg-gray-900 opacity-75"></div>
                 </div>
@@ -616,20 +635,23 @@
                                 <div class="mt-4 space-y-4">
                                     <div>
                                         <label for="edit-username" class="block text-sm font-medium text-gray-300">Username</label>
-                                        <input type="text" id="edit-username" class="mt-1 input-dark w-full rounded-md">
+                                        <input type="text" name="username" id="edit-username"
+                                            class="mt-1 input-dark w-full rounded-md px-4 py-2">
                                     </div>
                                     <div>
                                         <label for="edit-email" class="block text-sm font-medium text-gray-300">Email</label>
-                                        <input type="email" id="edit-email" class="mt-1 input-dark w-full rounded-md">
+                                        <input type="email" name="email" id="edit-email"
+                                            class="mt-1 input-dark w-full rounded-md px-4 py-2">
                                     </div>
                                     <div>
-                                        <label for="edit-password" class="block text-sm font-medium text-gray-300">Password
-                                            Baru (kosongkan jika tidak ingin mengubah)</label>
-                                        <input type="password" id="edit-password" class="mt-1 input-dark w-full rounded-md">
+                                        <label for="edit-password" class="block text-sm font-medium text-gray-300">Password Baru (kosongkan jika tidak ingin mengubah)</label>
+                                        <input type="password" name="password" id="edit-password"
+                                            class="mt-1 input-dark w-full rounded-md px-4 py-2">
                                     </div>
                                     <div>
                                         <label for="edit-role" class="block text-sm font-medium text-gray-300">Peran</label>
-                                        <select id="edit-role" class="mt-1 input-dark w-full rounded-md">
+                                        <select name="role" id="edit-role"
+                                            class="mt-1 input-dark w-full rounded-md px-4 py-2 appearance-none bg-gray-700 text-white">
                                             <option value="user">User</option>
                                             <option value="moderator">Moderator</option>
                                             <option value="admin">Admin</option>
@@ -637,7 +659,8 @@
                                     </div>
                                     <div>
                                         <label for="edit-status" class="block text-sm font-medium text-gray-300">Status</label>
-                                        <select id="edit-status" class="mt-1 input-dark w-full rounded-md">
+                                        <select name="status" id="edit-status"
+                                            class="mt-1 input-dark w-full rounded-md px-4 py-2 appearance-none bg-gray-700 text-white">
                                             <option value="active">Aktif</option>
                                             <option value="inactive">Tidak Aktif</option>
                                             <option value="banned">Diblokir</option>
@@ -647,8 +670,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="bg-gray-900 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <button type="button"
+                    <div class="bg-gray-800 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <button type="submit"
                             class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
                             Simpan Perubahan
                         </button>
@@ -658,12 +681,15 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
 
         <!-- Delete Confirmation Modal -->
         <div id="deleteModal" class="fixed inset-0 z-50 overflow-y-auto hidden">
-            <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <form id="deleteUserForm" action="" method="POST" class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                @csrf
+                @method('DELETE')
+
                 <div class="fixed inset-0 transition-opacity" aria-hidden="true">
                     <div class="absolute inset-0 bg-gray-900 opacity-75"></div>
                 </div>
@@ -690,7 +716,7 @@
                         </div>
                     </div>
                     <div class="bg-gray-900 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <button type="button" id="confirm-delete-btn"
+                        <button type="submit"
                             class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
                             Hapus
                         </button>
@@ -700,7 +726,7 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </main>
 @endsection
@@ -708,267 +734,325 @@
 @push('scripts')
     <!-- JavaScript for Modal and Sidebar Functionality -->
     <script>
-        // Toggle user dropdown
-        const userMenu = document.getElementById('user-menu');
-        const userDropdown = document.getElementById('user-dropdown');
+    //    te based on window size
+    // Wrap semua JavaScript dalam DOMContentLoaded
+// Pindahkan semua fungsi modal keluar dari DOMContentLoaded agar bisa diakses secara global
 
-        if (userMenu && userDropdown) {
-            userMenu.addEventListener('click', function(e) {
-                e.stopPropagation();
-                userDropdown.classList.toggle('show');
-            });
+// Data pengguna dari PHP (pastikan ini ter-generate dengan benar)
+const users = [
+    <?php foreach ($users as $user): ?>
+    {
+        id: <?= $user['id'] ?>,
+        username: '<?= addslashes($user['username']) ?>',
+        email: '<?= addslashes($user['email']) ?>',
+        role: '<?= $user['role'] ?>',
+        status: '<?= $user['status'] ?>',
+        created_at: '<?= $user['created_at'] ?? '-' ?>',
+        last_login: '<?= $user['last_login'] ?? '-' ?>',
+        favorite_anime: <?= $user['favorite_anime'] ?? 0 ?>,
+        favorite_manga: <?= $user['favorite_manga'] ?? 0 ?>,
+        comments: <?= $user['comments'] ?? 0 ?>
+    },
+    <?php endforeach; ?>
+];
 
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function() {
-                userDropdown.classList.remove('show');
-            });
+// Helper function
+function ucfirst(str) {
+    if (!str) return '';
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// MODAL FUNCTIONS - GLOBAL SCOPE
+// View Modal Functions
+function openViewModal(userId) {
+    const user = users.find(u => u.id === userId);
+    const viewModal = document.getElementById('viewModal');
+
+    if (!user) {
+        console.error("Pengguna tidak ditemukan!");
+        return;
+    }
+
+    // Isi data pengguna ke dalam modal
+    document.getElementById('view-username').textContent = user.username;
+    document.getElementById('view-email').textContent = user.email;
+    document.getElementById('view-id').textContent = user.id;
+    document.getElementById('view-created-at').textContent = user.created_at || '-';
+    document.getElementById('view-last-login').textContent = user.last_login || '-';
+    document.getElementById('view-favorite-anime').textContent = user.favorite_anime;
+    document.getElementById('view-favorite-manga').textContent = user.favorite_manga;
+    document.getElementById('view-comments').textContent = user.comments;
+    document.getElementById('view-user-initial').textContent = user.username.charAt(0).toUpperCase();
+
+    // Role badge
+    const roleBadge = document.getElementById('view-role');
+    roleBadge.textContent = ucfirst(user.role);
+    roleBadge.className = 'badge';
+    if (user.role === 'admin') {
+        roleBadge.classList.add('badge-admin');
+    } else if (user.role === 'moderator') {
+        roleBadge.classList.add('badge-moderator');
+    } else {
+        roleBadge.classList.add('badge-user');
+    }
+
+    // Status badge
+    const statusBadge = document.getElementById('view-status');
+    if (user.status === 'active') {
+        statusBadge.textContent = 'Aktif';
+        statusBadge.className = 'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800';
+    } else if (user.status === 'inactive') {
+        statusBadge.textContent = 'Tidak Aktif';
+        statusBadge.className = 'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800';
+    } else if (user.status === 'banned') {
+        statusBadge.textContent = 'Diblokir';
+        statusBadge.className = 'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800';
+    }
+
+    viewModal.classList.remove('hidden');
+}
+
+function closeViewModal() {
+    const viewModal = document.getElementById('viewModal');
+    viewModal.classList.add('hidden');
+}
+
+// Add User Modal Functions
+function openAddUserModal() {
+    const addUserModal = document.getElementById('addUserModal');
+    addUserModal.classList.remove('hidden');
+}
+
+function closeAddUserModal() {
+    const addUserModal = document.getElementById('addUserModal');
+    addUserModal.classList.add('hidden');
+}
+
+// Edit Modal Functions - VERSI DIPERBAIKI
+function openEditModal(userId) {
+    console.log('🔍 Debug: Opening modal for user ID:', userId, 'Type:', typeof userId);
+    
+    // 1. CEK APAKAH ARRAY USERS ADA
+    if (typeof users === 'undefined' || !users) {
+        console.error('❌ Array users tidak ditemukan!');
+        alert('Data pengguna tidak tersedia!');
+        return;
+    }
+    
+    console.log('✅ Users array found, length:', users.length);
+    
+    // 2. CARI USER
+    const user = users.find(u => u.id == userId);
+    console.log('🔍 User search result:', user);
+    
+    if (!user) {
+        console.error('❌ Pengguna tidak ditemukan!');
+        return;
+    }
+
+    // 3. SET FORM ACTION URL - PERBAIKAN UTAMA
+    const form = document.getElementById('editUserForm');
+    if (!form) {
+        console.error('❌ Form element tidak ditemukan!');
+        return;
+    }
+    
+    // Gunakan URL sederhana tanpa Blade template
+    const actionUrl = `/user/${userId}`;
+    form.setAttribute('action', actionUrl);
+    console.log('✅ Form action set to:', actionUrl);
+    
+    // 4. CEK MODAL ELEMENT
+    const editModal = document.getElementById('editModal');
+    if (!editModal) {
+        console.error('❌ Modal element tidak ditemukan!');
+        return;
+    }
+    
+    console.log('✅ Modal element found');
+    
+    // 5. ISI FORM FIELDS
+    try {
+        const usernameField = document.getElementById('edit-username');
+        const emailField = document.getElementById('edit-email');
+        const roleField = document.getElementById('edit-role');
+        const statusField = document.getElementById('edit-status');
+        const passwordField = document.getElementById('edit-password');
+        
+        // Cek apakah semua field ada
+        if (!usernameField || !emailField || !roleField || !statusField) {
+            console.error('❌ Beberapa form field tidak ditemukan!');
+            return;
         }
-
-        // Sidebar toggle functionality
-        const toggleSidebarBtn = document.getElementById('toggleSidebarBtn');
-        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
-        const sidebar = document.getElementById('sidebar');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
-        const mainWrapper = document.getElementById('mainWrapper');
-
-        // Function to toggle sidebar in desktop mode
-        function toggleDesktopSidebar() {
-            if (window.innerWidth >= 768) {
-                sidebar.classList.toggle('collapsed');
-                mainWrapper.classList.toggle('sidebar-collapsed');
-
-                if (sidebar.classList.contains('collapsed')) {
-                    mainWrapper.style.marginLeft = '70px';
-                } else {
-                    mainWrapper.style.marginLeft = '260px';
-                }
-            }
+        
+        // Isi data
+        usernameField.value = user.username || '';
+        emailField.value = user.email || '';
+        roleField.value = user.role || 'user';
+        statusField.value = user.status || 'active';
+        
+        if (passwordField) {
+            passwordField.value = '';
         }
+        
+        console.log('✅ Form fields populated successfully');
+        console.log('📋 Data yang diisi:', {
+            username: user.username,
+            email: user.email,
+            role: user.role,
+            status: user.status
+        });
+        
+    } catch (error) {
+        console.error('❌ Error saat mengisi form:', error);
+        return;
+    }
+    
+    // 6. TAMPILKAN MODAL - DENGAN DELAY UNTUK MENCEGAH AUTO CLOSE
+    console.log('🔄 Attempting to show modal...');
+    
+    setTimeout(() => {
+        editModal.classList.remove('hidden');
+        console.log('✅ Modal displayed with delay');
+    }, 50);
+}
 
-        // Function to open sidebar in mobile mode
-        function openMobileSidebar() {
-            if (window.innerWidth < 768) {
-                sidebar.classList.add('show');
-                sidebarOverlay.classList.add('show');
-                document.body.style.overflow = 'hidden'; // Prevent scrolling when sidebar is open
-            }
-        }
+function closeEditModal() {
+    console.log('🔄 Closing edit modal...');
+    
+    const editModal = document.getElementById('editModal');
+    if (!editModal) {
+        console.error('❌ Modal element tidak ditemukan saat menutup!');
+        return;
+    }
+    
+    editModal.classList.add('hidden');
+    
+    // Reset form
+    const form = document.getElementById('editUserForm');
+    if (form) {
+        form.reset();
+    }
+    
+    console.log('✅ Modal closed successfully');
+}
 
-        // Function to close sidebar in mobile mode
-        function closeMobileSidebar() {
-            if (window.innerWidth < 768) {
-                sidebar.classList.remove('show');
-                sidebarOverlay.classList.remove('show');
-                document.body.style.overflow = ''; // Re-enable scrolling
-            }
-        }
+// HAPUS ATAU MODIFIKASI EVENT LISTENER YANG BERMASALAH
+document.addEventListener('DOMContentLoaded', function() {
+    // HAPUS semua event listener click yang ada sebelumnya
+    const editModal = document.getElementById('editModal');
+    if (editModal) {
+        // Clone node untuk menghapus semua event listener
+        const newModal = editModal.cloneNode(true);
+        editModal.parentNode.replaceChild(newModal, editModal);
+        
+        // console.log('🔄 Modal event listeners reset');
+    }
+});
 
-        // Toggle sidebar on button click
-        if (toggleSidebarBtn) {
-            toggleSidebarBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                if (window.innerWidth >= 768) {
-                    // Desktop mode
-                    toggleDesktopSidebar();
-                } else {
-                    // Mobile mode
-                    if (sidebar.classList.contains('show')) {
-                        closeMobileSidebar();
-                    } else {
-                        openMobileSidebar();
-                    }
-                }
-            });
-        }
+// EVENT LISTENER YANG AMAN - hanya tutup jika klik di background
+document.addEventListener('click', function(event) {
+    const editModal = document.getElementById('editModal');
+    
+    // Pastikan modal ada dan sedang terbuka
+    if (!editModal || editModal.classList.contains('hidden')) {
+        return;
+    }
+    
+    // Hanya tutup jika klik tepat di background modal (bukan di content)
+    if (event.target === editModal) {
+        // console.log('🔄 Closing modal via background click');
+        closeEditModal();
+    }
+});
 
-        // Close sidebar when clicking the close button
-        if (closeSidebarBtn) {
-            closeSidebarBtn.addEventListener('click', closeMobileSidebar);
-        }
-
-        // Close sidebar when clicking the overlay
-        if (sidebarOverlay) {
-            sidebarOverlay.addEventListener('click', closeMobileSidebar);
-        }
-
-        // Data pengguna dari PHP
-        const users = [
-            <?php foreach ($users as $user): ?> {
-                id: <?= $user['id'] ?>,
-                username: '<?= addslashes($user['username']) ?>',
-                email: '<?= addslashes($user['email']) ?>',
-                role: '<?= $user['role'] ?>',
-                status: '<?= $user['status'] ?>',
-                created_at: '<?= $user['created_at'] ?? '-' ?>',
-                last_login: '<?= $user['last_login'] ?? '-' ?>',
-                favorite_anime: <?= $user['favorite_anime'] ?? 0 ?>,
-                favorite_manga: <?= $user['favorite_manga'] ?? 0 ?>,
-                comments: <?= $user['comments'] ?? 0 ?>
-            },
-            <?php endforeach; ?>
-        ];
-
-        // View Modal Functions
-        const viewModal = document.getElementById('viewModal');
-
-        function ucfirst(str) {
-            if (!str) return '';
-            return str.charAt(0).toUpperCase() + str.slice(1);
-        }
-
-        function openViewModal(userId) {
-            // Cari pengguna berdasarkan ID
-            const user = users.find(u => u.id === userId);
-
-            if (!user) {
-                console.error("Pengguna tidak ditemukan!");
-                return;
-            }
-
-            // Isi data pengguna ke dalam modal
-            document.getElementById('view-username').textContent = user.username;
-            document.getElementById('view-email').textContent = user.email;
-            document.getElementById('view-id').textContent = user.id;
-            document.getElementById('view-created-at').textContent = user.created_at || '-';
-            document.getElementById('view-last-login').textContent = user.last_login || '-';
-            document.getElementById('view-favorite-anime').textContent = user.favorite_anime;
-            document.getElementById('view-favorite-manga').textContent = user.favorite_manga;
-            document.getElementById('view-comments').textContent = user.comments;
-            document.getElementById('view-user-initial').textContent = user.username.charAt(0).toUpperCase();
-
-            // Role badge
-            const roleBadge = document.getElementById('view-role');
-            roleBadge.textContent = ucfirst(user.role);
-            roleBadge.className = 'badge'; // Reset class
-            if (user.role === 'admin') {
-                roleBadge.classList.add('badge-admin');
-            } else if (user.role === 'moderator') {
-                roleBadge.classList.add('badge-moderator');
-            } else {
-                roleBadge.classList.add('badge-user');
-            }
-
-            // Status badge
-            const statusBadge = document.getElementById('view-status');
-            if (user.status === 'active') {
-                statusBadge.textContent = 'Aktif';
-                statusBadge.className =
-                    'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800';
-            } else if (user.status === 'inactive') {
-                statusBadge.textContent = 'Tidak Aktif';
-                statusBadge.className =
-                    'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800';
-            } else if (user.status === 'banned') {
-                statusBadge.textContent = 'Diblokir';
-                statusBadge.className =
-                    'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800';
-            }
-
-            // Tampilkan modal
-            viewModal.classList.remove('hidden');
-        }
-
-        function closeViewModal() {
-            viewModal.classList.add('hidden');
-        }
-
-        // Add User Modal Functions
-        const addUserModal = document.getElementById('addUserModal');
-
-        function openAddUserModal() {
-            addUserModal.classList.remove('hidden');
-        }
-
-        function closeAddUserModal() {
-            addUserModal.classList.add('hidden');
-        }
-
-        // Edit Modal Functions
+// EVENT LISTENER ESCAPE KEY
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
         const editModal = document.getElementById('editModal');
+        if (editModal && !editModal.classList.contains('hidden')) {
+            // console.log('🔄 Closing modal via Escape key');
+            closeEditModal();
+        }
+    }
+});
 
-        function openEditModal(userId) {
-            const user = users.find(u => u.id === userId);
-
-            if (!user) {
-                console.error("Pengguna tidak ditemukan!");
-                return;
-            }
-
-            // Isi input dengan data pengguna
-            document.getElementById('edit-username').value = user.username;
-            document.getElementById('edit-email').value = user.email;
-
-            // Role dropdown
-            const roleSelect = document.getElementById('edit-role');
-            roleSelect.value = user.role;
-
-            // Status dropdown
-            const statusSelect = document.getElementById('edit-status');
-            statusSelect.value = user.status;
-
-            // Tampilkan modal
+// FUNGSI ALTERNATIF - JIKA MASALAH MASIH ADA
+function forceOpenEditModal(userId) {
+    // console.log('🚀 FORCE Opening modal for user ID:', userId);
+    
+    const user = users.find(u => u.id == userId);
+    if (!user) {
+        alert('User tidak ditemukan!');
+        return;
+    }
+    
+    const editModal = document.getElementById('editModal');
+    if (!editModal) {
+        alert('Modal tidak ditemukan!');
+        return;
+    }
+    
+    // Isi form
+    document.getElementById('edit-username').value = user.username || '';
+    document.getElementById('edit-email').value = user.email || '';
+    document.getElementById('edit-role').value = user.role || 'user';
+    document.getElementById('edit-status').value = user.status || 'active';
+    
+    const passwordField = document.getElementById('edit-password');
+    if (passwordField) {
+        passwordField.value = '';
+    }
+    
+    // Paksa tampilkan modal dengan berbagai cara
+    editModal.classList.remove('hidden');
+    editModal.style.display = 'block';
+    editModal.style.visibility = 'visible';
+    editModal.style.opacity = '1';
+    
+    // console.log('🚀 Modal forced open');
+    
+    // Cek setelah 1 detik
+    setTimeout(() => {
+        const isStillHidden = editModal.classList.contains('hidden');
+        // console.log('🔍 Modal masih hidden setelah force:', isStillHidden);
+        
+        if (isStillHidden) {
+            // console.log('🔧 Trying alternative approach...');
             editModal.classList.remove('hidden');
+            editModal.removeAttribute('style');
         }
-
-        function closeEditModal() {
-            editModal.classList.add('hidden');
-        }
-
+    }, 1000);
+}
 
         // Delete Modal Functions
-        const deleteModal = document.getElementById('deleteModal');
         let userIdToDelete = null;
 
         function confirmDelete(userId, username) {
             userIdToDelete = userId;
+            const deleteModal = document.getElementById('deleteModal');
+            const form = document.getElementById('deleteUserForm');
+            const url = "{{ route('user.delete', ':id') }}".replace(':id', userId);
+
+            // Isi teks konfirmasi
             document.getElementById('delete-confirmation-text').textContent =
                 `Apakah Anda yakin ingin menghapus pengguna "${username}"? Tindakan ini tidak dapat dibatalkan.`;
 
-            deleteModal.classList.remove('hidden');
+            // Set action form
+            form.setAttribute('action', url);
 
-            // Set up the delete button action
-            document.getElementById('confirm-delete-btn').onclick = function() {
-                deleteUser(userIdToDelete);
-            };
+            // Tampilkan modal
+            deleteModal.classList.remove('hidden');
         }
 
         function closeDeleteModal() {
+            const deleteModal = document.getElementById('deleteModal');
             deleteModal.classList.add('hidden');
             userIdToDelete = null;
         }
 
-        function deleteUser(userId) {
-            // In a real application, you would send a request to delete the user
-            // For this example, we'll just close the modal and show an alert
-            alert('Pengguna dengan ID ' + userId + ' telah dihapus.');
-            closeDeleteModal();
 
-            // In a real application, you would refresh the table or remove the row
-        }
 
-        // Close modals when clicking outside
-        window.addEventListener('click', (event) => {
-            if (event.target === viewModal) {
-                closeViewModal();
-            }
-            if (event.target === addUserModal) {
-                closeAddUserModal();
-            }
-            if (event.target === editModal) {
-                closeEditModal();
-            }
-            if (event.target === deleteModal) {
-                closeDeleteModal();
-            }
-        });
-
-        // Handle window resize for sidebar
-        window.addEventListener('resize', function() {
-            if (window.innerWidth >= 769) {
-                sidebar.classList.remove('show');
-            }
-        });
-
-        // MODALLLL
     </script>
+
 @endpush

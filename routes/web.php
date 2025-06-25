@@ -36,6 +36,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/anime/favorites', [AuthController::class, 'favoriteList'])->name('anime.favorites');
     Route::get('/anime/favorites/dashboard', [AuthController::class, 'favoriteListDashboard'])->name('anime.favorites.dashboard');
     Route::post('/anime/{mal_id}/favorite', [AnimeController::class, 'toggleFavorite'])->name('anime.favorite');
+    Route::post('/user/add', [AuthController::class, 'addUser'])->name('user.add');
+    Route::put('/user/{id}', [AuthController::class, 'update'])->name('user.update');
+    Route::delete('/user/{id}', [AuthController::class, 'destroy'])->name('user.delete');
 });
 
 // Public routes
