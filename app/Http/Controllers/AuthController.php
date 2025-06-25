@@ -166,6 +166,7 @@ class AuthController extends Controller
                 'username' => 'required|string|max:255|unique:users',
                 'email' => 'required|email|max:255|unique:users',
                 'password' => 'required|string|min:1|confirmed',
+                'role' => 'required|in:user,moderator,admin', // Tambahkan validasi role
             ]);
 
             // Password di-hash
@@ -177,7 +178,7 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'password' => $hashedPassword,
                 'profile_image_url' => null, // tidak ada upload dari modal
-                'role' => 'user', // default role seperti di register
+                'role' => $request->role, // default role seperti di register
             ]);
 
             return redirect()->back()->with('success', 'Pengguna berhasil ditambahkan!');
