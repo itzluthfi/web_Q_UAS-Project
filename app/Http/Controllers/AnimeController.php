@@ -9,6 +9,7 @@ use App\Models\Genre;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class AnimeController extends Controller
 {
@@ -130,12 +131,31 @@ class AnimeController extends Controller
     // ==========================
     // ======= DETAIL ===========
     // ==========================
+
     public function show($id)
     {
         $anime = Anime::getAnimeById($id);
 
         if (!$anime) {
             return abort(404, 'Anime detail tidak ditemukan.');
+        }
+
+        // Ambil episode dari Jikan API
+        $episodes = [];
+        $page = 1;
+        do {
+            $response = Http::get("https://api.jikan.moe/v4/anime/{$id}/episodes?page={$page}");
+            $data = $response->json('data') ?? [];
+            $episodes = array_merge($episodes, $data);
+            $hasNext = $response->json('pagination.has_next_page') ?? false;
+            $page++;
+        } while ($hasNext);
+
+        // Ambil data streaming dari Jikan API
+        $streaming = [];
+        $streamingResponse = Http::get("https://api.jikan.moe/v4/anime/{$id}/streaming");
+        if ($streamingResponse->successful()) {
+            $streaming = $streamingResponse->json('data') ?? [];
         }
 
         $genre = $anime->genres->isNotEmpty()
@@ -154,7 +174,8 @@ class AnimeController extends Controller
             ->whereNull('parent_id')
             ->get();
 
-        return view('user.anime.show', compact('anime', 'relatedAnimes', 'comments'));
+        // Kirim $streaming ke view
+        return view('user.anime.show', compact('anime', 'relatedAnimes', 'comments', 'episodes', 'streaming'));
     }
 
     // ==========================

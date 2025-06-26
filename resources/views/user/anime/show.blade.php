@@ -177,6 +177,38 @@
         .fav-btn-spinner {
             transition: opacity 0.2s;
         }
+
+        .custom-scrollbar {
+            scrollbar-width: thin;
+            scrollbar-color: #a78bfa #1f2937;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #a78bfa;
+            border-radius: 8px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+
+        @media (max-width: 768px) {
+            .max-h-96 {
+                max-height: 300px;
+            }
+
+            .anime-backdrop {
+                padding: 0 0.5rem;
+            }
+        }
+
+        .dropdown-menu {
+            min-width: 160px;
+        }
     </style>
 @endpush
 
@@ -283,6 +315,7 @@
                             @endif
                         </div>
                     </div>
+
                     <!-- Watch buttons -->
                     <div class="watch-buttons">
                         <a href="{{ $anime->url }}" target="_blank" class="watch-button watch-now">
@@ -301,11 +334,76 @@
                             </a>
                         @endif
                     </div>
+
+
                 </div>
+
             </div>
 
             <!-- Tombol Kembali -->
             <div class="px-6 pb-6">
+                @if (!empty($episodes))
+                    <div class="mt-8 mb-8 px-0 md:px-6">
+                        <h2 class="text-xl font-semibold mb-4 text-purple-300">Daftar Episode</h2>
+                        <div class="rounded-lg border border-gray-700 bg-gray-900 shadow-lg max-h-96 overflow-y-auto custom-scrollbar">
+                            <table class="min-w-full bg-transparent">
+                                <thead class="sticky top-0 bg-gray-900 z-10">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-xs text-gray-300 uppercase">Episode</th>
+                                        <th class="px-4 py-2 text-left text-xs text-gray-300 uppercase">Judul</th>
+                                        <th class="px-4 py-2 text-left text-xs text-gray-300 uppercase">Tanggal Tayang</th>
+                                        <th class="px-4 py-2 text-left text-xs text-gray-300 uppercase">Streaming</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($episodes as $ep)
+                                        <tr class="border-t border-gray-700 hover:bg-purple-900/10 transition">
+                                            <td class="px-4 py-2 text-gray-200 font-semibold whitespace-nowrap">Ep {{ $ep['mal_id'] ?? ($ep['episode_id'] ?? $loop->iteration) }}</td>
+                                            <td class="px-4 py-2 text-gray-200">{{ $ep['title'] ?? '-' }}</td>
+                                            <td class="px-4 py-2 text-gray-400 whitespace-nowrap">{{ $ep['aired'] ? \Carbon\Carbon::parse($ep['aired'])->format('Y-m-d') : '-' }}</td>
+                                            <td class="px-4 py-2">
+                                                <!-- Dropdown Streaming -->
+                                                <div class="relative inline-block text-left w-full">
+                                                    <button type="button" class="inline-flex justify-center w-full rounded-md border border-purple-700 shadow-sm px-3 py-1 bg-purple-700 text-sm font-medium text-white hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
+                                                        id="dropdownMenuButton-{{ $loop->index }}" aria-expanded="false" aria-haspopup="true" onclick="toggleDropdown({{ $loop->index }})">
+                                                        Tonton Sekarang
+                                                        <svg class="ml-2 -mr-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                                        </svg>
+                                                    </button>
+                                                    <div id="dropdown-{{ $loop->index }}" class="dropdown-menu hidden origin-top-right absolute right-0 mt-2 w-44 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 z-20">
+                                                        <div class="py-1">
+                                                            <a href="{{ url('/stream/' . $anime->mal_id . '/episode-' . ($ep['mal_id'] ?? ($ep['episode_id'] ?? $loop->iteration))) }}" target="_blank"
+                                                                class="block px-4 py-2 text-sm text-purple-400 hover:bg-purple-700 hover:text-white transition">AnimeList</a>
+                                                            @if (!empty($ep['crunchyroll_url']))
+                                                                <a href="{{ $ep['crunchyroll_url'] }}" target="_blank" class="block px-4 py-2 text-sm text-orange-400 hover:bg-orange-600 hover:text-white transition">Crunchyroll</a>
+                                                            @endif
+                                                            @if (!empty($ep['netflix_url']))
+                                                                <a href="{{ $ep['netflix_url'] }}" target="_blank" class="block px-4 py-2 text-sm text-red-400 hover:bg-red-600 hover:text-white transition">Netflix</a>
+                                                            @endif
+                                                            @if (!empty($ep['forum_url']))
+                                                                <a href="{{ $ep['forum_url'] }}" target="_blank" class="block px-4 py-2 text-sm text-blue-400 hover:bg-blue-600 hover:text-white transition">Forum/Official</a>
+                                                            @endif
+                                                            {{-- Tambahkan link streaming resmi dari $streaming --}}
+                                                            @if (!empty($streaming))
+                                                                <div class="border-t border-gray-700 my-1"></div>
+                                                                @foreach ($streaming as $s)
+                                                                    <a href="{{ $s['url'] }}" target="_blank" class="block px-4 py-2 text-sm text-green-400 hover:bg-green-700 hover:text-white transition">
+                                                                        {{ $s['name'] }}
+                                                                    </a>
+                                                                @endforeach
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                @endif
                 <a href="{{ route('home') }}" class="inline-flex items-center bg-purple-700 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition btn-glow">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
@@ -598,6 +696,24 @@
             function closeTrailer() {
                 const modal = document.getElementById('trailer-modal');
                 if (modal) modal.remove();
+            }
+
+
+            function toggleDropdown(idx) {
+                document.querySelectorAll('.dropdown-menu').forEach((el, i) => {
+                    if (i === idx) {
+                        el.classList.toggle('hidden');
+                    } else {
+                        el.classList.add('hidden');
+                    }
+                });
+                // Close dropdown if click outside
+                document.addEventListener('click', function handler(e) {
+                    if (!e.target.closest(`#dropdownMenuButton-${idx}`) && !e.target.closest(`#dropdown-${idx}`)) {
+                        document.getElementById(`dropdown-${idx}`)?.classList.add('hidden');
+                        document.removeEventListener('click', handler);
+                    }
+                });
             }
         </script>
 
