@@ -203,7 +203,7 @@
     </main>
 @endsection
 
-<script type="application/json" id="comment-data">
+    <script type="application/json" id="comment-data">
         {
             @foreach ($comments as $comment)
                 "{{ $comment->id }}": {
@@ -213,54 +213,62 @@
                 }@if (!$loop->last),@endif
             @endforeach
         }
-        </script>
+    </script>
 
 
-<!-- Edit Comment Modal -->
-<div id="editModal" class="modal fixed inset-0 z-50 hidden items-center justify-center">
-    <div class="modal-backdrop" onclick="closeEditModal()"></div>
-    <div class="relative w-full max-w-lg mx-4 z-50 bg-gray-800 rounded-lg shadow-xl">
-        <div class="bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <div class="sm:flex sm:items-start">
-                <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-purple-100 sm:mx-0 sm:h-10 sm:w-10">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                </div>
-                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                    <h3 class="text-lg leading-6 font-medium text-white" id="modal-title">
-                        Edit Komentar
-                    </h3>
-                    <div class="mt-4 space-y-4">
-                        <div>
-                            <label for="edit-username" class="block text-sm font-medium text-gray-300">Pengguna</label>
-                            <input type="text" id="edit-username" class="mt-1 input-dark w-full rounded-md" disabled>
+        <!-- Edit Comment Modal -->
+
+        <!-- Modal Container -->
+        <div id="editModal" class="fixed inset-0 z-50 hidden items-center justify-center">
+            <!-- Backdrop -->
+            <div class="modal-backdrop absolute inset-0 bg-black bg-opacity-70" onclick="closeEditModal()"></div>
+
+            <!-- Modal Content -->
+            <div class="relative w-full max-w-lg mx-4 z-50 bg-gray-800 rounded-lg shadow-xl">
+                <form id="editCommentForm" method="POST" action="{{ route('comment.update', $comment->id) }}" class="w-full">
+                    @csrf
+                    {{-- @method('PUT') --}}
+
+                    <div class="bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-purple-100 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                            </div>
+                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                                <h3 class="text-lg leading-6 font-medium text-white" id="modal-title">Edit Komentar</h3>
+                                <div class="mt-4 space-y-4">
+                                    <div>
+                                        <label for="edit-username" class="block text-sm font-medium text-gray-300">Pengguna</label>
+                                        <input type="text" id="edit-username" class="mt-1 input-dark w-full rounded-md" disabled>
+                                    </div>
+                                    <div>
+                                        <label for="edit-content-type" class="block text-sm font-medium text-gray-300">Konten</label>
+                                        <input type="text" id="edit-content-type" class="mt-1 input-dark w-full rounded-md" disabled>
+                                    </div>
+                                    <div>
+                                        <label for="edit-comment" class="block text-sm font-medium text-gray-300">Komentar</label>
+                                        <textarea name="content" id="edit-comment" rows="4" class="mt-1 input-dark w-full rounded-md"></textarea>
+                                    </div>
+                                    <input type="hidden" name="id" id="edit-comment-id">
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <label for="edit-content-type" class="block text-sm font-medium text-gray-300">Konten</label>
-                            <input type="text" id="edit-content-type" class="mt-1 input-dark w-full rounded-md" disabled>
-                        </div>
-                        <div>
-                            <label for="edit-comment" class="block text-sm font-medium text-gray-300">Komentar</label>
-                            <textarea id="edit-comment" rows="4" class="mt-1 input-dark w-full rounded-md"></textarea>
-                        </div>
-                        <input type="hidden" id="edit-comment-id">
                     </div>
-                </div>
+                    <div class="bg-gray-900 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <button type="submit"
+                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-purple-600 text-base font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:ml-3 sm:w-auto sm:text-sm btn-glow">
+                            Simpan Perubahan
+                        </button>
+                        <button type="button" onclick="closeEditModal()"
+                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-600 shadow-sm px-4 py-2 bg-gray-800 text-base font-medium text-gray-300 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                            Batal
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
-        <div class="bg-gray-900 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-            <button type="button" onclick="saveComment()"
-                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-purple-600 text-base font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:ml-3 sm:w-auto sm:text-sm btn-glow">
-                Simpan Perubahan
-            </button>
-            <button type="button" onclick="closeEditModal()"
-                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-600 shadow-sm px-4 py-2 bg-gray-800 text-base font-medium text-gray-300 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                Batal
-            </button>
-        </div>
-    </div>
-</div>
 
 <!-- Delete Confirmation Modal -->
 <div id="deleteModal" class="fixed inset-0 z-50 hidden">
@@ -347,48 +355,81 @@
                 if (event) event.stopPropagation();
                 const comment = commentData[commentId];
                 if (!comment) return;
+
                 document.getElementById('edit-username').value = comment.username || '';
                 document.getElementById('edit-content-type').value = comment.content || '';
                 document.getElementById('edit-comment').value = comment.comment || '';
                 document.getElementById('edit-comment-id').value = commentId;
+
+                // Update action form agar sesuai comment ID
+                const form = document.getElementById('editModal');
+                form.action = `/anime/comment/update/${commentId}`;
+
                 openModal(editModal);
             };
-            window.closeEditModal = function() {
-                closeModal(editModal);
-            };
 
-            window.saveComment = function() {
+            
+
+            window.saveComment = async function () {
                 const commentId = document.getElementById('edit-comment-id').value;
                 const newComment = document.getElementById('edit-comment').value;
+
                 if (!commentId || !newComment.trim()) {
-                    alert('Harap isi komentar!');
+                    alert("Harap isi komentar!");
                     return;
                 }
-                fetch(`/anime/comment/update/${commentId}`, {
+
+                try {
+                    const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
+                    if (!csrfTokenElement) {
+                        throw new Error("CSRF Token tidak ditemukan");
+                    }
+                    const csrfToken = csrfTokenElement.getAttribute('content');
+
+                    const response = await fetch(`/anime/comment/update/${commentId}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            'X-CSRF-TOKEN': csrfToken
                         },
-                        body: JSON.stringify({
-                            content: newComment
-                        })
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                            if (commentData[commentId]) commentData[commentId].comment = newComment;
-                            const commentTextElement = document.getElementById(`comment-text-${commentId}`);
-                            if (commentTextElement) commentTextElement.textContent = newComment;
-                            closeModal(editModal);
-                            showNotification('Komentar berhasil diperbarui!', 'success');
-                        } else {
-                            showNotification(data.message || 'Gagal memperbarui komentar!', 'error');
-                        }
-                    })
-                    .catch(() => {
-                        showNotification('Terjadi kesalahan!', 'error');
+                        body: JSON.stringify({ content: newComment })
                     });
+
+                    // Cek status HTTP
+                    if (!response.ok) {
+                        throw new Error(`Server merespons dengan status: ${response.status}`);
+                    }
+
+                    // Cek apakah respons adalah JSON
+                    const contentType = response.headers.get("content-type");
+                    if (!contentType || !contentType.includes("application/json")) {
+                        const text = await response.text();
+                        console.error("Respons bukan JSON:", text);
+                        throw new Error("Server tidak mengembalikan data dalam format JSON.");
+                    }
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        // Update cache lokal dan DOM
+                        if (commentData[commentId]) {
+                            commentData[commentId].comment = newComment;
+                        }
+                        const commentTextElement = document.getElementById(`comment-text-${commentId}`);
+                        if (commentTextElement) {
+                            commentTextElement.textContent = newComment;
+                        }
+
+                        closeModal(editModal);
+                        showNotification("Komentar berhasil diperbarui!", "success");
+                    } else {
+                        showNotification(data.message || "Gagal memperbarui komentar.", "error");
+                    }
+
+                } catch (err) {
+                    console.error("Error saat menyimpan komentar:", err);
+                    showNotification("Terjadi kesalahan saat menyimpan komentar.", "error");
+                }
             };
 
             // Delete Modal
@@ -461,5 +502,40 @@
                 }
             });
         });
+
+        function closeEditModal() {
+                console.log('🔄 Menutup modal edit...');
+
+                const modal = document.getElementById('editModal');
+                if (!modal) {
+                    console.error('❌ Elemen modal tidak ditemukan!');
+                    return;
+                }
+
+                // 1. Tambahkan class 'hidden'
+                modal.classList.add('hidden');
+
+                // 2. Reset display (opsional untuk tambahan)
+                modal.style.display = 'none';
+
+                // 3. Reset form jika ada
+                const form = document.getElementById('editCommentForm');
+                if (form && typeof form.reset === 'function') {
+                    form.reset();
+                    console.log('🗑️ Form berhasil direset.');
+                }
+
+                // 4. Reset backdrop opacity (jika ada)
+                const backdrop = modal.querySelector('.modal-backdrop');
+                if (backdrop) {
+                    backdrop.style.opacity = '0';
+                    console.log('🔲 Backdrop opacity direset.');
+                }
+
+                // 5. Kembalikan overflow body
+                document.body.style.overflow = '';
+
+                console.log('✅ Modal berhasil ditutup.');
+            }
     </script>
 @endpush

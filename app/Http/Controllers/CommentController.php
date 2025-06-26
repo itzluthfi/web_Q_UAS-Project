@@ -40,9 +40,10 @@ class CommentController extends Controller
 
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         $comment = Comment::findOrFail($id);
         $currentUser = Auth::user();
-
+// dd($currentUser->role);
         // Izinkan hanya pemilik komentar atau admin
         if ($comment->user_id !== $currentUser->id && $currentUser->role !== 'admin') {
             return back()->withErrors(['msg' => 'Anda tidak memiliki izin untuk mengedit komentar ini.']);
@@ -55,6 +56,8 @@ class CommentController extends Controller
         $comment->update([
             'content' => $request->content,
         ]);
+
+        // dd($comment);
 
         return redirect()->back()->with('success', 'Komentar berhasil diperbarui.');
     }
