@@ -369,6 +369,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
                 </button>
+            
                 <div id="mobile-genre-dropdown" class="hidden px-3 py-2">
                     <div class="flex justify-between items-center mb-2">
                         <h3 class="text-white font-medium">Pilih Genre</h3>
@@ -378,17 +379,21 @@
                             </svg>
                         </button>
                     </div>
+            
                     <div class="grid grid-cols-2 gap-2">
-                        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded-md text-sm">Action</a>
-                        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded-md text-sm">Adventure</a>
-                        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded-md text-sm">Comedy</a>
-                        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded-md text-sm">Drama</a>
-                        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded-md text-sm">Fantasy</a>
-                        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded-md text-sm">Horror</a>
-                        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded-md text-sm">Romance</a>
-                        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded-md text-sm">Sci-Fi</a>
+                        @foreach ($genres as $id => $name)
+                            <a href="{{ route('anime.showByGenre', $id) }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded-md text-sm">
+                                {{ $name }}
+                            </a>
+                        @endforeach
                     </div>
-                    <a href="#" class="block text-purple-400 hover:text-purple-300 mt-2 text-sm">Lihat Semua Genre →</a>
+            
+                    <a href="{{ route('anime.viewAllGenre') }}" class="block text-purple-400 hover:text-purple-300 mt-2 text-sm flex items-center justify-between">
+                        <span>view all genres</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </a>
                 </div>
             </div>
 
